@@ -11,33 +11,18 @@ public class Rail {
      * @param to
      */
     public Rail(Rail from, Rail to) {
-        // TODO implement here
-        throw new NotImplementedException();
+        this.from = from;
+        this.to = to;
     }
 
-    /**
-     * 
-     */
     protected Rail from;
-
-    /**
-     * 
-     */
     protected Rail to;
-
-    /**
-     * 
-     */
     protected Car car;
-
-    /**
-     * 
-     */
     protected Color color;
 
     /**
-     * @param t 
-     * @param prev 
+     * @param t
+     * @param prev
      * @return
      */
     public Rail carMoves(Car t, Rail prev) {
@@ -46,21 +31,19 @@ public class Rail {
     }
 
     /**
-     * @param r 
+     * @param r
      * @return
      */
     public void setFrom(Rail r) {
-        // TODO implement here
-        throw new NotImplementedException();
+        from = r;
     }
 
     /**
-     * @param r 
+     * @param r
      * @return
      */
     public void setTo(Rail r) {
-        // TODO implement here
-        throw new NotImplementedException();
+        to = r;
     }
 
 }
