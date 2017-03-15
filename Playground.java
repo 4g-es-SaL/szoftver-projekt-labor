@@ -11,6 +11,14 @@ import java.util.ArrayList;
  */
 public class Playground {
 
+    protected long startTime;
+    protected ArrayList<Locomotive> locomotives = new ArrayList<>();
+    protected ArrayList<Rail> rails;
+    protected ArrayList<Rail> enterPoints = new ArrayList<>();
+    protected Tunnel tunnel;
+    private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
+    private ArrayList<Switch> switches = new ArrayList<>();
+
     /**
      *
      * @param f
@@ -170,28 +178,18 @@ public class Playground {
 //            for (int i = 0; i < numRails; i++) {
 //                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
 //            }
-
-            Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
-            car2.canEmpty = false;
-            Car car1 = new Car(rails.get(5), rails.get(7), car2, Color.BLUE);
-            car1.canEmpty = true;
-            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
+//
+//            Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
+//            car2.canEmpty = false;
+//            Car car1 = new Car(rails.get(5), rails.get(7), car2, Color.BLUE);
+//            car1.canEmpty = true;
+//            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
 
         } catch (IOException e){
             System.out.println(e.toString());
         }
         MethodPrinter.leaveMethod();
     }
-
-
-    protected long startTime;
-    protected ArrayList<Locomotive> locomotives = new ArrayList<>();
-    protected ArrayList<Rail> rails;
-    protected ArrayList<Rail> enterPoints = new ArrayList<>();
-    protected Tunnel tunnel;
-    private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
-    private ArrayList<Switch> switches = new ArrayList<>();
-
 
     /**
      * @return
@@ -235,6 +233,15 @@ public class Playground {
     public void destroyTunnelEnd(int id) {          MethodPrinter.enterMethod();
         // TODO implement here
         throw new NotImplementedException();
+    }
+
+    public void initializeA() {
+        Locomotive l =new Locomotive(rails.get(6), rails.get(1),
+                            new Car(rails.get(1), rails.get(2),
+                                new Car(rails.get(2), rails.get(3),
+                                    new Car(rails.get(3), rails.get(4), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
+        locomotives.add(l);
     }
 
     @Override

@@ -20,17 +20,17 @@ public class Locomotive extends Car {
      * The Locomotive moves to the next Rail in the network. Repeats it with speed time. Pulls the Car behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
-    public int runTurn() {
-        System.out.print(rail.id + " ");
+    public int runTurn() { MethodPrinter.enterMethod();
+//        System.out.print(rail.id + " ");
         int res = 0;
         for (int i = 0; i < speed; i++) {
             res = super.runTurn();
             if (res == 1) {
-                return 1;
+                MethodPrinter.leaveMethod(); return 1;
             }
         }
-        System.out.print("\n\n");
-        return res;
+//        System.out.print("\n\n");
+        MethodPrinter.leaveMethod(); return res;
     }
     /**
      * 

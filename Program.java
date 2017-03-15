@@ -44,7 +44,8 @@ public class Program {
                 case 1:
                     p.initialization();
                     break;
-
+                case 2:
+                    p.ATrainMoves();
             }
         }
 
@@ -84,4 +85,9 @@ public class Program {
         playground = new Playground(f);
     }
 
+    private void ATrainMoves() {
+        initialization();
+        playground.initializeA();
+        playground.runTurn();
+    }
 }
