@@ -74,11 +74,13 @@ public class Playground {
 
                 if (from != -1 && from < rails.size()) {
                     r.setFrom(rails.get(from));
-                    rails.get(from).setTo(r);
+                    if (rails.get(from).to == null)
+                        rails.get(from).setTo(r);
                 }
                 if (to != -1 && to < rails.size()){
                     r.setTo(rails.get(to));
-                    rails.get(to).setFrom(r);
+                    if(rails.get(to).from == null)
+                        rails.get(to).setFrom(r);
                 }
                 rails.add(r);
             }
@@ -101,7 +103,8 @@ public class Playground {
                 rails.get(from).setTo(sw);
                 rails.get(to).setFrom(sw);
                 for (int j = 2; j < line.length; j++) {
-                    rails.get(Integer.parseInt(line[j])).setFrom(sw);
+                    if(rails.get(Integer.parseInt(line[j])).from == null)
+                        rails.get(Integer.parseInt(line[j])).setFrom(sw);
                 }
             }
 
