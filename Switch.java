@@ -28,4 +28,14 @@ public class Switch extends Rail {
         throw new NotImplementedException();
     }
 
+    public Rail carMoves(Car t, Rail prev) {
+        if(from == prev) {
+            if (currentToId == 0)
+                return to;
+            return alternativeWays.get(currentToId - 1);
+        }
+        else
+            return from;
+    }
+
 }
