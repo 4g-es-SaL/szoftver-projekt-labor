@@ -18,6 +18,7 @@ public class Car {
         this.prevRail = prevRail;
         this.next = next;
         this.color = color;
+        empty = false;
     }
 
     /**
@@ -28,31 +29,45 @@ public class Car {
     protected Car next;
     protected Color color;
     protected boolean canEmpty;
+    protected boolean empty;
 
     /**
      * @return
      */
-    public Rail runTurn() {
+    public int runTurn() {
+        int ret = 1;
         Rail tmp = rail;
         rail = rail.carMoves(this, prevRail);
         prevRail = tmp;
-        return rail;
+        if(next != null) {
+            int r = next.runTurn();
+            if(r == 2 && empty)
+                ret = 2;
+        }
+        else{
+            if(empty)
+                ret = 2;
+        }
+        return ret;
     }
 
     /**
      * @param c
      */
     public void atStation(Color c) {
-        // TODO implement here
-        throw new NotImplementedException();
+        if(color == c && canEmpty){
+            if(next != null)
+                next.setCanEmpty(true);
+            empty = true;
+            System.out.println("urit");
+        }
     }
 
     /**
      * @param b
      */
     public void setCanEmpty(boolean b) {
-        // TODO implement here
-        throw new NotImplementedException();
+        canEmpty = b;
     }
 
 }
