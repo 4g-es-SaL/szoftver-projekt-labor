@@ -2,7 +2,7 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * 
+ *
  */
 public class Station extends Rail {
 
@@ -14,11 +14,11 @@ public class Station extends Rail {
     public Station(Rail from, Rail to, Color color) {
         super(from, to);
         // TODO implement here
-        throw new NotImplementedException();
+        this.color = color;
     }
 
     /**
-     * 
+     *
      */
     protected Color color;
 
