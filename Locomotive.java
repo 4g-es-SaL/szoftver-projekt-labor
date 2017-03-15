@@ -18,6 +18,15 @@ public class Locomotive extends Car {
         this.speed = speed;
     }
 
+    public Rail runTurn() {
+        for (int i = 0; i < speed; i++) {
+            Rail tmp = rail;
+            rail = rail.carMoves(this, prevRail);
+            prevRail = tmp;
+            next.runTurn();
+        }
+        return rail;
+    }
     /**
      * 
      */
