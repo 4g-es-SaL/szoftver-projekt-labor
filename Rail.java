@@ -26,8 +26,10 @@ public class Rail {
      * @return
      */
     public Rail carMoves(Car t, Rail prev) {
-        // TODO implement here
-        throw new NotImplementedException();
+        if(from == prev)
+            return to;
+        else
+            return from;
     }
 
     /**
