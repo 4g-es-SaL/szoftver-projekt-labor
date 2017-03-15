@@ -67,4 +67,13 @@ public class Rail {
         to = r;
     }
 
+
+    @Override
+    public String toString() {
+        return "Rail{" +
+                "id=" + id +
+                ", from=" + (from != null ? from.id : "-1") +
+                ", to=" + (to != null ? to.id : "-1") +
+                '}';
+    }
 }

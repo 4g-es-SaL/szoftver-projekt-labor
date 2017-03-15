@@ -1,10 +1,10 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by matech on 2017. 02. 20..
@@ -197,13 +197,14 @@ public class Playground {
      */
     public int runTurn() {
         // TODO implement here
+        int res = 0;
         for (Locomotive loc:locomotives) {
-            loc.runTurn();
+            res = loc.runTurn();
+            if (res == 1) {
+                return res;
+            }
         }
-        for (Rail rail:rails) {
-            rail.clearCar();
-        }
-        return 1;
+        return res;
     }
 
     /**
@@ -231,4 +232,14 @@ public class Playground {
         throw new NotImplementedException();
     }
 
+    @Override
+    public String toString() {
+        String res = "Playground{\n";
+        for (Rail r :
+                rails) {
+            res += r + "\n";
+        }
+        res += "}";
+        return res;
+    }
 }

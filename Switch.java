@@ -1,7 +1,5 @@
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by matech on 2017. 02. 20..
@@ -36,4 +34,9 @@ public class Switch extends Rail {
             return from;
     }
 
+    @Override
+    public String toString() {
+        return "Switch{" +
+               super.toString() + "}";
+    }
 }

@@ -1,6 +1,4 @@
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * Created by matech on 2017. 02. 20..
  */
@@ -36,4 +34,11 @@ public class Tunnel extends Rail {
         to = null;
     }
 
+    @Override
+    public String toString() {
+        return "Tunnel{" +
+                "fromsNeighboor=" + fromsNeighboor +
+                ", tosNeighboor=" + tosNeighboor +
+                super.toString() + "} ";
+    }
 }
