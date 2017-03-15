@@ -1,15 +1,23 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by matech on 2017. 02. 20..
  */
 public class Playground {
+
+    protected long startTime;
+    protected ArrayList<Locomotive> locomotives = new ArrayList<>();
+    protected ArrayList<Rail> rails;
+    protected ArrayList<Rail> enterPoints = new ArrayList<>();
+    protected Tunnel tunnel;
+    private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
+    private ArrayList<Switch> switches = new ArrayList<>();
 
     /**
      *
@@ -46,7 +54,7 @@ public class Playground {
      * A belépő pontok listája
      */
 
-    Playground(File f) {
+    Playground(File f) {          MethodPrinter.enterMethod();
 
         rails = new ArrayList<>();
 
@@ -54,10 +62,11 @@ public class Playground {
             BufferedReader in = new BufferedReader(new FileReader(f));
             String[] line;
 
-
+            tunnel = new Tunnel(null, null);
+            Rail.idGenerator--;
             // Reading Rails and Stations
             int numRails = Integer.parseInt(in.readLine());
-            System.out.println(numRails);
+//            System.out.println(numRails);
             for (int i = 0; i < numRails; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
@@ -77,55 +86,80 @@ public class Playground {
                     if (rails.get(from).to == null)
                         rails.get(from).setTo(r);
                 }
+                else if(from == -1)
+                    r.setFrom(tunnel);
+
                 if (to != -1 && to < rails.size()){
                     r.setTo(rails.get(to));
                     if(rails.get(to).from == null)
                         rails.get(to).setFrom(r);
                 }
+                else if(to == -1)
+                    r.setTo(tunnel);
                 rails.add(r);
             }
 
             // Reading Switches
             int numSwitches = Integer.parseInt(in.readLine());
-            System.out.println(numSwitches);
+//            System.out.println(numSwitches);
             for (int i = 0; i < numSwitches; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
                 int to = Integer.parseInt(line[1]);
                 ArrayList<Rail> alt = new ArrayList<>();
+                Rail fromR, toR;
+                if(from == -1)
+                    fromR = tunnel;
+                else
+                    fromR = rails.get(from);
 
-                Switch sw = new Switch(rails.get(from), rails.get(to), alt);
+                if(to == -1)
+                    toR = tunnel;
+                else
+                    toR = rails.get(to);
+
+                Switch sw = new Switch(fromR, toR, alt);
                 rails.add(sw);
                 switches.add(sw);
 
                 for (int j = 2; j < line.length; j++) {
                     int idx = Integer.parseInt(line[j]);
-                    sw.alternativeWays.add(rails.get(idx));
-                    if(rails.get(idx).to == null)
-                        rails.get(idx).setTo(sw);
-                    else
-                        rails.get(idx).setFrom(sw);
+
+                    if(idx == -1)
+                        sw.alternativeWays.add(tunnel);
+                    else {
+                        sw.alternativeWays.add(rails.get(idx));
+                        if (rails.get(idx).to == null)
+                            rails.get(idx).setTo(sw);
+                        else
+                            rails.get(idx).setFrom(sw);
+                    }
                 }
 
-                if(rails.get(from).to == null)
-                    rails.get(from).setTo(sw);
-                else
-                    rails.get(from).setFrom(sw);
+                if(from != -1)
+                    if(rails.get(from).to == null)
+                        rails.get(from).setTo(sw);
+                    else
+                        rails.get(from).setFrom(sw);
 
-                if(rails.get(to).from == null)
-                    rails.get(to).setFrom(sw);
-                else
-                    rails.get(to).setTo(sw);
+                if(to != -1)
+                    if(rails.get(to).from == null)
+                        rails.get(to).setFrom(sw);
+                    else
+                        rails.get(to).setTo(sw);
 
                 for (int j = 2; j < line.length; j++) {
-                    if(rails.get(Integer.parseInt(line[j])).from == null)
-                        rails.get(Integer.parseInt(line[j])).setFrom(sw);
+                    int idx = Integer.parseInt(line[j]);
+                    if(idx != -1)
+                        if(rails.get(idx).from == null)
+                            rails.get(idx).setFrom(sw);
                 }
                 if(rails.get(from).to == null)
                     rails.get(from).setTo(sw);
             }
 
-            rails.add(new Tunnel(null, null));
+            tunnel.id = rails.size();
+            rails.add(tunnel);
 
             // Setting up tunnel end points
             line = in.readLine().split(" ");
@@ -141,65 +175,83 @@ public class Playground {
                 enterPoints.add(rails.get(idx));
             }
 
-            for (int i = 0; i < numRails; i++) {
-                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
-            }
-
-            Car car2 = new Car(rails.get(8), rails.get(4), null, Color.BLUE);
-            car2.canEmpty = false;
-            Car car1 = new Car(rails.get(5), rails.get(8), car2, Color.BLUE);
-            car1.canEmpty = true;
-            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
+//            for (int i = 0; i < numRails; i++) {
+//                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
+//            }
+//
+//            Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
+//            car2.canEmpty = false;
+//            Car car1 = new Car(rails.get(5), rails.get(7), car2, Color.BLUE);
+//            car1.canEmpty = true;
+//            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
 
         } catch (IOException e){
             System.out.println(e.toString());
         }
+        MethodPrinter.leaveMethod();
     }
-
-
-    protected long startTime;
-    protected ArrayList<Locomotive> locomotives = new ArrayList<>();
-    protected ArrayList<Rail> rails;
-    protected ArrayList<Rail> enterPoints = new ArrayList<>();
-    private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
-    private ArrayList<Switch> switches = new ArrayList<>();
-
 
     /**
      * @return
      */
-    public int runTurn() {
+    public int runTurn() {          MethodPrinter.enterMethod();
         // TODO implement here
+
+        int res = 0;
         for (Locomotive loc:locomotives) {
-            loc.runTurn();
+            res = loc.runTurn();
+            if (res == 1) {
+                MethodPrinter.leaveMethod(); return res;
+            }
         }
-        return 1;
+        MethodPrinter.leaveMethod(); return res;
+
     }
 
     /**
      * @param id
      * @return
      */
-    public void changeSwitch(int id) {
+    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
+        MethodPrinter.enterMethod();
         switches.get(id).changeDir();
+        MethodPrinter.leaveMethod();
     }
 
     /**
      * @param id
      * @return
      */
-    public void buildTunnelEnd(int id) {
-        // TODO implement here
-        throw new NotImplementedException();
+    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
+        tunnel.buildTunnel(tunnelEndPoints.get(id));
     }
 
     /**
      * @param id
      * @return
      */
-    public void destroyTunnelEnd(int id) {
+    public void destroyTunnelEnd(int id) {          MethodPrinter.enterMethod();
         // TODO implement here
         throw new NotImplementedException();
     }
 
+    public void initializeA() {
+        Locomotive l =new Locomotive(rails.get(6), rails.get(1),
+                            new Car(rails.get(1), rails.get(2),
+                                new Car(rails.get(2), rails.get(3),
+                                    new Car(rails.get(3), rails.get(4), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
+        locomotives.add(l);
+    }
+
+    @Override
+    public String toString() {
+        String res = "Playground{\n";
+        for (Rail r :
+                rails) {
+            res += r + "\n";
+        }
+        res += "}";
+        return res;
+    }
 }

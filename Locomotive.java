@@ -1,52 +1,40 @@
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * Created by matech on 2017. 02. 20..
  */
 public class Locomotive extends Car {
 
     /**
-     *
-     * @param rail
-     * @param prevRail
-     * @param next
-     * @param speed
+     * Create a new Locomotive object. Locomotives Color is NO_COLOR.
+     * @param rail The Locomotive will stand on this Rail.
+     * @param prevRail The Locomotive has come from this Rail.
+     * @param next In the train, the Car behind this Car.
+     * @param speed The speed of the Locomotive.
      */
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
     }
 
-    public int runTurn() {
-        System.out.print(rail.id + " ");
-        int ret = 1;
+    /**
+     * The Locomotive moves to the next Rail in the network. Repeats it with speed time. Pulls the Car behind it.
+     * @return 1 if there was a collision, 0 otherwise.
+     */
+    public int runTurn() { MethodPrinter.enterMethod();
+//        System.out.print(rail.id + " ");
+        int res = 0;
         for (int i = 0; i < speed; i++) {
-            Rail tmp = rail;
-            rail = rail.carMoves(this, prevRail);
-            prevRail = tmp;
-            if(next != null){
-                ret = next.runTurn();
-                if(ret == 2){
-                    System.out.println("ures");
-                }
+            res = super.runTurn();
+            if (res == 1) {
+                MethodPrinter.leaveMethod(); return 1;
             }
-
         }
-        System.out.print("\n\n");
-        //System.out.println(rail.id);
-        return ret;
+//        System.out.print("\n\n");
+        MethodPrinter.leaveMethod(); return res;
     }
     /**
      * 
      */
     protected int speed;
-
-    /**
-     * @param rail 
-     * @param prev 
-     * @param next 
-     * @param speed
-     */
 
 }
