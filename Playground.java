@@ -200,6 +200,9 @@ public class Playground {
         for (Locomotive loc:locomotives) {
             loc.runTurn();
         }
+        for (Rail rail:rails) {
+            rail.clearCar();
+        }
         return 1;
     }
 
