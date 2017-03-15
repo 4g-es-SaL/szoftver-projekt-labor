@@ -35,7 +35,7 @@ public class Car {
      * @return
      */
     public int runTurn() {
-        System.out.print(rail.id + " ");
+        System.out.print("c: " + rail.id + " ");
         int ret = 1;
         Rail tmp = rail;
         rail = rail.carMoves(this, prevRail);
@@ -60,7 +60,7 @@ public class Car {
             if(next != null)
                 next.setCanEmpty(true);
             empty = true;
-            System.out.println("urit");
+            System.out.print("urit ");
         }
     }
 
