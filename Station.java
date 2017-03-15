@@ -17,6 +17,14 @@ public class Station extends Rail {
         this.color = color;
     }
 
+    public Rail carMoves(Car t, Rail prev) {
+        t.atStation(color);
+        if(from == prev)
+            return to;
+        else
+            return from;
+    }
+
     /**
      *
      */
