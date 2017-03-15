@@ -128,7 +128,11 @@ public class Playground {
                 System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
             }
 
-            locomotives.add(new Locomotive(rails.get(0), rails.get(7), null, 1));
+            Car car2 = new Car(rails.get(9), rails.get(6), null, Color.BLUE);
+            car2.canEmpty = false;
+            Car car1 = new Car(rails.get(7), rails.get(9), car2, Color.BLUE);
+            car1.canEmpty = true;
+            locomotives.add(new Locomotive(rails.get(0), rails.get(7), car1, 1));
 
         } catch (IOException e){
             System.out.println(e.toString());
@@ -149,7 +153,7 @@ public class Playground {
     public int runTurn() {
         // TODO implement here
         for (Locomotive loc:locomotives) {
-            System.out.println(rails.indexOf(loc.runTurn()));
+            loc.runTurn();
         }
         return 1;
     }
