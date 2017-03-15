@@ -47,6 +47,7 @@ public class Playground {
      */
 
     Playground(File f) {
+        MethodPrinter.enterMethod();
 
         rails = new ArrayList<>();
 
@@ -58,7 +59,7 @@ public class Playground {
             Rail.idGenerator--;
             // Reading Rails and Stations
             int numRails = Integer.parseInt(in.readLine());
-            System.out.println(numRails);
+//            System.out.println(numRails);
             for (int i = 0; i < numRails; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
@@ -93,7 +94,7 @@ public class Playground {
 
             // Reading Switches
             int numSwitches = Integer.parseInt(in.readLine());
-            System.out.println(numSwitches);
+//            System.out.println(numSwitches);
             for (int i = 0; i < numSwitches; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
@@ -167,9 +168,9 @@ public class Playground {
                 enterPoints.add(rails.get(idx));
             }
 
-            for (int i = 0; i < numRails; i++) {
-                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
-            }
+//            for (int i = 0; i < numRails; i++) {
+//                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
+//            }
 
             Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
             car2.canEmpty = false;
@@ -180,6 +181,7 @@ public class Playground {
         } catch (IOException e){
             System.out.println(e.toString());
         }
+        MethodPrinter.leaveMethod();
     }
 
 
@@ -197,14 +199,19 @@ public class Playground {
      */
     public int runTurn() {
         // TODO implement here
+        MethodPrinter.enterMethod();
+
         int res = 0;
         for (Locomotive loc:locomotives) {
             res = loc.runTurn();
             if (res == 1) {
+                MethodPrinter.leaveMethod();
                 return res;
             }
         }
+        MethodPrinter.leaveMethod();
         return res;
+
     }
 
     /**

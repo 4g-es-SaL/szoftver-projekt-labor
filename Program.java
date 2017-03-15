@@ -38,7 +38,7 @@ public class Program {
         int userInput = -1;
 
         while (userInput != 0) {
-            printInfo();
+//            printInfo();
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:

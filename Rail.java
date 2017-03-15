@@ -10,9 +10,11 @@ public class Rail {
      * @param to Connected to this Rail. If Tunnel will build this neighbor will be replaced.
      */
     public Rail(Rail from, Rail to) {
+        MethodPrinter.enterMethod();
         id = idGenerator++;
         this.from = from;
         this.to = to;
+        MethodPrinter.leaveMethod();
     }
 
     public static int idGenerator = 0;
@@ -29,9 +31,13 @@ public class Rail {
      * @throws Exception In occasion of collision!
      */
     public Rail carMoves(Car c, Rail prev) throws Exception {
+        MethodPrinter.enterMethod();
+
         c = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
+
+        MethodPrinter.enterMethod();
         return nextRail;
     }
 
@@ -56,7 +62,9 @@ public class Rail {
      * @return
      */
     public void setFrom(Rail r) {
+        MethodPrinter.enterMethod();
         from = r;
+        MethodPrinter.leaveMethod();
     }
 
     /**
@@ -64,7 +72,9 @@ public class Rail {
      * @return
      */
     public void setTo(Rail r) {
+        MethodPrinter.enterMethod();
         to = r;
+        MethodPrinter.leaveMethod();
     }
 
 
