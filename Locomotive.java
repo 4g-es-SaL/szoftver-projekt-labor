@@ -19,7 +19,7 @@ public class Locomotive extends Car {
     }
 
     public int runTurn() {
-        System.out.print(rail.id + " ");
+        System.out.print("l: " + rail.id + " ");
         int ret = 1;
         for (int i = 0; i < speed; i++) {
             Rail tmp = rail;
