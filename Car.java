@@ -32,24 +32,36 @@ public class Car {
     protected boolean empty;
 
     /**
-     * @return
+     * The Car moves to the next Rail in the network.
+     * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {
-        System.out.print("c: " + rail.id + " ");
-        int ret = 1;
+        System.out.print(rail.id + " ");
+
+        int isCollision = move();
+        if (isCollision == 1) {
+            return isCollision;
+        }
+
+        return callNextCar();
+    }
+
+    private int move() {
         Rail tmp = rail;
-        rail = rail.carMoves(this, prevRail);
+        try {
+            rail = rail.carMoves(this, prevRail);
+        } catch (Exception e) {
+            return 1;
+        }
         prevRail = tmp;
+        return 0;
+    }
+
+    private int callNextCar() {
         if(next != null) {
-            int r = next.runTurn();
-            if(r == 2 && empty)
-                ret = 2;
+            return next.runTurn();
         }
-        else{
-            if(empty)
-                ret = 2;
-        }
-        return ret;
+        return 0;
     }
 
     /**
