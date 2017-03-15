@@ -14,41 +14,29 @@ public class Car {
      * @param color
      */
     public Car(Rail rail, Rail prevRail, Car next, Color color) {
-        // TODO implement here
-        throw new NotImplementedException();
+        this.rail = rail;
+        this.prevRail = prevRail;
+        this.next = next;
+        this.color = color;
     }
 
     /**
      * 
      */
     protected Rail rail;
-
-    /**
-     * 
-     */
     protected Rail prevRail;
-
-    /**
-     * 
-     */
     protected Car next;
-
-    /**
-     * 
-     */
     protected Color color;
-
-    /**
-     * 
-     */
     protected boolean canEmpty;
 
     /**
      * @return
      */
-    public int runTurn() {
-        // TODO implement here
-        throw new NotImplementedException();
+    public Rail runTurn() {
+        Rail tmp = rail;
+        rail = rail.carMoves(this, prevRail);
+        prevRail = tmp;
+        return rail;
     }
 
     /**
