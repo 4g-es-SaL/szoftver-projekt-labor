@@ -11,10 +11,13 @@ public class Rail {
      * @param to
      */
     public Rail(Rail from, Rail to) {
+        id = idGenerator++;
         this.from = from;
         this.to = to;
     }
 
+    public static int idGenerator = 0;
+    protected int id;
     protected Rail from;
     protected Rail to;
     protected Car car;
