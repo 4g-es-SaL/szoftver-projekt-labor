@@ -128,6 +128,8 @@ public class Playground {
                 System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
             }
 
+            locomotives.add(new Locomotive(rails.get(0), rails.get(7), null, 1));
+
         } catch (IOException e){
             System.out.println(e.toString());
         }
@@ -135,7 +137,7 @@ public class Playground {
 
 
     protected long startTime;
-    protected ArrayList<Locomotive> locomotives;
+    protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails;
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
@@ -146,7 +148,10 @@ public class Playground {
      */
     public int runTurn() {
         // TODO implement here
-        throw new NotImplementedException();
+        for (Locomotive loc:locomotives) {
+            System.out.println(rails.indexOf(loc.runTurn()));
+        }
+        return 1;
     }
 
     /**
