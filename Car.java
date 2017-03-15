@@ -31,7 +31,7 @@ public class Car {
 
 
     /**
-     * The Car moves to the next Rail in the network.
+     * The Car moves to the next Rail in the network. Pulls the Car behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {

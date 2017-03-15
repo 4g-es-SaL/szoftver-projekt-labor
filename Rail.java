@@ -29,6 +29,7 @@ public class Rail {
      * @throws Exception In occasion of collision!
      */
     public Rail carMoves(Car c, Rail prev) throws Exception {
+        c = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
         return nextRail;

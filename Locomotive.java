@@ -5,17 +5,21 @@
 public class Locomotive extends Car {
 
     /**
-     *
-     * @param rail
-     * @param prevRail
-     * @param next
-     * @param speed
+     * Create a new Locomotive object. Locomotives Color is NO_COLOR.
+     * @param rail The Locomotive will stand on this Rail.
+     * @param prevRail The Locomotive has come from this Rail.
+     * @param next In the train, the Car behind this Car.
+     * @param speed The speed of the Locomotive.
      */
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
     }
 
+    /**
+     * The Locomotive moves to the next Rail in the network. Repeats it with speed time. Pulls the Car behind it.
+     * @return 1 if there was a collision, 0 otherwise.
+     */
     public int runTurn() {
         System.out.print(rail.id + " ");
         int res = 0;
