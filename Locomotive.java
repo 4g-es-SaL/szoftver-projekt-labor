@@ -1,6 +1,4 @@
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * Created by matech on 2017. 02. 20..
  */
@@ -20,33 +18,19 @@ public class Locomotive extends Car {
 
     public int runTurn() {
         System.out.print(rail.id + " ");
-        int ret = 1;
+        int res = 0;
         for (int i = 0; i < speed; i++) {
-            Rail tmp = rail;
-            rail = rail.carMoves(this, prevRail);
-            prevRail = tmp;
-            if(next != null){
-                ret = next.runTurn();
-                if(ret == 2){
-                    System.out.println("ures");
-                }
+            res = super.runTurn();
+            if (res == 1) {
+                return 1;
             }
-
         }
         System.out.print("\n\n");
-        //System.out.println(rail.id);
-        return ret;
+        return res;
     }
     /**
      * 
      */
     protected int speed;
-
-    /**
-     * @param rail 
-     * @param prev 
-     * @param next 
-     * @param speed
-     */
 
 }
