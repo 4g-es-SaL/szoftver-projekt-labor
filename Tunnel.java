@@ -6,14 +6,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class Tunnel extends Rail {
 
-    /**
-     *
-     */
     protected Rail fromsNeighboor;
-
-    /**
-     *
-     */
     protected Rail tosNeighboor;
 
 
@@ -29,16 +22,18 @@ public class Tunnel extends Rail {
      * @param r
      */
     public void buildTunnel(Rail r) {
-        // TODO implement here
-        throw new NotImplementedException();
+        if(from == null)
+            from = r;
+        else if(to == null)
+            to = r;
     }
 
     /**
      *
      */
     public void destroyTunnel() {
-        // TODO implement here
-        throw new NotImplementedException();
+        from = null;
+        to = null;
     }
 
 }

@@ -72,7 +72,7 @@ public class Car {
             if(next != null)
                 next.setCanEmpty(true);
             empty = true;
-            System.out.println("urit");
+            System.out.print("urit ");
         }
     }
 
