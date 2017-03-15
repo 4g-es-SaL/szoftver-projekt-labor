@@ -15,7 +15,6 @@ public class Switch extends Rail {
      */
     public Switch(Rail from, Rail to, ArrayList<Rail> to2) {
         super(from, to);
-        // TODO implement here
         alternativeWays = to2;
     }
 
@@ -24,8 +23,7 @@ public class Switch extends Rail {
 
 
     public void changeDir() {
-        // TODO implement here
-        throw new NotImplementedException();
+        currentToId = (currentToId+1) % (alternativeWays.size()+1);
     }
 
     public Rail carMoves(Car t, Rail prev) {
