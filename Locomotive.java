@@ -19,23 +19,28 @@ public class Locomotive extends Car {
     }
 
     public int runTurn() {
-        System.out.print("l: " + rail.id + " ");
-        int ret = 1;
-        for (int i = 0; i < speed; i++) {
-            Rail tmp = rail;
-            rail = rail.carMoves(this, prevRail);
-            prevRail = tmp;
-            if(next != null){
-                ret = next.runTurn();
-                if(ret == 2){
-                    System.out.println("ures");
+        try {
+            System.out.print("l: " + rail.id + " ");
+            int ret = 1;
+            for (int i = 0; i < speed; i++) {
+                Rail tmp = rail;
+                rail = rail.carMoves(this, prevRail);
+                prevRail = tmp;
+                if (next != null) {
+                    ret = next.runTurn();
+                    if (ret == 2) {
+                        System.out.println("ures");
+                    }
                 }
-            }
 
+            }
+            System.out.print("\n\n");
+            //System.out.println(rail.id);
+            return ret;
         }
-        System.out.print("\n\n");
-        //System.out.println(rail.id);
-        return ret;
+        catch (Exception e){
+            return 1;
+        }
     }
     /**
      * 
