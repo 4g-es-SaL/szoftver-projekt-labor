@@ -46,8 +46,7 @@ public class Playground {
      * A belépő pontok listája
      */
 
-    Playground(File f) {
-        MethodPrinter.enterMethod();
+    Playground(File f) {          MethodPrinter.enterMethod();
 
         rails = new ArrayList<>();
 
@@ -197,20 +196,17 @@ public class Playground {
     /**
      * @return
      */
-    public int runTurn() {
+    public int runTurn() {          MethodPrinter.enterMethod();
         // TODO implement here
-        MethodPrinter.enterMethod();
 
         int res = 0;
         for (Locomotive loc:locomotives) {
             res = loc.runTurn();
             if (res == 1) {
-                MethodPrinter.leaveMethod();
-                return res;
+                MethodPrinter.leaveMethod(); return res;
             }
         }
-        MethodPrinter.leaveMethod();
-        return res;
+        MethodPrinter.leaveMethod(); return res;
 
     }
 
@@ -218,15 +214,17 @@ public class Playground {
      * @param id
      * @return
      */
-    public void changeSwitch(int id) {
+    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
+        MethodPrinter.enterMethod();
         switches.get(id).changeDir();
+        MethodPrinter.leaveMethod();
     }
 
     /**
      * @param id
      * @return
      */
-    public void buildTunnelEnd(int id) {
+    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
         tunnel.buildTunnel(tunnelEndPoints.get(id));
     }
 
@@ -234,7 +232,7 @@ public class Playground {
      * @param id
      * @return
      */
-    public void destroyTunnelEnd(int id) {
+    public void destroyTunnelEnd(int id) {          MethodPrinter.enterMethod();
         // TODO implement here
         throw new NotImplementedException();
     }

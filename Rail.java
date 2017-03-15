@@ -30,9 +30,7 @@ public class Rail {
      * @return The Rail where c stands.
      * @throws Exception In occasion of collision!
      */
-    public Rail carMoves(Car c, Rail prev) throws Exception {
-        MethodPrinter.enterMethod();
-
+    public Rail carMoves(Car c, Rail prev) throws Exception { MethodPrinter.enterMethod();
         c = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
@@ -61,9 +59,9 @@ public class Rail {
      * @param r
      * @return
      */
-    public void setFrom(Rail r) {
-        MethodPrinter.enterMethod();
+    public void setFrom(Rail r) { MethodPrinter.enterMethod();
         from = r;
+
         MethodPrinter.leaveMethod();
     }
 
@@ -71,12 +69,21 @@ public class Rail {
      * @param r
      * @return
      */
-    public void setTo(Rail r) {
-        MethodPrinter.enterMethod();
+    public void setTo(Rail r) { MethodPrinter.enterMethod();
         to = r;
+
         MethodPrinter.leaveMethod();
     }
 
+    public Rail getFrom() { MethodPrinter.enterMethod();
+    MethodPrinter.leaveMethod();
+        return from;
+    }
+
+    public Rail getTo() { MethodPrinter.enterMethod();
+        MethodPrinter.leaveMethod();
+        return to;
+    }
 
     @Override
     public String toString() {
