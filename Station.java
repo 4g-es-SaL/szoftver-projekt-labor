@@ -1,6 +1,4 @@
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  *
  */
@@ -16,12 +14,11 @@ public class Station extends Rail {
         this.color = color;
     }
 
-    public Rail carMoves(Car t, Rail prev) {
+    public Rail carMoves(Car t, Rail prev) throws Exception { MethodPrinter.enterMethod();
+        Rail res = super.carMoves(t, prev);
         t.atStation(color);
-        if(from == prev)
-            return to;
-        else
-            return from;
+
+        MethodPrinter.leaveMethod(); return res;
     }
 
     protected Color color;

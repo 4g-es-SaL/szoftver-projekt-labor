@@ -34,15 +34,16 @@ public class Car {
      * The Car moves to the next Rail in the network. Pulls the Car behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
-    public int runTurn() {
-        System.out.print(rail.id + " ");
+    public int runTurn() { MethodPrinter.enterMethod();
+//        System.out.print(rail.id + " ");
 
         int isCollision = move();
         if (isCollision == 1) {
-            return isCollision;
+            MethodPrinter.leaveMethod(); return isCollision;
         }
 
-        return callNextCar();
+        int res = callNextCar();
+        MethodPrinter.leaveMethod(); return res;
     }
 
     private int move() {
@@ -72,7 +73,7 @@ public class Car {
             if(next != null)
                 next.setCanEmpty(true);
             empty = true;
-            System.out.println("urit");
+            System.out.print("urit ");
         }
     }
 

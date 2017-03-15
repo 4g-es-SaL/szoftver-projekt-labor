@@ -10,9 +10,11 @@ public class Rail {
      * @param to Connected to this Rail. If Tunnel will build this neighbor will be replaced.
      */
     public Rail(Rail from, Rail to) {
+        MethodPrinter.enterMethod();
         id = idGenerator++;
         this.from = from;
         this.to = to;
+        MethodPrinter.leaveMethod();
     }
 
     public static int idGenerator = 0;
@@ -28,10 +30,12 @@ public class Rail {
      * @return The Rail where c stands.
      * @throws Exception In occasion of collision!
      */
-    public Rail carMoves(Car c, Rail prev) throws Exception {
+    public Rail carMoves(Car c, Rail prev) throws Exception { MethodPrinter.enterMethod();
         c = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
+
+        MethodPrinter.leaveMethod();
         return nextRail;
     }
 
@@ -55,16 +59,38 @@ public class Rail {
      * @param r
      * @return
      */
-    public void setFrom(Rail r) {
+    public void setFrom(Rail r) { MethodPrinter.enterMethod();
         from = r;
+
+        MethodPrinter.leaveMethod();
     }
 
     /**
      * @param r
      * @return
      */
-    public void setTo(Rail r) {
+    public void setTo(Rail r) { MethodPrinter.enterMethod();
         to = r;
+
+        MethodPrinter.leaveMethod();
     }
 
+    public Rail getFrom() { MethodPrinter.enterMethod();
+    MethodPrinter.leaveMethod();
+        return from;
+    }
+
+    public Rail getTo() { MethodPrinter.enterMethod();
+        MethodPrinter.leaveMethod();
+        return to;
+    }
+
+    @Override
+    public String toString() {
+        return "Rail{" +
+                "id=" + id +
+                ", from=" + (from != null ? from.id : "-1") +
+                ", to=" + (to != null ? to.id : "-1") +
+                '}';
+    }
 }
