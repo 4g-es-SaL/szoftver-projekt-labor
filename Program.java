@@ -24,6 +24,8 @@ public class Program {
         File f = new File("map.txt");
         Playground playground1 = new Playground(f);
 
+        playground1.buildTunnelEnd(0);
+        playground1.buildTunnelEnd(1);
         for (int i = 0; i < 20; i++) {
             playground1.runTurn();
             if(i == 11)
