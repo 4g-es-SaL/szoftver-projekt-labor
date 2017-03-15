@@ -26,6 +26,8 @@ public class Program {
 
         for (int i = 0; i < 20; i++) {
             playground1.runTurn();
+            if(i == 11)
+                playground1.changeSwitch(1);
         }
 
     }
