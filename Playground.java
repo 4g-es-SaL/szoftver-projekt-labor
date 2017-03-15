@@ -94,18 +94,35 @@ public class Playground {
                 int to = Integer.parseInt(line[1]);
                 ArrayList<Rail> alt = new ArrayList<>();
 
-                for (int j = 2; j < line.length; j++) {
-                    alt.add(rails.get(Integer.parseInt(line[j])));
-                }
                 Switch sw = new Switch(rails.get(from), rails.get(to), alt);
                 rails.add(sw);
+                switches.add(sw);
 
-                rails.get(from).setTo(sw);
-                rails.get(to).setFrom(sw);
+                for (int j = 2; j < line.length; j++) {
+                    int idx = Integer.parseInt(line[j]);
+                    sw.alternativeWays.add(rails.get(idx));
+                    if(rails.get(idx).to == null)
+                        rails.get(idx).setTo(sw);
+                    else
+                        rails.get(idx).setFrom(sw);
+                }
+
+                if(rails.get(from).to == null)
+                    rails.get(from).setTo(sw);
+                else
+                    rails.get(from).setFrom(sw);
+
+                if(rails.get(to).from == null)
+                    rails.get(to).setFrom(sw);
+                else
+                    rails.get(to).setTo(sw);
+
                 for (int j = 2; j < line.length; j++) {
                     if(rails.get(Integer.parseInt(line[j])).from == null)
                         rails.get(Integer.parseInt(line[j])).setFrom(sw);
                 }
+                if(rails.get(from).to == null)
+                    rails.get(from).setTo(sw);
             }
 
             rails.add(new Tunnel(null, null));
@@ -128,11 +145,11 @@ public class Playground {
                 System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
             }
 
-            Car car2 = new Car(rails.get(9), rails.get(6), null, Color.BLUE);
+            Car car2 = new Car(rails.get(8), rails.get(4), null, Color.BLUE);
             car2.canEmpty = false;
-            Car car1 = new Car(rails.get(7), rails.get(9), car2, Color.BLUE);
+            Car car1 = new Car(rails.get(5), rails.get(8), car2, Color.BLUE);
             car1.canEmpty = true;
-            locomotives.add(new Locomotive(rails.get(0), rails.get(7), car1, 1));
+            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
 
         } catch (IOException e){
             System.out.println(e.toString());
@@ -145,6 +162,7 @@ public class Playground {
     protected ArrayList<Rail> rails;
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
+    private ArrayList<Switch> switches = new ArrayList<>();
 
 
     /**
@@ -163,8 +181,7 @@ public class Playground {
      * @return
      */
     public void changeSwitch(int id) {
-        // TODO implement here
-        throw new NotImplementedException();
+        switches.get(id).changeDir();
     }
 
     /**
