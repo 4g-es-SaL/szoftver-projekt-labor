@@ -15,6 +15,21 @@ public class Program {
      */
     protected Playground playground;
 
+    /**
+     * MAP:
+     *              0       |6|
+     *          ________  ________
+     *         |      /           |
+     *     5   |    /             |   1
+     *         |  /  (tunnel)     |
+     *          /
+     *         |                  |
+     *     7   |                  |   2
+     *         |                  |
+     *          _______  _________
+     *             4         3
+     */
+
 
     /**
      * @param args
