@@ -1,7 +1,9 @@
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.File;
 import java.util.*;
+import java.io.Reader;
 
 /**
  * Created by matech on 2017. 02. 20..
@@ -9,7 +11,7 @@ import java.util.*;
 public class Program {
 
     /**
-     * 
+     *
      */
     protected Playground playground;
 
@@ -17,9 +19,17 @@ public class Program {
     /**
      * @param args
      */
-    public static void main(Set<String> args) {
+    public static void main(String[] args) {
         // TODO implement here
-        throw new NotImplementedException();
+        File f = new File("map.txt");
+        Playground playground1 = new Playground(f);
+
+        for (int i = 0; i < 20; i++) {
+            playground1.runTurn();
+            if(i == 11)
+                playground1.changeSwitch(1);
+        }
+
     }
 
 }

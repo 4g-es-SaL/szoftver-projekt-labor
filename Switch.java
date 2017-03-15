@@ -13,30 +13,27 @@ public class Switch extends Rail {
      * @param to
      * @param to2
      */
-    public Switch(Rail from, Rail to, Set<Rail> to2) {
+    public Switch(Rail from, Rail to, ArrayList<Rail> to2) {
         super(from, to);
-        // TODO implement here
-        throw new NotImplementedException();
+        alternativeWays = to2;
     }
 
-    /**
-     * 
-     */
-    protected Set<Rail> alternativeWays;
-
-    /**
-     * 
-     */
+    protected ArrayList<Rail> alternativeWays;
     protected int currentToId = 0;
 
 
-
-    /**
-     *
-     */
     public void changeDir() {
-        // TODO implement here
-        throw new NotImplementedException();
+        currentToId = (currentToId+1) % (alternativeWays.size()+1);
+    }
+
+    public Rail carMoves(Car t, Rail prev) {
+        if(from == prev) {
+            if (currentToId == 0)
+                return to;
+            return alternativeWays.get(currentToId - 1);
+        }
+        else
+            return from;
     }
 
 }

@@ -15,10 +15,28 @@ public class Locomotive extends Car {
      */
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
-        // TODO implement here
-        throw new NotImplementedException();
+        this.speed = speed;
     }
 
+    public int runTurn() {
+        System.out.print(rail.id + " ");
+        int ret = 1;
+        for (int i = 0; i < speed; i++) {
+            Rail tmp = rail;
+            rail = rail.carMoves(this, prevRail);
+            prevRail = tmp;
+            if(next != null){
+                ret = next.runTurn();
+                if(ret == 2){
+                    System.out.println("ures");
+                }
+            }
+
+        }
+        System.out.print("\n\n");
+        //System.out.println(rail.id);
+        return ret;
+    }
     /**
      * 
      */

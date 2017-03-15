@@ -7,24 +7,22 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class Tunnel extends Rail {
 
     /**
-     * 
+     *
      */
     protected Rail fromsNeighboor;
 
     /**
-     * 
+     *
      */
     protected Rail tosNeighboor;
 
 
     /**
-     * @param from 
+     * @param from
      * @param to
      */
     public Tunnel(Rail from, Rail to) {
         super(from, to);
-        // TODO implement here
-        throw new NotImplementedException();
     }
 
     /**

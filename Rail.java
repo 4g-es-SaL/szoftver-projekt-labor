@@ -11,56 +11,44 @@ public class Rail {
      * @param to
      */
     public Rail(Rail from, Rail to) {
-        // TODO implement here
-        throw new NotImplementedException();
+        id = idGenerator++;
+        this.from = from;
+        this.to = to;
     }
 
-    /**
-     * 
-     */
+    public static int idGenerator = 0;
+    protected int id;
     protected Rail from;
-
-    /**
-     * 
-     */
     protected Rail to;
-
-    /**
-     * 
-     */
     protected Car car;
-
-    /**
-     * 
-     */
     protected Color color;
 
     /**
-     * @param t 
-     * @param prev 
+     * @param t
+     * @param prev
      * @return
      */
     public Rail carMoves(Car t, Rail prev) {
-        // TODO implement here
-        throw new NotImplementedException();
+        if(from == prev)
+            return to;
+        else
+            return from;
     }
 
     /**
-     * @param r 
+     * @param r
      * @return
      */
     public void setFrom(Rail r) {
-        // TODO implement here
-        throw new NotImplementedException();
+        from = r;
     }
 
     /**
-     * @param r 
+     * @param r
      * @return
      */
     public void setTo(Rail r) {
-        // TODO implement here
-        throw new NotImplementedException();
+        to = r;
     }
 
 }
