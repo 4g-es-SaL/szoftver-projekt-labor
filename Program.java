@@ -23,6 +23,11 @@ public class Program {
         // TODO implement here
         File f = new File("map.txt");
         Playground playground1 = new Playground(f);
+
+        for (int i = 0; i < 20; i++) {
+            playground1.runTurn();
+        }
+
     }
 
 }
