@@ -35,6 +35,7 @@ public class Car {
      * @return
      */
     public int runTurn() {
+        System.out.print(rail.id + " ");
         int ret = 1;
         Rail tmp = rail;
         rail = rail.carMoves(this, prevRail);
