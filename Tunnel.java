@@ -13,14 +13,16 @@ public class Tunnel extends Rail {
      * @param to
      */
     public Tunnel(Rail from, Rail to) {
-        super(from, to); MethodPrinter.enterMethod();
+        super(from, to);
+        MethodPrinter.enterMethod();
         MethodPrinter.leaveMethod();
     }
 
     /**
      * @param r
      */
-    public void buildTunnel(Rail r) { MethodPrinter.enterMethod();
+    public void buildTunnel(Rail r) {
+        MethodPrinter.enterMethod();
         if(from == null) {
             fromsNeighbor = r.getTo();
             r.setTo(this);
@@ -37,7 +39,9 @@ public class Tunnel extends Rail {
     /**
      *
      */
-    public void destroyTunnel() { MethodPrinter.enterMethod();
+    public void destroyTunnel() {
+        MethodPrinter.enterMethod();
+
         from.to = fromsNeighbor;
         to.to = tosNeighbor;
         from = null;
