@@ -30,7 +30,11 @@ public class Rail {
      * @return The Rail where c stands.
      * @throws Exception In occasion of collision!
      */
-    public Rail carMoves(Car c, Rail prev) throws Exception { MethodPrinter.enterMethod();
+    public Rail carMoves(Car c, Rail prev) throws Exception {
+        for (int i = 0; i < MethodPrinter.tabCount+1; i++)  System.out.print("\t");
+        System.out.println(this.toString());
+        MethodPrinter.enterMethod();
+
         c = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
