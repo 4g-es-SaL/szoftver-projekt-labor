@@ -22,8 +22,8 @@ public class Program {
      *          /
      *         |                  |
      *  sw|7|  |                  |   2
-     *         |                  |
-     *          _______  _________
+     *         |_______  _________|
+     *
      *             4         3
      */
 
@@ -38,7 +38,7 @@ public class Program {
         int userInput = -1;
 
         while (userInput != 0) {
-//            printInfo();
+            printInfo();
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
@@ -46,19 +46,28 @@ public class Program {
                     break;
                 case 2:
                     p.ATrainMoves();
+                    break;
+                case 3:
+                    p.BTrainMoves();
+                    break;
+                case 4:
+                    p.switchTheSwitch();
+                    break;
+                case 5:
+                    p.BThroughTheSwitch();
+                    break;
+                case 6:
+                    p.buildSomeTunnels();
+                    break;
+                case 7:
+                    p.BTroughTheTunnel();
+                    break;
+                case 8:
+                    p.destroySomeTunnels();
+                    break;
+
             }
         }
-
-//        System.out.println(playground1);
-//
-//        playground1.buildTunnelEnd(0);
-//        playground1.buildTunnelEnd(1);
-//        for (int i = 0; i < 20; i++) {
-//            playground1.runTurn();
-//            if(i == 11)
-//                playground1.changeSwitch(1);
-//        }
-
     }
 
     private static void printInfo() {
@@ -83,11 +92,75 @@ public class Program {
     private void initialization() {
         File f = new File("map.txt");
         playground = new Playground(f);
+        MethodPrinter.reset();
     }
 
     private void ATrainMoves() {
+        MethodPrinter.disablePrint();
         initialization();
         playground.initializeA();
+        MethodPrinter.enablePrint();
         playground.runTurn();
+        MethodPrinter.reset();
+    }
+
+    private void BTrainMoves() {
+        MethodPrinter.disablePrint();
+        initialization();
+        playground.initializeB();
+        MethodPrinter.enablePrint();
+        playground.runTurn();
+        MethodPrinter.reset();
+    }
+
+    private void switchTheSwitch(){
+        MethodPrinter.disablePrint();
+        initialization();
+        MethodPrinter.enablePrint();
+        playground.changeSwitch(0);
+        MethodPrinter.reset();
+    }
+
+    private void BThroughTheSwitch(){
+        MethodPrinter.disablePrint();
+        initialization();
+        playground.initializeB();
+        MethodPrinter.enablePrint();
+        playground.runTurn();
+        MethodPrinter.reset();
+    }
+
+    private void buildSomeTunnels(){
+        MethodPrinter.disablePrint();
+        initialization();
+        MethodPrinter.enablePrint();
+        playground.buildTunnelEnd(0);
+        playground.buildTunnelEnd(1);
+        MethodPrinter.reset();
+    }
+
+    private void BTroughTheTunnel(){
+        MethodPrinter.disablePrint();
+        initialization();
+        playground.initializeB();
+        playground.buildTunnelEnd(0);
+        playground.buildTunnelEnd(1);
+        playground.changeSwitch(1);
+        MethodPrinter.enablePrint();
+        playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        MethodPrinter.reset();
+    }
+
+    private void destroySomeTunnels(){
+        MethodPrinter.disablePrint();
+        initialization();
+        playground.buildTunnelEnd(0);
+        playground.buildTunnelEnd(1);
+        MethodPrinter.enablePrint();
+        playground.destroyTunnelEnd(0);
+        MethodPrinter.reset();
     }
 }

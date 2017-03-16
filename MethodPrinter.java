@@ -2,19 +2,28 @@
  * Created by matech on 2017. 03. 15..
  */
 public class MethodPrinter {
-    private static int tabCount;
+    private static boolean print = true;
+    public static int tabCount;
     public MethodPrinter() {
         tabCount = -1;
     }
 
+    public static void enablePrint() { print = true; }
+    public static void disablePrint() { print = false; }
+    public static void reset() { tabCount = -1; }
+
     public static void enterMethod() {
-        tabCount++;
-        printStackInfo('>');
+        if(print) {
+            tabCount++;
+            printStackInfo('>');
+        }
     }
 
     public static void leaveMethod() {
-        printStackInfo('<');
-        tabCount--;
+        if(print) {
+            printStackInfo('<');
+            tabCount--;
+        }
     }
 
     private static void printStackInfo(char sign) {
