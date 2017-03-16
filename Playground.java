@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -213,7 +211,6 @@ public class Playground {
      * @return
      */
     public void changeSwitch(int id) {          MethodPrinter.enterMethod();
-        MethodPrinter.enterMethod();
         switches.get(id).changeDir();
         MethodPrinter.leaveMethod();
     }
@@ -224,6 +221,7 @@ public class Playground {
      */
     public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
         tunnel.buildTunnel(tunnelEndPoints.get(id));
+        MethodPrinter.leaveMethod();
     }
 
     /**
@@ -233,6 +231,7 @@ public class Playground {
     public void destroyTunnelEnd(int id) {
         MethodPrinter.enterMethod();
         tunnel.destroyTunnel();
+        MethodPrinter.leaveMethod();
     }
 
     public void initializeA() {
@@ -245,7 +244,7 @@ public class Playground {
     }
 
     public void initializeB() {
-        Locomotive l =new Locomotive(rails.get(4), rails.get(3), null, 1);
+        Locomotive l =new Locomotive(rails.get(4), rails.get(3), null, 2);
         locomotives.add(l);
     }
 

@@ -38,7 +38,7 @@ public class Program {
         int userInput = -1;
 
         while (userInput != 0) {
-//            printInfo();
+            printInfo();
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
@@ -68,17 +68,6 @@ public class Program {
 
             }
         }
-
-//        System.out.println(playground1);
-//
-//        playground1.buildTunnelEnd(0);
-//        playground1.buildTunnelEnd(1);
-//        for (int i = 0; i < 20; i++) {
-//            playground1.runTurn();
-//            if(i == 11)
-//                playground1.changeSwitch(1);
-//        }
-
     }
 
     private static void printInfo() {
@@ -137,8 +126,6 @@ public class Program {
         initialization();
         playground.initializeB();
         MethodPrinter.enablePrint();
-        playground.runTurn();
-        playground.runTurn();
         playground.runTurn();
         MethodPrinter.reset();
     }
