@@ -13,11 +13,11 @@ public class Program {
     protected Playground playground;
 
     /**
-     * MAP:
+     * MAP:      (BLUE)
      *              0      sw|6|
      *          ________  ________
      *         |      /           |
-     *     5   |    /             |   1
+     *     5   |    /             |   1 (RED)
      *         |  /  (tunnel)     |
      *          /
      *         |                  |
