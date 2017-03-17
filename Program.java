@@ -93,6 +93,7 @@ public class Program {
     }
 
     private void initialization() {
+        Rail.idGenerator = 0;
         File f = new File("map.txt");
         playground = new Playground(f);
         MethodPrinter.reset();
