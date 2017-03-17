@@ -65,6 +65,9 @@ public class Program {
                 case 8:
                     p.destroySomeTunnels();
                     break;
+                case 11:
+                    p.collision();
+                    break;
 
             }
         }
@@ -161,6 +164,27 @@ public class Program {
         playground.buildTunnelEnd(1);
         MethodPrinter.enablePrint();
         playground.destroyTunnelEnd(0);
+        MethodPrinter.reset();
+    }
+
+
+    private void collision(){
+        MethodPrinter.disablePrint();
+        initialization();
+        playground.initializeA();
+        playground.initializeB();
+        MethodPrinter.enablePrint();
+
+        int isCollision = 0;
+        while (true){
+            isCollision = playground.runTurn();
+
+            if( isCollision == 1 ){
+                System.out.println("\n<<Collision Exception!>>\n");
+                break;
+            }
+        }
+
         MethodPrinter.reset();
     }
 }
