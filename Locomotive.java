@@ -14,6 +14,8 @@ public class Locomotive extends Car {
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
+        
+        next.setCanEmpty(true);
     }
 
     /**
@@ -26,7 +28,8 @@ public class Locomotive extends Car {
         for (int i = 0; i < speed; i++) {
             res = super.runTurn();
             if (res == 1) {
-                MethodPrinter.leaveMethod(); return 1;
+                MethodPrinter.leaveMethod();
+                return 1;
             }
         }
 //        System.out.print("\n\n");
@@ -36,5 +39,10 @@ public class Locomotive extends Car {
      * 
      */
     protected int speed;
+    
+    public void atStation(Color c) { MethodPrinter.enterMethod();
+    	next.setCanEmpty(true);
+    	MethodPrinter.leaveMethod();
+    }
 
 }

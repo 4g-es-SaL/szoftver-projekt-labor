@@ -65,6 +65,9 @@ public class Program {
                 case 8:
                     p.destroySomeTunnels();
                     break;
+                case 9:
+                	p.passRedStationWithFullCars();
+                	break;
                 case 11:
                     p.collision();
                     break;
@@ -73,23 +76,23 @@ public class Program {
         }
     }
 
-    private static void printInfo() {
-        System.out.println("A pÃ¡lyÃ¡n kÃ©t vonat talÃ¡lhatÃ³.\n" +
-                "â€œAâ€ vonat 1 mozdonybÃ³l Ã©s 3 kocsibÃ³l Ã¡ll. A kocsik szÃ­ne a vonat elejÃ©rÅ‘l: kÃ©k, piros, kÃ©k. SebessÃ©ge 1.\n" +
-                "â€œBâ€ vonat 1 mozdonybÃ³l Ã¡ll. SebessÃ©ge 2.\n" +
-                "VÃ¡lasszon jelenetet:\n" +
-                "0 - KilÃ©pÃ©s\n" +
-                "1 - InicializÃ¡ciÃ³\n" +
-                "2 - â€œAâ€ elÅ‘re halad.\n" +
-                "3 - â€œBâ€ elÅ‘re halad.\n" +
-                "4 - VÃ¡ltÃ³ Ã¡tÃ¡llÃ­tÃ¡sa.\n" +
-                "5 - â€œBâ€ vonat Ã¡thaladÃ¡sa vÃ¡ltÃ³n.\n" +
-                "6 - AlagÃºt Ã©pÃ­tÃ©s.\n" +
-                "7 - â€œBâ€ vonat Ã¡thaladÃ¡sa alagÃºton.\n" +
-                "8 - AlagÃºt lebontÃ¡sa.\n" +
-                "9 - â€œAâ€ Ã¡thalad egy piros szÃ­nÅ± Ã¡llomÃ¡son miutÃ¡n mÃ¡r egyszer Ã¡thaladt kÃ©ken.\n" +
-                "10 - â€œAâ€ Ã¡thalad a kÃ©k szÃ­nÅ± Ã¡llomÃ¡son, mikor mÃ©g egy kocsija sem Ã¼rÃ¼lt.\n" +
-                "11 - ÃœtkÃ¶zÃ©s\n");
+	private static void printInfo() {
+        System.out.println("A pályán két vonat található.\n" +
+                "“A” vonat 1 mozdonyból és 3 kocsiból áll. A kocsik színe a vonat elejérõl: kék, piros, kék. Sebessége 1.\n" +
+                "“B” vonat 1 mozdonyból áll. Sebessége 2.\n" +
+                "Válasszon jelenetet:\n" +
+                "0 - Kilépés\n" +
+                "1 - Inicializáció\n" +
+                "2 - “A” elõre halad.\n" +
+                "3 - “B” elõre halad.\n" +
+                "4 - Váltó átállítása.\n" +
+                "5 - “B” vonat áthaladása váltón.\n" +
+                "6 - Alagút építés.\n" +
+                "7 - “B” vonat áthaladása alagúton.\n" +
+                "8 - Alagút lebontása.\n" +
+                "9 - “A” áthalad a piros színû állomáson, mikor még egy kocsija sem ürült.\n" +
+                "10 - “A” áthalad a kék színû állomáson, mikor még egy kocsija sem ürült.\n" +
+                "11 - Ütközés\n");
     }
 
     private void initialization() {
@@ -188,4 +191,17 @@ public class Program {
 
         MethodPrinter.reset();
     }
+    
+    private void passRedStationWithFullCars(){
+    	MethodPrinter.disablePrint();
+    	initialization();
+    	playground.initializeAForRedStation();
+    	MethodPrinter.enablePrint();
+    	playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        MethodPrinter.reset();
+    }
+    
 }
