@@ -35,7 +35,7 @@ public class Rail {
         System.out.println(this.toString());
         MethodPrinter.enterMethod();
 
-        c = null;
+        car = null;
         Rail nextRail = getNextRail(prev);
         nextRail.addCar(c);
 
