@@ -64,7 +64,7 @@ public class Car {
      * Sets the Cars Color to NO_COLOR, if c equals the Cars Color and canEmpty is true.
      * @param c The Color to compare.
      */
-    public void atStation(Color c) {
+    public void atStation(Color c) { MethodPrinter.enterMethod();
         if(color == c && canEmpty){
             if(next != null) {
                 next.setCanEmpty(false);
@@ -72,16 +72,17 @@ public class Car {
             color = Color.NO_COLOR;
 //            System.out.print("urit ");
         }
+        MethodPrinter.leaveMethod();
     }
 
     /**
      * @param b
      */
-    public void setCanEmpty(boolean b) {
+    public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
         canEmpty = b;
-        if(next != null) {
-            next.setCanEmpty(true);
-        }
+        if(next != null)
+        	next.setCanEmpty(b);
+        MethodPrinter.leaveMethod();
     }
 
 }

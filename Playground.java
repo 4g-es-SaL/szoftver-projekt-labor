@@ -242,6 +242,15 @@ public class Playground {
                                             Color.BLUE), Color.RED), Color.BLUE), 1);
         locomotives.add(l);
     }
+    
+    public void initializeAForRedStation() {
+        Locomotive l =new Locomotive(rails.get(1), rails.get(2),
+                            new Car(rails.get(2), rails.get(3),
+                                new Car(rails.get(3), rails.get(4),
+                                    new Car(rails.get(4), rails.get(7), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
+        locomotives.add(l);
+    }
 
     public void initializeB() {
         Locomotive l =new Locomotive(rails.get(4), rails.get(3), null, 2);
