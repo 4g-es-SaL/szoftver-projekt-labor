@@ -4,6 +4,12 @@
  */
 public class Car {
 
+    protected Rail rail;
+    protected Rail prevRail;
+    protected Car next;
+    protected Color color;
+    protected boolean canEmpty;
+
     /**
      * Create a new Car object.
      * @param rail The Car will stand on this Rail.
@@ -16,18 +22,8 @@ public class Car {
         this.prevRail = prevRail;
         this.next = next;
         this.color = color;
-        empty = false;
+        canEmpty = true;
     }
-
-    /**
-     * 
-     */
-    protected Rail rail;
-    protected Rail prevRail;
-    protected Car next;
-    protected Color color;
-    protected boolean canEmpty;
-    protected boolean empty;
 
 
     /**
@@ -70,10 +66,11 @@ public class Car {
      */
     public void atStation(Color c) {
         if(color == c && canEmpty){
-            if(next != null)
-                next.setCanEmpty(true);
-            empty = true;
-            System.out.print("urit ");
+            if(next != null) {
+                next.setCanEmpty(false);
+            }
+            color = Color.NO_COLOR;
+//            System.out.print("urit ");
         }
     }
 
@@ -82,6 +79,9 @@ public class Car {
      */
     public void setCanEmpty(boolean b) {
         canEmpty = b;
+        if(next != null) {
+            next.setCanEmpty(true);
+        }
     }
 
 }

@@ -3,6 +3,7 @@
  * Created by matech on 2017. 02. 20..
  */
 public class Locomotive extends Car {
+    protected int speed;
 
     /**
      * Create a new Locomotive object. Locomotives Color is NO_COLOR.
@@ -14,8 +15,6 @@ public class Locomotive extends Car {
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
-        
-        next.setCanEmpty(true);
     }
 
     /**
@@ -35,9 +34,11 @@ public class Locomotive extends Car {
 //        System.out.print("\n\n");
         MethodPrinter.leaveMethod(); return res;
     }
-    /**
-     * 
-     */
-    protected int speed;
 
+    @Override
+    public void atStation(Color c) {
+        if (next != null) {
+            next.setCanEmpty(true);
+        }
+    }
 }
