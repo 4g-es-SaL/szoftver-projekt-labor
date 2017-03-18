@@ -78,22 +78,22 @@ public class Program {
     }
 
 	private static void printInfo() {
-        System.out.println("A p�ly�n k�t vonat tal�lhat�.\n" +
-                "�A� vonat 1 mozdonyb�l �s 3 kocsib�l �ll. A kocsik sz�ne a vonat elej�r�l: k�k, piros, k�k. Sebess�ge 1.\n" +
-                "�B� vonat 1 mozdonyb�l �ll. Sebess�ge 2.\n" +
-                "V�lasszon jelenetet:\n" +
-                "0 - Kil�p�s\n" +
-                "1 - Inicializ�ci�\n" +
-                "2 - �A� el�re halad.\n" +
-                "3 - �B� el�re halad.\n" +
-                "4 - V�lt� �t�ll�t�sa.\n" +
-                "5 - �B� vonat �thalad�sa v�lt�n.\n" +
-                "6 - Alag�t �p�t�s.\n" +
-                "7 - �B� vonat �thalad�sa alag�ton.\n" +
-                "8 - Alag�t lebont�sa.\n" +
-                "9 - �A� �thalad a piros sz�n� �llom�son, mikor m�g egy kocsija sem �r�lt.\n" +
-                "10 - �A� �thalad a k�k sz�n� �llom�son, mikor m�g egy kocsija sem �r�lt.\n" +
-                "11 - �tk�z�s\n");
+        System.out.println("A pályán két vonat található.\n" +
+                "“A” vonat 1 mozdonyból és 3 kocsiból áll. A kocsik színe a vonat elejéről: kék, piros, kék. Sebessége 1.\n" +
+                "“B” vonat 1 mozdonyból áll. Sebessége 2.\n" +
+                "Válasszon jelenetet:\n" +
+                "0 - Kilépés\n" +
+                "1 - Inicializáció\n" +
+                "2 - “A” előre halad.\n" +
+                "3 - “B” előre halad.\n" +
+                "4 - Váltó átállítása.\n" +
+                "5 - “B” vonat áthaladása váltón.\n" +
+                "6 - Alagút építés.\n" +
+                "7 - “B” vonat áthaladása alagúton.\n" +
+                "8 - Alagút lebontása.\n" +
+                "9 - “A” áthalad a piros színű állomáson, mikor még egy kocsija sem ürült.\n" +
+                "10 - “A” áthalad a kék színű állomáson, mikor még egy kocsija sem ürült.\n" +
+                "11 - Ütközés\n");
     }
 
     private void initialization() {

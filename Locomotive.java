@@ -15,8 +15,6 @@ public class Locomotive extends Car {
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
-        
-        next.setCanEmpty(true);
     }
 
     /**
