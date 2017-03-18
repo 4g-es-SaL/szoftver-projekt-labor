@@ -65,10 +65,11 @@ public class Program {
                 case 8:
                     p.destroySomeTunnels();
                     break;
+                case 10:
+                	p.passBlueStationWithFullCars();
                 case 11:
                     p.collision();
                     break;
-
             }
         }
     }
@@ -167,7 +168,20 @@ public class Program {
         playground.destroyTunnelEnd(0);
         MethodPrinter.reset();
     }
-
+  
+    private void passBlueStationWithFullCars(){
+    	MethodPrinter.disablePrint();
+    	initialization();
+    	playground.initializeA();
+    	MethodPrinter.enablePrint();
+    	System.out.println("pisi-kaka");
+    	playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        playground.runTurn();
+        MethodPrinter.reset();
+    }
 
     private void collision(){
         MethodPrinter.disablePrint();
@@ -185,7 +199,6 @@ public class Program {
                 break;
             }
         }
-
         MethodPrinter.reset();
     }
 }
