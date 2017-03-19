@@ -4,12 +4,6 @@
  */
 public class Car {
 
-    protected Rail rail;
-    protected Rail prevRail;
-    protected Car next;
-    protected Color color;
-    protected boolean canEmpty;
-
     /**
      * Create a new Car object.
      * @param rail The Car will stand on this Rail.
@@ -22,8 +16,18 @@ public class Car {
         this.prevRail = prevRail;
         this.next = next;
         this.color = color;
-        canEmpty = true;
+        empty = false;
     }
+
+    /**
+     * 
+     */
+    protected Rail rail;
+    protected Rail prevRail;
+    protected Car next;
+    protected Color color;
+    protected boolean canEmpty;
+    protected boolean empty;
 
 
     /**
@@ -65,13 +69,13 @@ public class Car {
      * @param c The Color to compare.
      */
     public void atStation(Color c) { MethodPrinter.enterMethod();
-        if(color == c && canEmpty){
-            if(next != null) {
-                next.setCanEmpty(false);
+    	if(canEmpty){
+    		if(next != null)
+    			next.setCanEmpty(false);
+    		if(color == c){
+                empty = true;
             }
-            color = Color.NO_COLOR;
-//            System.out.print("urit ");
-        }
+    	}
         MethodPrinter.leaveMethod();
     }
 
