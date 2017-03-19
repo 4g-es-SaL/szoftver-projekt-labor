@@ -14,7 +14,7 @@ public class Locomotive extends Car {
      */
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed) throws Exception {
         super(rail, prevRail, next,Color.NO_COLOR);
-        if (next.getClass().equals(Locomotive.class)) {
+        if (next != null && next.getClass().equals(Locomotive.class)) {
             //TODO: Free Rail from Car
             System.exit(1);
             throw new Exception("A train cant have multiple Locomotives.");

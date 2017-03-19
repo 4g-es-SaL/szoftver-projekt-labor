@@ -258,6 +258,7 @@ public class Playground {
                                                 Color.BLUE), Color.RED), Color.BLUE), 1);
             locomotives.add(l);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("The rail is taken!");
         }
     }
@@ -267,6 +268,7 @@ public class Playground {
             Locomotive l = new Locomotive(rails.get(railID), rails.get(prevRailId), null, 2);
             locomotives.add(l);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("The rail is taken!");
         }
     }
