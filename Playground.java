@@ -244,10 +244,10 @@ public class Playground {
     }
     
     public void initializeAForRedStation() {
-        Locomotive l =new Locomotive(rails.get(1), rails.get(2),
-                            new Car(rails.get(2), rails.get(3),
-                                new Car(rails.get(3), rails.get(4),
-                                    new Car(rails.get(4), rails.get(7), null,
+        Locomotive l =new Locomotive(rails.get(3), rails.get(4),
+                            new Car(rails.get(4), rails.get(7),
+                                new Car(rails.get(7), rails.get(5),
+                                    new Car(rails.get(5), rails.get(0), null,
                                             Color.BLUE), Color.RED), Color.BLUE), 1);
         locomotives.add(l);
     }
