@@ -1,13 +1,13 @@
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Represents a {@link Rail} object.
  */
 public class Rail {
 
     /**
-     * Create a new Rail object.
-     * @param from Connected to this Rail.
-     * @param to Connected to this Rail. If Tunnel will build this neighbor will be replaced.
+     * Create a new {@link Rail} object.
+     * @param from Connected to this {@link Rail}.
+     * @param to Connected to this {@link Rail}. If Tunnel will build this neighbor will be replaced.
      */
     public Rail(Rail from, Rail to) {
         MethodPrinter.enterMethod();
@@ -24,10 +24,10 @@ public class Rail {
     protected Car car;
 
     /**
-     * Moves the Car to the next Rail in the network.
-     * @param c The Car that moves.
-     * @param prev The Rail where the Car came from.
-     * @return The Rail where c stands.
+     * Moves the {@link Car} to the next Rail in the network.
+     * @param c The {@link Car} that moves.
+     * @param prev The Rail where the {@link Car} came from.
+     * @return The {@link Rail} where c stands.
      * @throws Exception In occasion of collision!
      */
     public Rail carMoves(Car c, Rail prev) throws Exception {
@@ -64,20 +64,12 @@ public class Rail {
         }
     }
 
-    /**
-     * @param r
-     * @return
-     */
     public void setFrom(Rail r) { MethodPrinter.enterMethod();
         from = r;
 
         MethodPrinter.leaveMethod();
     }
 
-    /**
-     * @param r
-     * @return
-     */
     public void setTo(Rail r) { MethodPrinter.enterMethod();
         to = r;
 

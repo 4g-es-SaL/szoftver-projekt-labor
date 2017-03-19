@@ -1,6 +1,6 @@
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Represents the color of the {@link Car}s and {@link Station}s.
  */
 public enum Color {
     RED,

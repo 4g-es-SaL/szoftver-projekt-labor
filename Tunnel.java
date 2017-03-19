@@ -1,6 +1,6 @@
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Represents a tunnel object. A tunnel is a special {@link Rail}, because it is not always presented.
  */
 public class Tunnel extends Rail {
 
@@ -9,6 +9,7 @@ public class Tunnel extends Rail {
 
 
     /**
+     * Create a new {@link Tunnel} object.
      * @param from
      * @param to
      */
@@ -19,6 +20,7 @@ public class Tunnel extends Rail {
     }
 
     /**
+     * Builds the {@link Tunnel}s end to r {@link Rail#to} end.
      * @param r
      */
     public void buildTunnel(Rail r) {
@@ -37,7 +39,7 @@ public class Tunnel extends Rail {
     }
 
     /**
-     *
+     * Destroy both end of the {@link Tunnel}.
      */
     public void destroyTunnel() {
         MethodPrinter.enterMethod();

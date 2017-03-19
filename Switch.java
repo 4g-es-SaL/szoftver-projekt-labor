@@ -2,14 +2,19 @@
 import java.util.ArrayList;
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Represents a switch object. A switch is a special type of {@link Rail}. It can have not just 2, but multiple ends,
+ * but only 2 can be active.
  */
 public class Switch extends Rail {
 
+    protected ArrayList<Rail> alternativeWays;
+    protected int currentToId = 0;
+
     /**
-     * @param from
-     * @param to
-     * @param to2
+     * Create a {@link Switch} object.
+     * @param from Connected to this {@link Rail}. If {@link Car} comes from one of the to2 direction, it will go this way.
+     * @param to Connected to this {@link Rail}.
+     * @param to2 to can be replaced with this ones. Muss contain to too.
      */
     public Switch(Rail from, Rail to, ArrayList<Rail> to2) {
         super(from, to); MethodPrinter.enterMethod();
@@ -18,10 +23,9 @@ public class Switch extends Rail {
         MethodPrinter.leaveMethod();
     }
 
-    protected ArrayList<Rail> alternativeWays;
-    protected int currentToId = 0;
-
-
+    /**
+     * Rotates to2.
+     */
     public void changeDir() { MethodPrinter.enterMethod();
         currentToId = (currentToId+1) % (alternativeWays.size());
         to = alternativeWays.get(currentToId);
