@@ -31,13 +31,18 @@ public class Rail {
      * @throws Exception In occasion of collision!
      */
     public Rail carMoves(Car c, Rail prev) throws Exception {
-        for (int i = 0; i < MethodPrinter.tabCount+1; i++)  System.out.print("\t");
-        System.out.println(this.toString());
+//        for (int i = 0; i < MethodPrinter.tabCount+1; i++)  System.out.print("\t");
+//        System.out.println(this.toString());
         MethodPrinter.enterMethod();
 
         car = null;
         Rail nextRail = getNextRail(prev);
-        nextRail.addCar(c);
+        try {
+            nextRail.addCar(c);
+        } catch (Exception e) {
+            MethodPrinter.leaveMethod();
+            throw e;
+        }
 
         MethodPrinter.leaveMethod();
         return nextRail;
@@ -79,13 +84,13 @@ public class Rail {
         MethodPrinter.leaveMethod();
     }
 
-    public Rail getFrom() { MethodPrinter.enterMethod();
-    MethodPrinter.leaveMethod();
+    public Rail getFrom() { //MethodPrinter.enterMethod();
+//    MethodPrinter.leaveMethod();
         return from;
     }
 
-    public Rail getTo() { MethodPrinter.enterMethod();
-        MethodPrinter.leaveMethod();
+    public Rail getTo() { //MethodPrinter.enterMethod();
+//        MethodPrinter.leaveMethod();
         return to;
     }
 

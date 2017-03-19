@@ -70,6 +70,7 @@ public class Program {
                 	break;
                 case 10:
                 	p.passBlueStationWithFullCars();
+                	break;
                 case 11:
                     p.collision();
                     break;
@@ -115,7 +116,7 @@ public class Program {
     private void BTrainMoves() {
         MethodPrinter.disablePrint();
         initialization();
-        playground.initializeB();
+        playground.initializeB(2, 1);
         MethodPrinter.enablePrint();
         playground.runTurn();
         MethodPrinter.reset();
@@ -132,7 +133,7 @@ public class Program {
     private void BThroughTheSwitch(){
         MethodPrinter.disablePrint();
         initialization();
-        playground.initializeB();
+        playground.initializeB(4, 3);
         MethodPrinter.enablePrint();
         playground.runTurn();
         MethodPrinter.reset();
@@ -150,14 +151,11 @@ public class Program {
     private void BTroughTheTunnel(){
         MethodPrinter.disablePrint();
         initialization();
-        playground.initializeB();
+        playground.initializeB(7, 4);
         playground.buildTunnelEnd(0);
         playground.buildTunnelEnd(1);
         playground.changeSwitch(1);
         MethodPrinter.enablePrint();
-        playground.runTurn();
-        playground.runTurn();
-        playground.runTurn();
         playground.runTurn();
         MethodPrinter.reset();
     }
@@ -177,7 +175,7 @@ public class Program {
     	initialization();
     	playground.initializeA();
     	MethodPrinter.enablePrint();
-    	System.out.println("pisi-kaka");
+//    	System.out.println("pisi-kaka"); // WHAT THE FUCK IS THIS SHIT?!4?!4
     	playground.runTurn();
         playground.runTurn();
         playground.runTurn();
@@ -189,8 +187,8 @@ public class Program {
     private void collision(){
         MethodPrinter.disablePrint();
         initialization();
+        playground.initializeB(0, 5);
         playground.initializeA();
-        playground.initializeB();
         MethodPrinter.enablePrint();
 
         int isCollision = 0;

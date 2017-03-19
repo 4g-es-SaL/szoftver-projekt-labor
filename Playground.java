@@ -173,8 +173,9 @@ public class Playground {
                 enterPoints.add(rails.get(idx));
             }
 
-//            for (int i = 0; i < numRails; i++) {
-//                System.out.println(i + ": " + rails.indexOf(rails.get(i).from) + " - " + rails.indexOf(rails.get(i).to));
+//            for (Rail r :
+//                    rails) {
+//                System.out.println(r);
 //            }
 //
 //            Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
@@ -235,26 +236,39 @@ public class Playground {
     }
 
     public void initializeA() {
-        Locomotive l =new Locomotive(rails.get(6), rails.get(1),
-                            new Car(rails.get(1), rails.get(2),
-                                new Car(rails.get(2), rails.get(3),
-                                    new Car(rails.get(3), rails.get(4), null,
-                                            Color.BLUE), Color.RED), Color.BLUE), 1);
+        Locomotive l = null;
+        try {
+            l = new Locomotive(rails.get(6), rails.get(1),
+                                new Car(rails.get(1), rails.get(2),
+                                    new Car(rails.get(2), rails.get(3),
+                                        new Car(rails.get(3), rails.get(4), null,
+                                                Color.BLUE), Color.RED), Color.BLUE), 1);
+        } catch (Exception e) {
+            System.out.println("The rail is taken!");
+        }
         locomotives.add(l);
     }
     
     public void initializeAForRedStation() {
-        Locomotive l =new Locomotive(rails.get(3), rails.get(4),
-                            new Car(rails.get(4), rails.get(7),
-                                new Car(rails.get(7), rails.get(5),
-                                    new Car(rails.get(5), rails.get(0), null,
-                                            Color.BLUE), Color.RED), Color.BLUE), 1);
-        locomotives.add(l);
+        try {
+            Locomotive l = new Locomotive(rails.get(3), rails.get(4),
+                                new Car(rails.get(4), rails.get(7),
+                                    new Car(rails.get(7), rails.get(5),
+                                        new Car(rails.get(5), rails.get(0), null,
+                                                Color.BLUE), Color.RED), Color.BLUE), 1);
+            locomotives.add(l);
+        } catch (Exception e) {
+            System.out.println("The rail is taken!");
+        }
     }
 
-    public void initializeB() {
-        Locomotive l =new Locomotive(rails.get(4), rails.get(3), null, 2);
-        locomotives.add(l);
+    public void initializeB(int railID, int prevRailId) {
+        try {
+            Locomotive l = new Locomotive(rails.get(railID), rails.get(prevRailId), null, 2);
+            locomotives.add(l);
+        } catch (Exception e) {
+            System.out.println("The rail is taken!");
+        }
     }
 
     @Override

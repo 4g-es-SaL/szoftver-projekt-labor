@@ -42,8 +42,8 @@ public class Tunnel extends Rail {
     public void destroyTunnel() {
         MethodPrinter.enterMethod();
 
-        from.to = fromsNeighbor;
-        to.to = tosNeighbor;
+        from.setTo(fromsNeighbor);
+        to.setTo(tosNeighbor);
         from = null;
         to = null;
 

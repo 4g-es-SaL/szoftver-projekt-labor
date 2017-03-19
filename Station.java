@@ -15,15 +15,23 @@ public class Station extends Rail {
     }
 
     public Rail carMoves(Car t, Rail prev) throws Exception { MethodPrinter.enterMethod();
-        Rail res = super.carMoves(t, prev);
-        t.atStation(color);
-
-        MethodPrinter.leaveMethod(); return res;
+        try {
+            Rail res = super.carMoves(t, prev);
+            t.atStation(color);
+            MethodPrinter.leaveMethod(); return res;
+        } catch(Exception e) {
+            MethodPrinter.leaveMethod();
+            throw e;
+        }
     }
 
     protected Color color;
 
-
-
-
-}//kkkkkkk
+    @Override
+    public String toString() {
+        return "Station{" +
+                super.toString() +
+                "color=" + color +
+                "}";
+    }
+}

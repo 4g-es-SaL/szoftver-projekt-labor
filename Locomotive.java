@@ -12,7 +12,7 @@ public class Locomotive extends Car {
      * @param next In the train, the Car behind this Car.
      * @param speed The speed of the Locomotive.
      */
-    public Locomotive(Rail rail, Rail prevRail, Car next, int speed) {
+    public Locomotive(Rail rail, Rail prevRail, Car next, int speed) throws Exception {
         super(rail, prevRail, next,Color.NO_COLOR);
         this.speed = speed;
     }
@@ -36,9 +36,10 @@ public class Locomotive extends Car {
     }
 
     @Override
-    public void atStation(Color c) {
+    public void atStation(Color c) { MethodPrinter.enterMethod();
         if (next != null) {
             next.setCanEmpty(true);
         }
+        MethodPrinter.leaveMethod();
     }
 }
