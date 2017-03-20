@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Maneges the objects({@link Rail}s, {@link Car}s) of the game.
  */
 public class Playground {
 
@@ -18,8 +18,8 @@ public class Playground {
     private ArrayList<Switch> switches = new ArrayList<>();
 
     /**
-     *
-     * @param f
+     * Creat a new instance of Playground
+     * @param f The file that stores the map of {@link Rail}s.
      *
      * A file tartalma a következő
      * R
@@ -53,7 +53,7 @@ public class Playground {
      */
 
     Playground(File f) {          MethodPrinter.enterMethod();
-
+        //TODO: Make the code more understandable. Correct file handling.
         rails = new ArrayList<>();
 
         try {
@@ -62,9 +62,9 @@ public class Playground {
 
             tunnel = new Tunnel(null, null);
             Rail.idGenerator--;
+
             // Reading Rails and Stations
             int numRails = Integer.parseInt(in.readLine());
-//            System.out.println(numRails);
             for (int i = 0; i < numRails; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
@@ -99,7 +99,6 @@ public class Playground {
 
             // Reading Switches
             int numSwitches = Integer.parseInt(in.readLine());
-//            System.out.println(numSwitches);
             for (int i = 0; i < numSwitches; i++) {
                 line = in.readLine().split(" ");
                 int from = Integer.parseInt(line[0]);
@@ -173,6 +172,8 @@ public class Playground {
                 enterPoints.add(rails.get(idx));
             }
 
+            in.close();
+
 //            for (Rail r :
 //                    rails) {
 //                System.out.println(r);
@@ -191,6 +192,7 @@ public class Playground {
     }
 
     /**
+     * Calls all locomotives {@link Locomotive#runTurn()}.
      * @return
      */
     public int runTurn() {          MethodPrinter.enterMethod();
@@ -208,8 +210,8 @@ public class Playground {
     }
 
     /**
-     * @param id
-     * @return
+     * Changes the {@link Switch} direction.
+     * @param id Identifies the Switch.
      */
     public void changeSwitch(int id) {          MethodPrinter.enterMethod();
         switches.get(id).changeDir();
@@ -258,6 +260,7 @@ public class Playground {
                                                 Color.BLUE), Color.RED), Color.BLUE), 1);
             locomotives.add(l);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("The rail is taken!");
         }
     }
@@ -267,6 +270,7 @@ public class Playground {
             Locomotive l = new Locomotive(rails.get(railID), rails.get(prevRailId), null, 2);
             locomotives.add(l);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("The rail is taken!");
         }
     }

@@ -3,13 +3,10 @@ import java.io.File;
 import java.util.Scanner;
 
 /**
- * Created by matech on 2017. 02. 20..
+ * Communicates with the user and the {@link Playground}.
  */
 public class Program {
 
-    /**
-     *
-     */
     protected Playground playground;
 
     /**
@@ -29,7 +26,8 @@ public class Program {
 
 
     /**
-     * @param args
+     * Starts the program.
+     * @param args Ignored.
      */
     public static void main(String[] args) {
         // TODO implement here

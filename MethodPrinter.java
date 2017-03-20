@@ -1,7 +1,7 @@
 /**
- * Created by matech on 2017. 03. 15..
+ * Why dont we do unit tests?
  */
-public class MethodPrinter {
+class MethodPrinter {
     private static boolean print = true;
     public static int tabCount;
     public MethodPrinter() {
