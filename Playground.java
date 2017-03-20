@@ -172,6 +172,8 @@ public class Playground {
                 enterPoints.add(rails.get(idx));
             }
 
+            in.close();
+
 //            for (Rail r :
 //                    rails) {
 //                System.out.println(r);
