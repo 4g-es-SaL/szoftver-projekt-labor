@@ -11,7 +11,7 @@ public class Playground {
 
     protected long startTime;
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
-    protected ArrayList<Rail> rails;
+    protected ArrayList<Rail> rails = new ArrayList<>();
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
     protected Tunnel tunnel;
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
@@ -52,142 +52,23 @@ public class Playground {
      * A belépő pontok listája
      */
 
-    Playground(File f) {          MethodPrinter.enterMethod();
-        //TODO: Make the code more understandable. Correct file handling.
-        rails = new ArrayList<>();
+    Playground(File f) {
+        MethodPrinter.enterMethod();
 
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(f));
-            String[] line;
+        try(BufferedReader in = new BufferedReader(new FileReader(f))) {
+            readRails(in);
+            readSwitches(in);
+            readTunnelEndPoints(in);
+            readEntryPoints(in);
 
+            // create and add the only Tunnel object to the rails
             tunnel = new Tunnel(null, null);
-            Rail.idGenerator--;
-
-            // Reading Rails and Stations
-            int numRails = Integer.parseInt(in.readLine());
-            for (int i = 0; i < numRails; i++) {
-                line = in.readLine().split(" ");
-                int from = Integer.parseInt(line[0]);
-                int to = Integer.parseInt(line[1]);
-
-                Rail r;
-
-                if(line.length > 2){
-                    Color c = Color.values()[Integer.parseInt(line[2])];
-                    r = new Station(null, null, c);
-                }
-                else
-                    r = new Rail(null, null);
-
-                if (from != -1 && from < rails.size()) {
-                    r.setFrom(rails.get(from));
-                    if (rails.get(from).to == null)
-                        rails.get(from).setTo(r);
-                }
-                else if(from == -1)
-                    r.setFrom(tunnel);
-
-                if (to != -1 && to < rails.size()){
-                    r.setTo(rails.get(to));
-                    if(rails.get(to).from == null)
-                        rails.get(to).setFrom(r);
-                }
-                else if(to == -1)
-                    r.setTo(tunnel);
-                rails.add(r);
-            }
-
-            // Reading Switches
-            int numSwitches = Integer.parseInt(in.readLine());
-            for (int i = 0; i < numSwitches; i++) {
-                line = in.readLine().split(" ");
-                int from = Integer.parseInt(line[0]);
-                int to = Integer.parseInt(line[1]);
-                ArrayList<Rail> alt = new ArrayList<>();
-                Rail fromR, toR;
-                if(from == -1)
-                    fromR = tunnel;
-                else
-                    fromR = rails.get(from);
-
-                if(to == -1)
-                    toR = tunnel;
-                else
-                    toR = rails.get(to);
-
-                Switch sw = new Switch(fromR, toR, alt);
-                rails.add(sw);
-                switches.add(sw);
-
-                for (int j = 2; j < line.length; j++) {
-                    int idx = Integer.parseInt(line[j]);
-
-                    if(idx == -1)
-                        sw.alternativeWays.add(tunnel);
-                    else {
-                        sw.alternativeWays.add(rails.get(idx));
-                        if (rails.get(idx).to == null)
-                            rails.get(idx).setTo(sw);
-                        else
-                            rails.get(idx).setFrom(sw);
-                    }
-                }
-
-                if(from != -1)
-                    if(rails.get(from).to == null)
-                        rails.get(from).setTo(sw);
-                    else
-                        rails.get(from).setFrom(sw);
-
-                if(to != -1)
-                    if(rails.get(to).from == null)
-                        rails.get(to).setFrom(sw);
-                    else
-                        rails.get(to).setTo(sw);
-
-                for (int j = 2; j < line.length; j++) {
-                    int idx = Integer.parseInt(line[j]);
-                    if(idx != -1)
-                        if(rails.get(idx).from == null)
-                            rails.get(idx).setFrom(sw);
-                }
-                if(rails.get(from).to == null)
-                    rails.get(from).setTo(sw);
-            }
-
-            tunnel.id = rails.size();
             rails.add(tunnel);
 
-            // Setting up tunnel end points
-            line = in.readLine().split(" ");
-            for (int i = 0; i < line.length; i++) {
-                int idx = Integer.parseInt(line[i]);
-                tunnelEndPoints.add(rails.get(idx));
-            }
-
-            // Setting up entry points
-            line = in.readLine().split(" ");
-            for (int i = 0; i < line.length; i++) {
-                int idx = Integer.parseInt(line[i]);
-                enterPoints.add(rails.get(idx));
-            }
-
-            in.close();
-
-//            for (Rail r :
-//                    rails) {
-//                System.out.println(r);
-//            }
-//
-//            Car car2 = new Car(rails.get(7), rails.get(4), null, Color.BLUE);
-//            car2.canEmpty = false;
-//            Car car1 = new Car(rails.get(5), rails.get(7), car2, Color.BLUE);
-//            car1.canEmpty = true;
-//            locomotives.add(new Locomotive(rails.get(0), rails.get(5), car1, 1));
-
-        } catch (IOException e){
+        } catch (Exception e){
             System.out.println(e.toString());
         }
+
         MethodPrinter.leaveMethod();
     }
 
@@ -264,14 +145,14 @@ public class Playground {
         }
         locomotives.add(l);
     }
-    
+
     public void initializeAForRedStation() {
         try {
             Locomotive l = new Locomotive(rails.get(3), rails.get(4),
-                                new Car(rails.get(4), rails.get(7),
-                                    new Car(rails.get(7), rails.get(5),
-                                        new Car(rails.get(5), rails.get(0), null,
-                                                Color.BLUE), Color.RED), Color.BLUE), 1);
+                    new Car(rails.get(4), rails.get(7),
+                            new Car(rails.get(7), rails.get(5),
+                                    new Car(rails.get(5), rails.get(0), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
             locomotives.add(l);
         } catch (Exception e) {
             e.printStackTrace();
@@ -299,4 +180,110 @@ public class Playground {
         res += "}";
         return res;
     }
+
+
+    //  ___________________________________________
+    // |                                           |
+    // |        File reading helper functions      |
+    // |___________________________________________|
+    //
+    private void readRails(BufferedReader in) throws Exception {
+        int numRails = Integer.parseInt(in.readLine());
+
+        for (int i = 0; i < numRails; i++) {
+            String[] line = in.readLine().split(" ");
+            int from = Integer.parseInt(line[0]);
+            int to = Integer.parseInt(line[1]);
+
+            Rail r;
+
+            // if a color is defined -> make it a Station
+            if(line.length > 2){
+                Color c = Color.values()[Integer.parseInt(line[2])];
+                r = new Station(null, null, c);
+            }
+            else
+                r = new Rail(null, null);
+
+            // read from
+            if (from != -1 && from < rails.size()) {
+                r.setFrom(rails.get(from));
+                // if not set yet, set an available end to this rail
+                if (rails.get(from).getTo() == null)
+                    rails.get(from).setTo(r);
+            }
+
+            // read to
+            if (to != -1 && to < rails.size()){
+                r.setTo(rails.get(to));
+                // if not set yet, set an available end to this rail
+                if(rails.get(to).getFrom() == null)
+                    rails.get(to).setFrom(r);
+            }
+
+            rails.add(r);
+        }
+    }
+
+    private void readSwitches(BufferedReader in) throws Exception {
+        int numSwitches = Integer.parseInt(in.readLine());
+
+        for (int i = 0; i < numSwitches; i++) {
+            String[] line = in.readLine().split(" ");
+
+            // create a new Switch and add it to the rails and switches
+            Switch sw = new Switch(null, null, new ArrayList<>());
+            rails.add(sw);
+            switches.add(sw);
+
+            // read from
+            int from = Integer.parseInt(line[0]);
+            if(from != -1) {
+                sw.setFrom(rails.get(from));
+                if (rails.get(from).to == null)
+                    rails.get(from).setTo(sw);
+                else
+                    rails.get(from).setFrom(sw);
+            }
+
+            // read all the alternative rails
+            for (int j = 1; j < line.length; j++) {
+                int idx = Integer.parseInt(line[j]);
+
+                if(idx == -1)
+                    sw.alternativeWays.add(null);
+                else {
+                    sw.alternativeWays.add(rails.get(idx));
+                    // if not set yet, set an available end to this switch
+                    if (rails.get(idx).to == null)
+                        rails.get(idx).setTo(sw);
+                    else
+                        rails.get(idx).setFrom(sw);
+                }
+            }
+            // set to to the first alternative rail
+            sw.setTo(sw.alternativeWays.get(0));
+        }
+    }
+
+    private void readTunnelEndPoints(BufferedReader in) throws Exception {
+        String[] line = in.readLine().split(" ");
+        for (String aLine : line) {
+            int idx = Integer.parseInt(aLine);
+            tunnelEndPoints.add(rails.get(idx));
+        }
+    }
+
+    private void readEntryPoints(BufferedReader in) throws Exception {
+        String[] line = in.readLine().split(" ");
+        for (String aLine : line) {
+            int idx = Integer.parseInt(aLine);
+            enterPoints.add(rails.get(idx));
+        }
+    }
+
+    //
+    //       End of file reading helper functions
+    //  ______________________________________________
+    //  ______________________________________________
 }
