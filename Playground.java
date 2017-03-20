@@ -241,10 +241,24 @@ public class Playground {
         Locomotive l = null;
         try {
             l = new Locomotive(rails.get(6), rails.get(1),
-                                new Car(rails.get(1), rails.get(2),
-                                    new Car(rails.get(2), rails.get(3),
-                                        new Car(rails.get(3), rails.get(4), null,
-                                                Color.BLUE), Color.RED), Color.BLUE), 1);
+                    new Car(rails.get(1), rails.get(2),
+                            new Car(rails.get(2), rails.get(3),
+                                    new Car(rails.get(3), rails.get(4), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
+        } catch (Exception e) {
+            System.out.println("The rail is taken!");
+        }
+        locomotives.add(l);
+    }
+
+    public void initializeAForBlueStation() {
+        Locomotive l = null;
+        try {
+            l = new Locomotive(rails.get(0), rails.get(6),
+                    new Car(rails.get(6), rails.get(1),
+                            new Car(rails.get(1), rails.get(2),
+                                    new Car(rails.get(2), rails.get(3), null,
+                                            Color.BLUE), Color.RED), Color.BLUE), 1);
         } catch (Exception e) {
             System.out.println("The rail is taken!");
         }

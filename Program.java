@@ -171,11 +171,10 @@ public class Program {
     private void passBlueStationWithFullCars(){
     	MethodPrinter.disablePrint();
     	initialization();
-    	playground.initializeA();
+    	playground.initializeAForBlueStation();
     	MethodPrinter.enablePrint();
 //    	System.out.println("pisi-kaka"); // WHAT THE FUCK IS THIS SHIT?!4?!4
     	playground.runTurn();
-        playground.runTurn();
         playground.runTurn();
         playground.runTurn();
         playground.runTurn();
