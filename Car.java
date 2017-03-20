@@ -76,11 +76,15 @@ public class Car {
      * @param c The Color to compare.
      */
     public void atStation(Color c) { MethodPrinter.enterMethod();
-    	if(canEmpty && color == c){
-            color = Color.NO_COLOR;
-            if(next != null) {
-                next.setCanEmpty(false);
-            }
+    	if(canEmpty){
+    		if(color != Color.NO_COLOR){
+    			if(next != null) {
+    				next.setCanEmpty(false);
+    			}
+    		}
+    		if(color == c){
+    			color = Color.NO_COLOR;
+    		}
     	}
         MethodPrinter.leaveMethod();
     }
