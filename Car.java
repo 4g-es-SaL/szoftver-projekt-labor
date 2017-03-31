@@ -101,4 +101,14 @@ public class Car {
         MethodPrinter.leaveMethod();
     }
 
+    @Override
+    public String toString() {
+        return "Car{" +
+                "rail=" + rail.id +
+                ", prevRail=" + prevRail.id +
+                ", next=" + next +
+                ", color=" + color +
+                ", canEmpty=" + canEmpty +
+                '}';
+    }
 }

@@ -49,4 +49,11 @@ public class Locomotive extends Car {
         }
         MethodPrinter.leaveMethod();
     }
+
+    @Override
+    public String toString() {
+        return "Locomotive{" + super.toString() +
+                "speed=" + speed +
+                "} ";
+    }
 }
