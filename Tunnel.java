@@ -25,16 +25,17 @@ public class Tunnel extends Rail {
      */
     public void buildTunnel(Rail r) {
         MethodPrinter.enterMethod();
-        if(from == null) {
-            fromsNeighbor = r.getTo();
-            r.setTo(this);
-            from = r;
-        } else if(to == null) {
-            tosNeighbor = r.getFrom();
-            r.setTo(this);
-            to = r;
+	    if(this.car==null){
+	        if(from == null) {
+	            fromsNeighbor = r.getTo();
+	            r.setTo(this);
+	            from = r;
+	        } else if(to == null) {
+	            tosNeighbor = r.getFrom();
+	            r.setTo(this);
+	            to = r;
+	        }
         }
-
         MethodPrinter.leaveMethod();
     }
 
@@ -43,12 +44,12 @@ public class Tunnel extends Rail {
      */
     public void destroyTunnel() {
         MethodPrinter.enterMethod();
-
-        from.setTo(fromsNeighbor);
-        to.setTo(tosNeighbor);
-        from = null;
-        to = null;
-
+        if(this.car==null){
+	        from.setTo(fromsNeighbor);
+	        to.setTo(tosNeighbor);
+	        from = null;
+	        to = null;
+        }
         MethodPrinter.leaveMethod();
     }
 
