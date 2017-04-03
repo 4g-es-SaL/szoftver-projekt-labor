@@ -2,14 +2,18 @@
  * Why dont we do unit tests?
  */
 class MethodPrinter {
-    private static boolean print = true;
+    private final static boolean print = false;
     public static int tabCount;
     public MethodPrinter() {
         tabCount = -1;
     }
 
-    public static void enablePrint() { print = true; }
-    public static void disablePrint() { print = false; }
+    public static void enablePrint() {
+        //print = true;
+    }
+    public static void disablePrint() {
+        //print = false;
+    }
     public static void reset() { tabCount = -1; }
 
     public static void enterMethod() {
