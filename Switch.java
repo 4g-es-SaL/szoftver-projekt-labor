@@ -36,6 +36,16 @@ public class Switch extends Rail {
     @Override
     public String toString() {
         return "Switch{" +
-               super.toString() + "}";
+               super.toString() +
+                ", alternativeWays=" + getTosId() + "}";
+    }
+
+    private ArrayList<Integer> getTosId() {
+        ArrayList<Integer> res = new ArrayList<>();
+        for (Rail r :
+                alternativeWays) {
+            res.add(r.id);
+        }
+        return res;
     }
 }

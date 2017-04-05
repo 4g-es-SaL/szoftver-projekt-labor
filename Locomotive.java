@@ -22,6 +22,7 @@ public class Locomotive extends Car {
         }
         this.speed = speed;
         this.entryTime = entryTime;
+        this.empty = true;
     }
 
     /**
@@ -56,8 +57,8 @@ public class Locomotive extends Car {
     @Override
     public String toString() {
         return "Locomotive{" + super.toString() +
-                "speed=" + speed +
-                "} ";
+                ", speed=" + speed +
+                "}";
     }
 
     // helper function for reading in
