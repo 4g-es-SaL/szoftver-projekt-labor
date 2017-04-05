@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * Represents a station object. A station is a special type of {@link Rail}. It can have a {@link Color}, and can empty {@link Car}s.
@@ -5,6 +6,7 @@
 public class Station extends Rail {
 
     protected Color color;
+    protected ArrayList<Color> passColor;
 
     /**
      * Create a new {@link Station} instance.
@@ -24,6 +26,7 @@ public class Station extends Rail {
      * @return The {@link Rail} where c stands.
      * @throws Exception In occasion of collision!
      */
+    @Override
     public Rail carMoves(Car c, Rail prev) throws Exception { MethodPrinter.enterMethod();
         try {
             Rail res = super.carMoves(c, prev);
@@ -33,6 +36,10 @@ public class Station extends Rail {
             MethodPrinter.leaveMethod();
             throw e;
         }
+    }
+
+    public void addPassanger(Color c) {
+        passColor.add(c);
     }
 
     @Override

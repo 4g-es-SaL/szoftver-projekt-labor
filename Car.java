@@ -4,6 +4,13 @@
  */
 public class Car {
 
+    protected Rail rail;
+    protected Rail prevRail;
+    protected Car next;
+    protected Color color;
+    protected boolean empty;
+    protected Station stationWhereEmpty;
+
     /**
      * Create a new {@link Car} object. And notifies the {@link Rail}s about its presence.
      * @param rail The {@link Car} will stand on this Rail.
@@ -28,12 +35,6 @@ public class Car {
             prevRail.carMoves(this, prevFrom);
         }
     }
-
-    protected Rail rail;
-    protected Rail prevRail;
-    protected Car next;
-    protected Color color;
-    protected boolean canEmpty;
 
 
     /**
@@ -76,29 +77,22 @@ public class Car {
      * @param c The Color to compare.
      */
     public void atStation(Color c) { MethodPrinter.enterMethod();
-    	if(canEmpty){
-    		if(color != Color.NO_COLOR){
-    			if(next != null) {
-    				next.setCanEmpty(false);
-    			}
-    		}
-    		if(color == c){
-    			color = Color.NO_COLOR;
-    		}
-    	}
+    //TODO: Reimplement
+//    	if(canEmpty){
+//    		if(color != Color.NO_COLOR){
+//    			if(next != null) {
+//    				next.setCanEmpty(false);
+//    			}
+//    		}
+//    		if(color == c){
+//    			color = Color.NO_COLOR;
+//    		}
+//    	}
         MethodPrinter.leaveMethod();
     }
 
-    /**
-     * Sets the canEmpty value.
-     * @param b
-     */
-    public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
-        canEmpty = b;
-        if(next != null) {
-            next.setCanEmpty(b);
-        }
-        MethodPrinter.leaveMethod();
+    public boolean isEmpty() {
+        return empty;
     }
 
     @Override
@@ -108,7 +102,7 @@ public class Car {
                 ", prevRail=" + prevRail.id +
                 ", next=" + next +
                 ", color=" + color +
-                ", canEmpty=" + canEmpty +
+                ", canEmpty=" + empty +
                 '}';
     }
 }
