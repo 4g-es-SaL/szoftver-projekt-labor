@@ -44,9 +44,10 @@ public class Locomotive extends Car {
      */
     @Override
     public void atStation(Color c) { MethodPrinter.enterMethod();
-        if (next != null) {
-            next.setCanEmpty(true);
-        }
+    //TODO: REIMPLEMENT
+//        if (next != null) {
+//            next.setCanEmpty(true);
+//        }
         MethodPrinter.leaveMethod();
     }
 
