@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -13,6 +14,10 @@ public class Program {
      * @param args Ignored.
      */
     public static void main(String[] args) {
+
+        // example playground
+        Playground tmp = new Playground(new File("map.txt"));
+
         // TODO implement here
         Program p = new Program();
         Scanner scanner = new Scanner(System.in);
