@@ -100,9 +100,9 @@ public class Car {
         return "Car{" +
                 "rail=" + rail.id +
                 ", prevRail=" + prevRail.id +
-                ", next=" + next +
                 ", color=" + color +
-                ", canEmpty=" + empty +
+                ", empty=" + empty +
+                ", next=" + next +
                 '}';
     }
 }

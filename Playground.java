@@ -88,7 +88,9 @@ public class Playground {
             in.read(rawData);
             in.close();
 
-            String[] data = new String(rawData, "UTF-8").split("\n\n");
+            String originalFileInput = new String(rawData, "UTF-8");
+            String windowsCompatibleFileInput = originalFileInput.replace("\r\n", "\n");
+            String[] data = windowsCompatibleFileInput.split("\n\n");
 
             createRails(data);
             createTrains(data);
@@ -318,7 +320,7 @@ public class Playground {
                 to = rails.get(toID);
 
             ArrayList<Rail> alternativeRails = new ArrayList<>();
-            for (int j = 2; j < line.length; j++) {
+            for (int j = 1; j < line.length; j++) {
                 Rail alt = null;
                 int altID = Integer.parseInt(line[j]);
                 if(altID > -1)

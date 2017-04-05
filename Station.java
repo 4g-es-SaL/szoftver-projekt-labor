@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Station extends Rail {
 
     protected Color color;
-    protected ArrayList<Color> passColor;
+    protected ArrayList<Color> passColors;
 
     /**
      * Create a new {@link Station} instance.
@@ -17,6 +17,7 @@ public class Station extends Rail {
     public Station(Rail from, Rail to, Color color) {
         super(from, to);
         this.color = color;
+        passColors = new ArrayList<>();
     }
 
     /**
@@ -39,14 +40,14 @@ public class Station extends Rail {
     }
 
     public void addPassanger(Color c) {
-        passColor.add(c);
+        passColors.add(c);
     }
 
     @Override
     public String toString() {
         return "Station{" +
                 super.toString() +
-                "color=" + color +
-                "}";
+                ", color=" + color +
+                ", passColors=" + passColors + "}";
     }
 }

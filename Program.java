@@ -16,10 +16,14 @@ public class Program {
     public static void main(String[] args) {
 
         // example playground
-        Playground tmp = new Playground(new File("map.txt"));
+        //Playground tmp = new Playground(new File("basic.txt"));
 
         // TODO implement here
         Program p = new Program();
+        p.run();
+    }
+
+    protected void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -30,6 +34,7 @@ public class Program {
                 switch (userInputSplit[0]) {
                     case "init":
                         //TODO
+                        init(userInputSplit[1]);
                         break;
                     case "switch":
                         //TODO
@@ -59,7 +64,7 @@ public class Program {
         }
     }
 
-    protected static void printHelp() {
+    protected void printHelp() {
         System.out.println("Your input is not recognizable as an existing command!");
         System.out.println("init <file>\n" +
                 "Leírás: beolvassa a megadott file-t és ez alapján felépíti a játékterepet\n" +
@@ -87,5 +92,10 @@ public class Program {
                 "exit\n" +
                 "Leírás: Kilépés" +
                 "Opciók: N/A");
+    }
+
+    protected void init(String s) {
+        File f = new File(s);
+        playground = new Playground(f);
     }
 }
