@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -21,45 +18,81 @@ public class Playground {
      * Creat a new instance of Playground
      * @param f The file that stores the map of {@link Rail}s.
      *
-     * A file tartalma a következő
-     * R
-     * from0 to0 [sz]
-     * from1 to1 [sz]
-     * ...
-     * fromR-1 toR-1 [sz]
-     * S
-     * from0 to0 alt00 alt01 ...
-     * from1 to1 alt10 alt11 ...
-     * ...
-     * fromS-1 toS-1 altS-10 altS-11 ...
-     * t0 t1 t2 ...
+     * A file tartalma a következő:
+     *
+         * R
+         * from0 to0 [{sz0 | from02, to02}]
+         * from1 to1 [{sz1 | from12, to12}]
+         * ...
+         * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}]
+         * [ENTER]
+         * S
+         * from0 to0 alt00 alt01 ...
+         * from1 to1 alt10 alt11 ...
+         * ...
+         * fromS-1 toS-1 altS-10 altS-11 ...
+         * [ENTER]
+         * T
+         * E0
+         * C0
+         * locospeed0 locoprev0 lococurr0
+         * color00 prev00 curr00
+         * color01 prev01 curr01
+         * …
+         * color0C0-1 prev0C0-1 curr0C0-1
+         * E1
+         * C1
+         * locospeed1 locoprev1 lococurr1
+         * …
+         * …
+         * ET-1
+         * CT-1
+         * …
+         * [ENTER]
+         * {t0 t1 t2 ... | [SPACE]}
      *
      * ahol R = #Rails + #Stations
      * a következő R sorban:
-     * fromi és toi mutaja, hogy az i-dik sínnek ki a
-     * fromja és toja, és ha az i-dik éppen station,
-     * akkor 3.ként ott egy szín is
+     *      - fromi és toi mutatja, hogy az i-dik sínnek ki a fromja és toja,
+     *        és ha az i-dik éppen Station, akkor a 3-dik számérték a színét
+     *        jelenti.
+     *      - Ha 4 számérték van az i-dik sínnek, akkor az egy CrossRail
+     *        (kereszteződés). Ekkor 2 fromja és 2 to-ja van, az fromi-ból
+     *        az toi-ba, illetve from2i-ból a to2i felé haladhat tovább a
+     *        vonat. Egy CrossRail nem lehet station, tehát nem lehet színe.
      *
      * S = #Switches
      * következő S sorban:
-     * fromi, toi, alti0, alti1, ... mutatják az i-dik
-     * Switch dolgait
+     *      fromi, toi, alti0, alti1, ... mutatják az i-dik Switch
+     *      megfelelő tulajdonságait
+     *
+     *
+     * T = #Trains
+     * következő T blokkban:
+     *      Ei: hanyadik körben lép be
+     *      Ci: kocsik száma
+     *      locoprev lococurr: melyik sínről jött és melyiken van
+     *      locospeed: a mozdony sebessége
+     *      Következő Ci sor:
      *
      * Következő sor:
      * A lehetséges Tunnel építési pontok
      *
-     * Utolsó sor:
-     * A belépő pontok listája
      */
 
     Playground(File f) {
         MethodPrinter.enterMethod();
 
-        try(BufferedReader in = new BufferedReader(new FileReader(f))) {
-            readRails(in);
-            readSwitches(in);
-            readTunnelEndPoints(in);
-            readEntryPoints(in);
+        try(FileInputStream in = new FileInputStream(f)) {
+            byte[] rawData = new byte[(int) f.length()];
+            in.read(rawData);
+            in.close();
+
+            String[] data = new String(rawData, "UTF-8").split("\n\n");
+
+            createRails(data);
+            createTrains(data);
+            readTunnelEndPoints(data);
 
             // create and add the only Tunnel object to the rails
             tunnel = new Tunnel(null, null);
@@ -118,58 +151,6 @@ public class Playground {
         MethodPrinter.leaveMethod();
     }
 
-    public void initializeA() {
-        Locomotive l = null;
-        try {
-            l = new Locomotive(rails.get(6), rails.get(1),
-                    new Car(rails.get(1), rails.get(2),
-                            new Car(rails.get(2), rails.get(3),
-                                    new Car(rails.get(3), rails.get(4), null,
-                                            Color.BLUE), Color.RED), Color.BLUE), 1);
-        } catch (Exception e) {
-            System.out.println("The rail is taken!");
-        }
-        locomotives.add(l);
-    }
-
-    public void initializeAForBlueStation() {
-        Locomotive l = null;
-        try {
-            l = new Locomotive(rails.get(0), rails.get(6),
-                    new Car(rails.get(6), rails.get(1),
-                            new Car(rails.get(1), rails.get(2),
-                                    new Car(rails.get(2), rails.get(3), null,
-                                            Color.BLUE), Color.RED), Color.BLUE), 1);
-        } catch (Exception e) {
-            System.out.println("The rail is taken!");
-        }
-        locomotives.add(l);
-    }
-
-    public void initializeAForRedStation() {
-        try {
-            Locomotive l = new Locomotive(rails.get(3), rails.get(4),
-                    new Car(rails.get(4), rails.get(7),
-                            new Car(rails.get(7), rails.get(5),
-                                    new Car(rails.get(5), rails.get(0), null,
-                                            Color.BLUE), Color.RED), Color.BLUE), 1);
-            locomotives.add(l);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("The rail is taken!");
-        }
-    }
-
-    public void initializeB(int railID, int prevRailId) {
-        try {
-            Locomotive l = new Locomotive(rails.get(railID), rails.get(prevRailId), null, 2);
-            locomotives.add(l);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("The rail is taken!");
-        }
-    }
-
     @Override
     public String toString() {
         String res = "Playground{\n";
@@ -187,89 +168,177 @@ public class Playground {
     // |        File reading helper functions      |
     // |___________________________________________|
     //
-    private void readRails(BufferedReader in) throws Exception {
-        int numRails = Integer.parseInt(in.readLine());
+
+    private void createTrains(String[] data) throws Exception {
+        String[] trainData = data[2].split("\n");
+        int numTrains = Integer.parseInt(trainData[0]);
+        int dataPointer = 1;
+
+        for (int i = 0; i < numTrains; i++) {
+            int entryTime = Integer.parseInt(trainData[dataPointer++]);
+            int numCars = Integer.parseInt(trainData[dataPointer++]);
+
+            String[] locomotiveData = trainData[dataPointer++].split(" ");
+            int speed = Integer.parseInt(locomotiveData[0]);
+            int prevRailID = Integer.parseInt(locomotiveData[1]);
+            int currentRailID = Integer.parseInt(locomotiveData[2]);
+
+            Locomotive locomotive = new Locomotive(rails.get(currentRailID), rails.get(prevRailID), null, speed, entryTime);
+
+            for (int j = 0; j < numCars; j++) {
+                String[] carData = trainData[dataPointer++].split(" ");
+
+                Color color = Color.values()[Integer.parseInt(carData[0])];
+                prevRailID = Integer.parseInt(carData[1]);
+                currentRailID = Integer.parseInt(carData[2]);
+                locomotive.getLastCar().next = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+            }
+            locomotives.add(locomotive);
+        }
+
+        for (int i = 0; i < locomotives.size(); i++) {
+            System.out.println(locomotives.get(i).toString());
+        }
+    }
+
+    /**
+     *
+     * @param data input file in blocks
+     * @throws Exception
+     *
+     * first it creates the proper number of instances of
+     * Rail, Station and CrossRail classes, then it calls
+     * readRails() and readSwitches. These functions bind
+     * all these togather
+     */
+    private void createRails(String[] data) throws Exception {
+        String[] railData = data[0].split("\n");
+        String[] switchData = data[1].split("\n");
+
+        int numRails = Integer.parseInt(railData[0]);
+        int numSwitches = Integer.parseInt(switchData[0]);
 
         for (int i = 0; i < numRails; i++) {
-            String[] line = in.readLine().split(" ");
-            int from = Integer.parseInt(line[0]);
-            int to = Integer.parseInt(line[1]);
-
-            Rail r;
-
-            // if a color is defined -> make it a Station
-            if(line.length > 2){
-                Color c = Color.values()[Integer.parseInt(line[2])];
-                r = new Station(null, null, c);
-            }
+            String[] tmp = railData[i+1].split(" ");
+            if(tmp.length == 3)
+                rails.add(new Station(null, null, null));
+            else if(tmp.length == 4)
+                rails.add(new CrossRail(null, null, null, null));
             else
-                r = new Rail(null, null);
+                rails.add(new Rail(null, null));
+        }
+        for (int i = 0; i < numSwitches; i++) {
+            rails.add(new Switch(null, null, null));
+        }
 
-            // read from
-            if (from != -1 && from < rails.size()) {
-                r.setFrom(rails.get(from));
-                // if not set yet, set an available end to this rail
-                if (rails.get(from).getTo() == null)
-                    rails.get(from).setTo(r);
-            }
+        readRails(numRails, railData);
+        readSwitches(numRails, numSwitches, switchData);
 
-            // read to
-            if (to != -1 && to < rails.size()){
-                r.setTo(rails.get(to));
-                // if not set yet, set an available end to this rail
-                if(rails.get(to).getFrom() == null)
-                    rails.get(to).setFrom(r);
-            }
-
-            rails.add(r);
+        //----------------------------------------------
+        // a little print. you can delete it
+        for (int i = 0; i < rails.size(); i++) {
+            System.out.println(rails.get(i).toString());
         }
     }
 
-    private void readSwitches(BufferedReader in) throws Exception {
-        int numSwitches = Integer.parseInt(in.readLine());
+    /**
+     *
+     * @param numRails
+     * @param railData the Rail data block splitted along "\n" characters
+     * @throws Exception
+     *
+     * It reads the rail block (1st block) of the input
+     * and initializes the relationships
+     */
+    private void readRails(int numRails, String[] railData) throws Exception {
+
+        for (int i = 0; i < numRails; i++) {
+            String[] line = railData[i+1].split(" ");
+            int fromID = Integer.parseInt(line[0]);
+            int toID = Integer.parseInt(line[1]);
+            Rail from = null, to = null;
+
+            if(fromID > -1)
+                from = rails.get(fromID);
+            if(toID > -1)
+                to = rails.get(toID);
+
+            Rail current = rails.get(i);
+            current.setFrom(from);
+            current.setTo(to);
+
+            // total ertelmetlen, de a doksiban ugy maradt,
+            // hogy a rail blokkban vannak a Station-k és
+            // a CrossRail-k is, ugyhogy ime...
+            if(line.length == 3){
+                Color c = Color.values()[Integer.parseInt(line[2])];
+                Station tmp = (Station)current;
+                tmp.color = c;
+            }
+            else if(line.length == 4){
+                int from2ID = Integer.parseInt(line[2]);
+                int to2ID = Integer.parseInt(line[3]);
+
+                Rail from2 = null, to2 = null;
+
+                if(from2ID > -1)
+                    from2 = rails.get(from2ID);
+                if(to2ID > -1)
+                    to2 = rails.get(to2ID);
+
+                CrossRail cross = (CrossRail)current;
+                cross.setFrom2(from2);
+                cross.setTo2(to2);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param startID this is needed to be able to follow the row-continuity of the input file
+     * @param numSwitches
+     * @param switchData
+     * @throws Exception
+     *
+     * It reads the Switch block (2nd block) of the input
+     * and initializes the relationships
+     */
+    private void readSwitches(int startID, int numSwitches, String[] switchData) throws Exception {
 
         for (int i = 0; i < numSwitches; i++) {
-            String[] line = in.readLine().split(" ");
+            String[] line = switchData[i+1].split(" ");
 
-            // create a new Switch and add it to the rails and switches
-            Switch sw = new Switch(null, null, new ArrayList<>());
-            rails.add(sw);
+            int fromID = Integer.parseInt(line[0]);
+            int toID = Integer.parseInt(line[1]);
+            Rail from = null, to = null;
+
+            if(fromID > -1)
+                from = rails.get(fromID);
+            if(toID > -1)
+                to = rails.get(toID);
+
+            ArrayList<Rail> alternativeRails = new ArrayList<>();
+            for (int j = 2; j < line.length; j++) {
+                Rail alt = null;
+                int altID = Integer.parseInt(line[j]);
+                if(altID > -1)
+                    alt = rails.get(altID);
+                alternativeRails.add(alt);
+            }
+
+            Switch sw = (Switch) rails.get(startID + i);
+            sw.setFrom(from);
+            sw.setTo(to);
+            sw.alternativeWays = alternativeRails;
+
             switches.add(sw);
-
-            // read from
-            int from = Integer.parseInt(line[0]);
-            if(from != -1) {
-                sw.setFrom(rails.get(from));
-                if (rails.get(from).to == null)
-                    rails.get(from).setTo(sw);
-                else
-                    rails.get(from).setFrom(sw);
-            }
-
-            // read all the alternative rails
-            for (int j = 1; j < line.length; j++) {
-                int idx = Integer.parseInt(line[j]);
-
-                if(idx == -1)
-                    sw.alternativeWays.add(null);
-                else {
-                    sw.alternativeWays.add(rails.get(idx));
-                    // if not set yet, set an available end to this switch
-                    if (rails.get(idx).to == null)
-                        rails.get(idx).setTo(sw);
-                    else
-                        rails.get(idx).setFrom(sw);
-                }
-            }
-            // set to to the first alternative rail
-            sw.setTo(sw.alternativeWays.get(0));
         }
     }
 
-    private void readTunnelEndPoints(BufferedReader in) throws Exception {
-        String[] line = in.readLine().split(" ");
-        for (String aLine : line) {
-            int idx = Integer.parseInt(aLine);
+    private void readTunnelEndPoints(String[] data) throws Exception {
+        String[] tunnelEndData = data[3].split(" ");
+        for (String tep : tunnelEndData) {
+            int idx = Integer.parseInt(tep);
             tunnelEndPoints.add(rails.get(idx));
         }
     }
