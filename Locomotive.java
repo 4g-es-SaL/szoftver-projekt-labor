@@ -4,6 +4,7 @@
  */
 public class Locomotive extends Car {
     protected int speed;
+    protected int entryTime;
 
     /**
      * Create a new {@link Locomotive} object. Locomotives {@link Color} is {@link Color#NO_COLOR}.
@@ -12,7 +13,7 @@ public class Locomotive extends Car {
      * @param next In the train, the {@link Car} behind this {@link Car}.
      * @param speed The speed of the {@link Locomotive}.
      */
-    public Locomotive(Rail rail, Rail prevRail, Car next, int speed) throws Exception {
+    public Locomotive(Rail rail, Rail prevRail, Car next, int speed, int entryTime) throws Exception {
         super(rail, prevRail, next,Color.NO_COLOR);
         if (next != null && next.getClass().equals(Locomotive.class)) {
             //TODO: Free Rail from Car
@@ -20,6 +21,7 @@ public class Locomotive extends Car {
             throw new Exception("A train cant have multiple Locomotives.");
         }
         this.speed = speed;
+        this.entryTime = entryTime;
     }
 
     /**
@@ -55,5 +57,13 @@ public class Locomotive extends Car {
         return "Locomotive{" + super.toString() +
                 "speed=" + speed +
                 "} ";
+    }
+
+    // helper function for reading in
+    public Car getLastCar(){
+        Car tmp = this;
+        while (tmp.next != null)
+            tmp = tmp.next;
+        return tmp;
     }
 }
