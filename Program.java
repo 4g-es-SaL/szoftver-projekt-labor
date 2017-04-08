@@ -50,6 +50,7 @@ public class Program {
                         break;
                     case "move":
                         //TODO
+                        playground.runTurn();
                         break;
                     case "exit":
                         exit = true;
@@ -62,6 +63,11 @@ public class Program {
                 printHelp();
             }
         }
+    }
+
+    protected void init(String s) {
+        File f = new File(s);
+        playground = new Playground(f);
     }
 
     protected void printHelp() {
@@ -92,10 +98,5 @@ public class Program {
                 "exit\n" +
                 "Leírás: Kilépés" +
                 "Opciók: N/A");
-    }
-
-    protected void init(String s) {
-        File f = new File(s);
-        playground = new Playground(f);
     }
 }

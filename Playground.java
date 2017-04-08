@@ -107,63 +107,7 @@ public class Playground {
         MethodPrinter.leaveMethod();
     }
 
-    /**
-     * Calls all locomotives {@link Locomotive#runTurn()}.
-     * @return
-     */
-    public int runTurn() {          MethodPrinter.enterMethod();
-        // TODO implement here
-
-        int res = 0;
-        for (Locomotive loc:locomotives) {
-            res = loc.runTurn();
-            if (res == 1) {
-                MethodPrinter.leaveMethod(); return res;
-            }
-        }
-        MethodPrinter.leaveMethod(); return res;
-
-    }
-
-    /**
-     * Changes the {@link Switch} direction.
-     * @param id Identifies the Switch.
-     */
-    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
-        switches.get(id).changeDir();
-        MethodPrinter.leaveMethod();
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
-        tunnel.buildTunnel(tunnelEndPoints.get(id));
-        MethodPrinter.leaveMethod();
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    public void destroyTunnelEnd(int id) {
-        MethodPrinter.enterMethod();
-        tunnel.destroyTunnel();
-        MethodPrinter.leaveMethod();
-    }
-
-    @Override
-    public String toString() {
-        String res = "Playground{\n";
-        for (Rail r :
-                rails) {
-            res += r + "\n";
-        }
-        res += "}";
-        return res;
-    }
-
+    //<editor-fold desc="File reading helper functions">
 
     //  ___________________________________________
     // |                                           |
@@ -357,4 +301,62 @@ public class Playground {
     //       End of file reading helper functions
     //  ______________________________________________
     //  ______________________________________________
+    //</editor-fold>
+
+    /**
+     * Calls all locomotives {@link Locomotive#runTurn()}.
+     * @return
+     */
+    public int runTurn() {          MethodPrinter.enterMethod();
+        // TODO implement here
+
+        int res = 0;
+        for (Locomotive loc:locomotives) {
+            res = loc.runTurn();
+            if (res == 1) {
+                MethodPrinter.leaveMethod(); return res;
+            }
+        }
+        MethodPrinter.leaveMethod(); return res;
+
+    }
+
+    /**
+     * Changes the {@link Switch} direction.
+     * @param id Identifies the Switch.
+     */
+    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
+        switches.get(id).changeDir();
+        MethodPrinter.leaveMethod();
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
+        tunnel.buildTunnel(tunnelEndPoints.get(id));
+        MethodPrinter.leaveMethod();
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public void destroyTunnelEnd(int id) {
+        MethodPrinter.enterMethod();
+        tunnel.destroyTunnel();
+        MethodPrinter.leaveMethod();
+    }
+
+    @Override
+    public String toString() {
+        String res = "Playground{\n";
+        for (Rail r :
+                rails) {
+            res += r + "\n";
+        }
+        res += "}";
+        return res;
+    }
 }
