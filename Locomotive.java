@@ -38,6 +38,7 @@ public class Locomotive extends Car {
                 return 1;
             }
         }
+        System.out.println(this);
         MethodPrinter.leaveMethod(); return res;
     }
 

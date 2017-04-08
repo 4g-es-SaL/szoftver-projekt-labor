@@ -1,51 +1,63 @@
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
+
+import static junit.framework.TestCase.assertEquals;
+
 
 /**
  * Created by matech on 2017. 04. 08..
  */
-class ProgramTest {
+public class ProgramTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
-    @BeforeClass
-    private void setUp() {
+    @Before
+    public void setUp() throws Exception {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
     }
 
-    @Test
-    public boolean runTestCases() throws FileNotFoundException {
-        for (int i = 1; i < 2; i++) {
-            runTestCase(i);
-        }
-
-        return true;
+    @After
+    public void tearDown() throws Exception {
+        System.setOut(null);
+        System.setErr(null);
     }
 
-    public boolean runTestCase(int i) throws FileNotFoundException {
-        String fileName = String.valueOf(i) + ".txt";
-        System.setIn(new FileInputStream(fileName));
+    @Test
+    public void runTestCases() throws IOException {
+        final int TEST_Case = 1;
+        if (TEST_Case > 0) {
+            runTestCase(TEST_Case);
+        } else {
+            for (int i = 1; i < 15; i++) {
+                runTestCase(i);
+            }
+        }
+
+    }
+
+    public void runTestCase(int i) throws IOException {
+        String InputfileName = "test/" + String.valueOf(i) + "input.txt";
+        System.setIn(new FileInputStream(InputfileName));
         try {
             Program.main(new String[0]);
         } catch(NoSuchElementException e) {
             //Our file has no more lines and scanner is upset.
         }
+        String expectedOutputFileName = "test/" + String.valueOf(i) + "output.txt";
         String output = outContent.toString();
-        return true;
-    }
-
-    @AfterClass
-    private void tearDown() {
-        System.setOut(null);
-        System.setErr(null);
+        new FileInputStream((expectedOutputFileName));
+        String expectedOutput = new String(Files.readAllBytes(Paths.get(expectedOutputFileName)));
+        assertEquals(expectedOutput, output);
     }
 
 }

@@ -1,0 +1,10 @@
+Station{Rail{id=0, from=5, to=6}, color=BLUE, passColors=[]}
+Rail{id=1, from=6, to=2}
+Rail{id=2, from=1, to=3}
+Station{Rail{id=3, from=2, to=4}, color=RED, passColors=[]}
+Rail{id=4, from=3, to=7}
+Rail{id=5, from=7, to=0}
+Switch{Rail{id=6, from=1, to=0}, alternativeWays=[0, 2]}
+Switch{Rail{id=7, from=4, to=5}, alternativeWays=[5, 0]}
+Locomotive{Car{rail=6, prevRail=1, color=NO_COLOR, empty=true, next=Car{rail=1, prevRail=2, color=GREEN, empty=false, next=null}}, speed=1}
+Locomotive{Car{rail=0, prevRail=6, color=NO_COLOR, empty=true, next=Car{rail=6, prevRail=1, color=GREEN, empty=false, next=null}}, speed=1}
