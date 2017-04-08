@@ -34,7 +34,7 @@ public class ProgramTest {
 
     @Test
     public void runTestCases() throws IOException {
-        final int TEST_Case = 1;
+        final int TEST_Case = 2; //Change for the number of the test case or -1 to run all tests
         if (TEST_Case > 0) {
             runTestCase(TEST_Case);
         } else {
@@ -46,8 +46,8 @@ public class ProgramTest {
     }
 
     public void runTestCase(int i) throws IOException {
-        String InputfileName = "test/" + String.valueOf(i) + "input.txt";
-        System.setIn(new FileInputStream(InputfileName));
+        String InputFileName = "test/" + String.valueOf(i) + "input.txt";
+        System.setIn(new FileInputStream(InputFileName));
         try {
             Program.main(new String[0]);
         } catch(NoSuchElementException e) {

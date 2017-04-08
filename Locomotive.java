@@ -42,19 +42,6 @@ public class Locomotive extends Car {
         MethodPrinter.leaveMethod(); return res;
     }
 
-    /**
-     * Notifies the {@link Car}s behind it, that they can empty.
-     * @param c The {@link Color} to compare.
-     */
-    @Override
-    public void atStation(Color c) { MethodPrinter.enterMethod();
-    //TODO: REIMPLEMENT
-//        if (next != null) {
-//            next.setCanEmpty(true);
-//        }
-        MethodPrinter.leaveMethod();
-    }
-
     @Override
     public String toString() {
         return "Locomotive{" + super.toString() +

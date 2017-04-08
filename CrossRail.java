@@ -1,5 +1,5 @@
 /**
- * Created by aliras on 2017.04.05..
+ * Represents a Rail that has 4 ends
  */
 public class CrossRail extends Rail{
 

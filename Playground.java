@@ -107,13 +107,7 @@ public class Playground {
         MethodPrinter.leaveMethod();
     }
 
-    //<editor-fold desc="File reading helper functions">
-
-    //  ___________________________________________
-    // |                                           |
-    // |        File reading helper functions      |
-    // |___________________________________________|
-    //
+    //region File reading helper functions
 
     private void createTrains(String[] data) throws Exception {
         String[] trainData = data[2].split("\n");
@@ -142,8 +136,8 @@ public class Playground {
             locomotives.add(locomotive);
         }
 
-        for (int i = 0; i < locomotives.size(); i++) {
-            System.out.println(locomotives.get(i).toString());
+        for (Locomotive locomotive : locomotives) {
+            System.out.println(locomotive.toString());
         }
     }
 
@@ -182,8 +176,8 @@ public class Playground {
 
         //----------------------------------------------
         // a little print. you can delete it
-        for (int i = 0; i < rails.size(); i++) {
-            System.out.println(rails.get(i).toString());
+        for (Rail rail : rails) {
+            System.out.println(rail.toString());
         }
     }
 
@@ -296,19 +290,13 @@ public class Playground {
             enterPoints.add(rails.get(idx));
         }
     }
-
-    //
-    //       End of file reading helper functions
-    //  ______________________________________________
-    //  ______________________________________________
-    //</editor-fold>
+    //endregion
 
     /**
      * Calls all locomotives {@link Locomotive#runTurn()}.
      * @return
      */
     public int runTurn() {          MethodPrinter.enterMethod();
-        // TODO implement here
 
         int res = 0;
         for (Locomotive loc:locomotives) {
