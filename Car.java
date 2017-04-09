@@ -7,7 +7,7 @@ public class Car {
     protected Rail rail;
     protected Rail prevRail;
     protected Car next;
-    protected Color color;
+    protected final Color color;
     protected boolean empty;
     protected Station stationWhereEmpty;
 
@@ -26,6 +26,7 @@ public class Car {
         signUpCarOnRail(rail, prevRail);
     }
 
+    //region Constructor privates
     private void signUpCarOnRail(Rail rail, Rail prevRail) throws Exception {
         Rail prevFrom = prevRail.getFrom();
         Rail prevTo = prevRail.getTo();
@@ -35,15 +36,13 @@ public class Car {
             prevRail.carMoves(this, prevFrom);
         }
     }
-
+    //endregion
 
     /**
      * The {@link Car} moves to the next {@link Rail} in the network. Pulls the {@link Car} behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() { MethodPrinter.enterMethod();
-//        System.out.print(rail.id + " ");
-
         int isCollision = move();
         if (isCollision == 1) {
             MethodPrinter.leaveMethod(); return isCollision;
@@ -53,9 +52,13 @@ public class Car {
         MethodPrinter.leaveMethod(); return res;
     }
 
+    //region runTurn privates
     private int move() {
         Rail tmp = rail;
         try {
+            if (rail == stationWhereEmpty) {
+                empty = true;
+            }
             rail = rail.carMoves(this, prevRail);
         } catch (Exception e) {
             return 1;
@@ -70,25 +73,22 @@ public class Car {
         }
         return 0;
     }
+    //endregion
 
     /**
      *  If c equals the Cars Color and canEmpty is true, sets the Cars Color to {@link Color#NO_COLOR} and calls the
      *  {@link Car}s behind it, not to empty.
-     * @param c The Color to compare.
+     * @param s The station compare.
      */
-    public void atStation(Color c) { MethodPrinter.enterMethod();
+    public void newStation(Station s) {
     //TODO: Reimplement
-//    	if(canEmpty){
-//    		if(color != Color.NO_COLOR){
-//    			if(next != null) {
-//    				next.setCanEmpty(false);
-//    			}
-//    		}
-//    		if(color == c){
-//    			color = Color.NO_COLOR;
-//    		}
-//    	}
-        MethodPrinter.leaveMethod();
+        if(empty || stationWhereEmpty != null) {
+            next.newStation(s);
+        } else {
+            if (color == s.getColor()) {
+                stationWhereEmpty = s;
+            }
+        }
     }
 
     public boolean isEmpty() {

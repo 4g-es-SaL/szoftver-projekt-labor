@@ -107,69 +107,7 @@ public class Playground {
         MethodPrinter.leaveMethod();
     }
 
-    /**
-     * Calls all locomotives {@link Locomotive#runTurn()}.
-     * @return
-     */
-    public int runTurn() {          MethodPrinter.enterMethod();
-        // TODO implement here
-
-        int res = 0;
-        for (Locomotive loc:locomotives) {
-            res = loc.runTurn();
-            if (res == 1) {
-                MethodPrinter.leaveMethod(); return res;
-            }
-        }
-        MethodPrinter.leaveMethod(); return res;
-
-    }
-
-    /**
-     * Changes the {@link Switch} direction.
-     * @param id Identifies the Switch.
-     */
-    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
-        switches.get(id).changeDir();
-        MethodPrinter.leaveMethod();
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
-        tunnel.buildTunnel(tunnelEndPoints.get(id));
-        MethodPrinter.leaveMethod();
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    public void destroyTunnelEnd(int id) {
-        MethodPrinter.enterMethod();
-        tunnel.destroyTunnel();
-        MethodPrinter.leaveMethod();
-    }
-
-    @Override
-    public String toString() {
-        String res = "Playground{\n";
-        for (Rail r :
-                rails) {
-            res += r + "\n";
-        }
-        res += "}";
-        return res;
-    }
-
-
-    //  ___________________________________________
-    // |                                           |
-    // |        File reading helper functions      |
-    // |___________________________________________|
-    //
+    //region File reading helper functions
 
     private void createTrains(String[] data) throws Exception {
         String[] trainData = data[2].split("\n");
@@ -198,8 +136,8 @@ public class Playground {
             locomotives.add(locomotive);
         }
 
-        for (int i = 0; i < locomotives.size(); i++) {
-            System.out.println(locomotives.get(i).toString());
+        for (Locomotive locomotive : locomotives) {
+            System.out.println(locomotive.toString());
         }
     }
 
@@ -238,8 +176,8 @@ public class Playground {
 
         //----------------------------------------------
         // a little print. you can delete it
-        for (int i = 0; i < rails.size(); i++) {
-            System.out.println(rails.get(i).toString());
+        for (Rail rail : rails) {
+            System.out.println(rail.toString());
         }
     }
 
@@ -352,9 +290,61 @@ public class Playground {
             enterPoints.add(rails.get(idx));
         }
     }
+    //endregion
 
-    //
-    //       End of file reading helper functions
-    //  ______________________________________________
-    //  ______________________________________________
+    /**
+     * Calls all locomotives {@link Locomotive#runTurn()}.
+     * @return
+     */
+    public int runTurn() {          MethodPrinter.enterMethod();
+
+        int res = 0;
+        for (Locomotive loc:locomotives) {
+            res = loc.runTurn();
+            if (res == 1) {
+                MethodPrinter.leaveMethod(); return res;
+            }
+        }
+        MethodPrinter.leaveMethod(); return res;
+
+    }
+
+    /**
+     * Changes the {@link Switch} direction.
+     * @param id Identifies the Switch.
+     */
+    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
+        switches.get(id).changeDir();
+        MethodPrinter.leaveMethod();
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
+        tunnel.buildTunnel(tunnelEndPoints.get(id));
+        MethodPrinter.leaveMethod();
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public void destroyTunnelEnd(int id) {
+        MethodPrinter.enterMethod();
+        tunnel.destroyTunnel();
+        MethodPrinter.leaveMethod();
+    }
+
+    @Override
+    public String toString() {
+        String res = "Playground{\n";
+        for (Rail r :
+                rails) {
+            res += r + "\n";
+        }
+        res += "}";
+        return res;
+    }
 }

@@ -14,11 +14,6 @@ public class Program {
      * @param args Ignored.
      */
     public static void main(String[] args) {
-
-        // example playground
-        //Playground tmp = new Playground(new File("basic.txt"));
-
-        // TODO implement here
         Program p = new Program();
         p.run();
     }
@@ -30,7 +25,7 @@ public class Program {
         while (!exit) {
             String userInput = scanner.nextLine();
             String[] userInputSplit = userInput.split(" ");
-            try {
+            //try {
                 switch (userInputSplit[0]) {
                     case "init":
                         //TODO
@@ -50,6 +45,7 @@ public class Program {
                         break;
                     case "move":
                         //TODO
+                        playground.runTurn();
                         break;
                     case "exit":
                         exit = true;
@@ -57,11 +53,16 @@ public class Program {
                     default:
                         printHelp();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                printHelp();
-            }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                printHelp();
+//            }
         }
+    }
+
+    protected void init(String s) {
+        File f = new File(s);
+        playground = new Playground(f);
     }
 
     protected void printHelp() {
@@ -92,10 +93,5 @@ public class Program {
                 "exit\n" +
                 "Leírás: Kilépés" +
                 "Opciók: N/A");
-    }
-
-    protected void init(String s) {
-        File f = new File(s);
-        playground = new Playground(f);
     }
 }

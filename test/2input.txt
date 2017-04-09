@@ -1,0 +1,4 @@
+init urites_korlatai.txt
+move
+move
+move
