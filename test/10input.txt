@@ -1,0 +1,3 @@
+init valto.txt
+move
+switch 6
