@@ -1,0 +1,5 @@
+init szenes.txt
+move
+move
+move
+move

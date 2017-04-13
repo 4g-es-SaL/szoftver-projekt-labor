@@ -23,6 +23,9 @@ public class Car {
         this.prevRail = prevRail;
         this.next = next;
         this.color = color;
+        if (color == Color.NO_COLOR) {
+            empty = true;
+        }
         signUpCarOnRail(rail, prevRail);
     }
 
@@ -56,10 +59,10 @@ public class Car {
     private int move() {
         Rail tmp = rail;
         try {
+            rail = rail.carMoves(this, prevRail);
             if (rail == stationWhereEmpty) {
                 empty = true;
             }
-            rail = rail.carMoves(this, prevRail);
         } catch (Exception e) {
             return 1;
         }
@@ -83,7 +86,9 @@ public class Car {
     public void newStation(Station s) {
     //TODO: Reimplement
         if(empty || stationWhereEmpty != null) {
-            next.newStation(s);
+            if (next != null) {
+                next.newStation(s);
+            }
         } else {
             if (color == s.getColor()) {
                 stationWhereEmpty = s;
@@ -102,7 +107,7 @@ public class Car {
                 ", prevRail=" + prevRail.id +
                 ", color=" + color +
                 ", empty=" + empty +
-                ", next=" + next +
+                ",\n\tnext=" + next +
                 '}';
     }
 }
