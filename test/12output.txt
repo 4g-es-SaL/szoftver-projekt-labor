@@ -1,4 +1,4 @@
-Station{Rail{id=0, from=3, to=1, color=RED, passColors=[]}
+Station{Rail{id=0, from=3, to=1}, color=RED, passColors=[]}
 Rail{id=1, from=0, to=2}
 Rail{id=2, from=1, to=3}
 Rail{id=3, from=2, to=0}

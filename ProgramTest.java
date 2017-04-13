@@ -14,7 +14,7 @@ import static junit.framework.TestCase.assertEquals;
 
 
 /**
- * Created by matech on 2017. 04. 08..
+ * It is a JUnit class, that helps to compare the expected and the real output of the program.
  */
 public class ProgramTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -34,7 +34,7 @@ public class ProgramTest {
 
     @Test
     public void runTestCases() throws IOException {
-        final int TEST_Case = 2; //Change for the number of the test case or -1 to run all tests
+        final int TEST_Case = 12; //Change for the number of the test case or -1 to run all tests
         if (TEST_Case > 0) {
             runTestCase(TEST_Case);
         } else {
@@ -51,13 +51,13 @@ public class ProgramTest {
         try {
             Program.main(new String[0]);
         } catch(NoSuchElementException e) {
-            //Our file has no more lines and scanner is upset.
+            //Our file has no more lines and scanner is just upset.
         }
         String expectedOutputFileName = "test/" + String.valueOf(i) + "output.txt";
         String output = outContent.toString();
         new FileInputStream((expectedOutputFileName));
         String expectedOutput = new String(Files.readAllBytes(Paths.get(expectedOutputFileName)));
-        assertEquals(expectedOutput, output);
+        assertEquals(expectedOutput.replace("\r",""), output.replace("\r",""));
     }
 
 }

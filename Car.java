@@ -23,6 +23,9 @@ public class Car {
         this.prevRail = prevRail;
         this.next = next;
         this.color = color;
+        if (color == Color.NO_COLOR) {
+            empty = true;
+        }
         signUpCarOnRail(rail, prevRail);
     }
 
@@ -56,10 +59,10 @@ public class Car {
     private int move() {
         Rail tmp = rail;
         try {
+            rail = rail.carMoves(this, prevRail);
             if (rail == stationWhereEmpty) {
                 empty = true;
             }
-            rail = rail.carMoves(this, prevRail);
         } catch (Exception e) {
             return 1;
         }
