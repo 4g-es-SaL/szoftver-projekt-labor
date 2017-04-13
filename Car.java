@@ -83,7 +83,9 @@ public class Car {
     public void newStation(Station s) {
     //TODO: Reimplement
         if(empty || stationWhereEmpty != null) {
-            next.newStation(s);
+            if (next != null) {
+                next.newStation(s);
+            }
         } else {
             if (color == s.getColor()) {
                 stationWhereEmpty = s;
@@ -102,7 +104,7 @@ public class Car {
                 ", prevRail=" + prevRail.id +
                 ", color=" + color +
                 ", empty=" + empty +
-                ", next=" + next +
+                ",\n\tnext=" + next +
                 '}';
     }
 }

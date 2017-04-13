@@ -45,7 +45,9 @@ public class Program {
                         break;
                     case "move":
                         //TODO
-                        playground.runTurn();
+                        if (playground.runTurn() == 1) {
+                            System.out.println("Collosion!");
+                        }
                         break;
                     case "exit":
                         exit = true;

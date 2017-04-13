@@ -24,7 +24,7 @@ public class Switch extends Rail {
     }
 
     /**
-     * Rotates to2.
+     * Rotates alternativeWays.
      */
     public void changeDir() { MethodPrinter.enterMethod();
         currentToId = (currentToId+1) % (alternativeWays.size());
