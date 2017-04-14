@@ -1,0 +1,7 @@
+Rail{id=0, from=2, to=1}
+Rail{id=1, from=0, to=2}
+Rail{id=2, from=1, to=0}
+Locomotive{Car{rail=1, prevRail=0, color=NO_COLOR, empty=true,
+	next=null}, speed=1}
+Locomotive{Car{rail=2, prevRail=1, color=NO_COLOR, empty=true,
+	next=null}, speed=1}

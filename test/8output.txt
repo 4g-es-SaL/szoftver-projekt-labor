@@ -1,0 +1,12 @@
+CrossRail{Rail{id=0, from=4, to=1}, from2=2, to2=3}
+Rail{id=1, from=0, to=2}
+Rail{id=2, from=1, to=0}
+Rail{id=3, from=0, to=4}
+Rail{id=4, from=3, to=0}
+Locomotive{Car{rail=2, prevRail=1, color=NO_COLOR, empty=true,
+	next=null}, speed=1}
+Locomotive{Car{rail=3, prevRail=0, color=NO_COLOR, empty=true,
+	next=null}, speed=2}
+Locomotive{Car{rail=0, prevRail=2, color=NO_COLOR, empty=true,
+	next=null}, speed=1}
+Collision!

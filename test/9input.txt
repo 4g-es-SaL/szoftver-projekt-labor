@@ -1,0 +1,4 @@
+init valto.txt
+switch 6
+switch 6
+switch 6

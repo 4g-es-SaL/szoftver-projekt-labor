@@ -33,6 +33,7 @@ public class Program {
                         break;
                     case "switch":
                         //TODO
+                        playground.changeSwitch(Integer.parseInt(userInputSplit[1]));
                         break;
                     case "build":
                         //TODO
@@ -45,7 +46,7 @@ public class Program {
                         break;
                     case "move":
                         if (playground.runTurn() == 1) {
-                            System.out.println("Collosion!");
+                            System.out.println("Collision!");
                         }
                         break;
                     case "exit":

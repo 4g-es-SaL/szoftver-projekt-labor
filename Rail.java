@@ -48,7 +48,7 @@ public class Rail {
         return nextRail;
     }
 
-    private Rail getNextRail(Rail prev) {
+    protected Rail getNextRail(Rail prev) {
         if(from == prev) {
             return to;
         } else {
@@ -85,6 +85,7 @@ public class Rail {
 //        MethodPrinter.leaveMethod();
         return to;
     }
+
 
     @Override
     public String toString() {

@@ -1,0 +1,7 @@
+init keresztezodes_haladas.txt
+move
+move
+move
+move
+move
+move

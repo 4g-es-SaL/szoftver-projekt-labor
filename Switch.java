@@ -23,15 +23,22 @@ public class Switch extends Rail {
         MethodPrinter.leaveMethod();
     }
 
+
     /**
      * Rotates alternativeWays.
      */
-    public void changeDir() { MethodPrinter.enterMethod();
-        currentToId = (currentToId+1) % (alternativeWays.size());
-        to = alternativeWays.get(currentToId);
-
-        MethodPrinter.leaveMethod();
+    public void changeDir() {
+        if(car == null){
+            MethodPrinter.enterMethod();
+            currentToId = (currentToId+1) % (alternativeWays.size());
+            to = alternativeWays.get(currentToId);
+            System.out.println("alternativeWays of Switch " + id + " changed to " + currentToId);
+            MethodPrinter.leaveMethod();
+        }else{
+            System.out.println("Switch cannot be changed!");
+        }
     }
+
 
     @Override
     public String toString() {

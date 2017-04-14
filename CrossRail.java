@@ -27,6 +27,22 @@ public class CrossRail extends Rail{
     }
 
     @Override
+    protected Rail getNextRail(Rail prev) {
+        if(from == prev) {
+            return to;
+        }
+        else if(to == prev){
+            return from;
+        }
+        else if(from2 == prev){
+            return to2;
+        }
+        else{
+            return from2;
+        }
+    }
+
+    @Override
     public String toString() {
         return "CrossRail{" +
                 super.toString() +

@@ -308,15 +308,19 @@ public class Playground {
         return res;
 
     }
-
     /**
      * Changes the {@link Switch} direction.
      * @param id Identifies the Switch.
      */
-    public void changeSwitch(int id) {          MethodPrinter.enterMethod();
+    public void changeSwitch(int id) {
+        MethodPrinter.enterMethod();
         switches.get(id).changeDir();
+
+        //így jól lefutna a teszt!!!!
+        //switches.get(0).changeDir();
         MethodPrinter.leaveMethod();
     }
+
 
     /**
      * @param id Identifies the Rail which will be the Tunnel's end.
