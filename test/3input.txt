@@ -1,0 +1,7 @@
+init utasok_felszallnak.txt
+passenger 0 0
+move
+move
+move
+move
+move

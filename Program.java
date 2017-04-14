@@ -41,10 +41,9 @@ public class Program {
                         //TODO
                         break;
                     case "passenger":
-                        //TODO
+                        playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
                         break;
                     case "move":
-                        //TODO
                         if (playground.runTurn() == 1) {
                             System.out.println("Collosion!");
                         }

@@ -183,7 +183,7 @@ public class Playground {
 
     /**
      *
-     * @param numRails
+     * @param numRails number of Rails
      * @param railData the Rail data block splitted along "\n" characters
      * @throws Exception
      *
@@ -236,8 +236,8 @@ public class Playground {
     /**
      *
      * @param startID this is needed to be able to follow the row-continuity of the input file
-     * @param numSwitches
-     * @param switchData
+     * @param numSwitches number of switches
+     * @param switchData String array of lines, that contains the Switches descriptions.
      * @throws Exception
      *
      * It reads the Switch block (2nd block) of the input
@@ -294,18 +294,17 @@ public class Playground {
 
     /**
      * Calls all locomotives {@link Locomotive#runTurn()}.
-     * @return
+     * @return 1 if there was an error, 0 otherwise.
      */
-    public int runTurn() {          MethodPrinter.enterMethod();
-
+    public int runTurn() {
         int res = 0;
         for (Locomotive loc:locomotives) {
             res = loc.runTurn();
             if (res == 1) {
-                MethodPrinter.leaveMethod(); return res;
+                return res;
             }
         }
-        MethodPrinter.leaveMethod(); return res;
+        return res;
 
     }
 
@@ -319,8 +318,7 @@ public class Playground {
     }
 
     /**
-     * @param id
-     * @return
+     * @param id Identifies the Rail which will be the Tunnel's end.
      */
     public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
         tunnel.buildTunnel(tunnelEndPoints.get(id));
@@ -328,13 +326,17 @@ public class Playground {
     }
 
     /**
-     * @param id
-     * @return
+     * @param id Identifies the Rail that will be removed as the Tunnel's end.
      */
     public void destroyTunnelEnd(int id) {
-        MethodPrinter.enterMethod();
         tunnel.destroyTunnel();
-        MethodPrinter.leaveMethod();
+    }
+
+    public void addPassenger(int id, int colorID) {
+        Station s = (Station) rails.get(id);
+        Color c = Color.values()[colorID];
+        s.addPassanger(c);
+        System.out.println(s);
     }
 
     @Override

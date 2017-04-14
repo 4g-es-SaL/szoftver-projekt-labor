@@ -10,6 +10,7 @@ public class Car {
     protected final Color color;
     protected boolean empty;
     protected Station stationWhereEmpty;
+    private boolean canEmpty;
 
     /**
      * Create a new {@link Car} object. And notifies the {@link Rail}s about its presence.
@@ -26,6 +27,7 @@ public class Car {
         if (color == Color.NO_COLOR) {
             empty = true;
         }
+        canEmpty = false;
         signUpCarOnRail(rail, prevRail);
     }
 
@@ -45,14 +47,13 @@ public class Car {
      * The {@link Car} moves to the next {@link Rail} in the network. Pulls the {@link Car} behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
-    public int runTurn() { MethodPrinter.enterMethod();
+    public int runTurn() {
         int isCollision = move();
         if (isCollision == 1) {
-            MethodPrinter.leaveMethod(); return isCollision;
+            return isCollision;
         }
 
-        int res = callNextCar();
-        MethodPrinter.leaveMethod(); return res;
+        return callNextCar();
     }
 
     //region runTurn privates
@@ -78,26 +79,45 @@ public class Car {
     }
     //endregion
 
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
+
     /**
      *  If c equals the Cars Color and canEmpty is true, sets the Cars Color to {@link Color#NO_COLOR} and calls the
      *  {@link Car}s behind it, not to empty.
-     * @param s The station compare.
+     * @param s The Color to compare.
      */
-    public void newStation(Station s) {
-    //TODO: Reimplement
-        if(empty || stationWhereEmpty != null) {
-            if (next != null) {
-                next.newStation(s);
+    public void atStation(Station s) {
+        if (empty && s.removePassenger(color)) {
+            empty = false;
+        } else if(canEmpty){
+            if(!empty){
+                if(next != null) {
+                    next.setCanEmpty(false);
+                }
             }
-        } else {
-            if (color == s.getColor()) {
-                stationWhereEmpty = s;
+            if(color == s.getColor()){
+                empty = true;
             }
         }
     }
 
+    public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
+        canEmpty = b;
+        if(next != null) {
+            next.setCanEmpty(b);
+        }
+        MethodPrinter.leaveMethod();
+    }
+
     public boolean isEmpty() {
         return empty;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override
