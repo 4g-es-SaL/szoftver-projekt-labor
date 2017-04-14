@@ -83,6 +83,7 @@ public class Playground {
     Playground(File f) {
         MethodPrinter.enterMethod();
 
+        Rail.idGenerator = 0;
         try(FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
             in.read(rawData);
