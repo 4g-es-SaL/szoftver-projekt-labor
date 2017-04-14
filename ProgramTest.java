@@ -33,16 +33,78 @@ public class ProgramTest {
     }
 
     @Test
-    public void runTestCases() throws IOException {
-        final int TEST_Case = 12; //Change for the number of the test case or -1 to run all tests
-        if (TEST_Case > 0) {
-            runTestCase(TEST_Case);
-        } else {
-            for (int i = 1; i < 15; i++) {
-                runTestCase(i);
-            }
-        }
+    public void Case1() throws Exception {
+        runTestCase(1);
+    }
 
+    @Test
+    public void Case2() throws Exception {
+        runTestCase(2);
+    }
+
+    @Test
+    public void Case3() throws Exception {
+        runTestCase(3);
+    }
+
+    @Test
+    public void Case4() throws Exception {
+        runTestCase(4);
+    }
+
+    @Test
+    public void Case5() throws Exception {
+        runTestCase(5);
+    }
+
+    @Test
+    public void Case6() throws Exception {
+        runTestCase(6);
+    }
+
+    @Test
+    public void Case7() throws Exception {
+        runTestCase(7);
+    }
+
+    @Test
+    public void Case8() throws Exception {
+        runTestCase(8);
+    }
+
+    @Test
+    public void Case9() throws Exception {
+        runTestCase(9);
+    }
+
+    @Test
+    public void Case10() throws Exception {
+        runTestCase(10);
+    }
+
+    @Test
+    public void Case11() throws Exception {
+        runTestCase(11);
+    }
+
+    @Test
+    public void Case12() throws Exception {
+        runTestCase(12);
+    }
+
+    @Test
+    public void Case13() throws Exception {
+        runTestCase(13);
+    }
+
+    @Test
+    public void Case14() throws Exception {
+        runTestCase(14);
+    }
+
+    @Test
+    public void Case15() throws Exception {
+        runTestCase(15);
     }
 
     public void runTestCase(int i) throws IOException {

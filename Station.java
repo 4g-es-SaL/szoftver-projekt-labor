@@ -20,18 +20,10 @@ public class Station extends Rail {
         passColors = new ArrayList<>();
     }
 
-    /**
-     * Same as {@link Rail#carMoves(Car, Rail)}, but calls t.{@link Car#newStation(Station)}.
-     * @param c The {@link Car} that moves.
-     * @param prev The {@link Rail} where the {@link Car} came from.
-     * @return The {@link Rail} where c stands.
-     * @throws Exception In occasion of collision!
-     */
     @Override
-    public Rail carMoves(Car c, Rail prev) throws Exception {
-        Rail res = super.carMoves(c, prev);
-        c.newStation(this);
-        MethodPrinter.leaveMethod(); return res;
+    protected void addCar(Car c) throws Exception {
+        super.addCar(c);
+        c.atStation(this);
     }
 
     public Color getColor() {
@@ -40,6 +32,10 @@ public class Station extends Rail {
 
     public void addPassanger(Color c) {
         passColors.add(c);
+    }
+
+    public boolean removePassenger(Color c) {
+        return passColors.remove(c);
     }
 
     @Override
