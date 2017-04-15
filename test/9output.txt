@@ -7,6 +7,6 @@ Rail{id=5, from=4, to=6}
 Switch{Rail{id=6, from=5, to=0}, alternativeWays=[0, 2, 3]}
 Locomotive{Car{rail=5, prevRail=4, color=NO_COLOR, empty=true,
 	next=null}, speed=1}
-alternativeWays of Switch 6 changed to 1
 alternativeWays of Switch 6 changed to 2
+alternativeWays of Switch 6 changed to 3
 alternativeWays of Switch 6 changed to 0

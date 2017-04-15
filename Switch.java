@@ -32,7 +32,7 @@ public class Switch extends Rail {
             MethodPrinter.enterMethod();
             currentToId = (currentToId+1) % (alternativeWays.size());
             to = alternativeWays.get(currentToId);
-            System.out.println("alternativeWays of Switch " + id + " changed to " + currentToId);
+            System.out.println("alternativeWays of Switch " + id + " changed to " + to.getId());
             MethodPrinter.leaveMethod();
         }else{
             System.out.println("Switch cannot be changed!");

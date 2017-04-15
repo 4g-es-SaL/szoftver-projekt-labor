@@ -86,6 +86,7 @@ public class Rail {
         return to;
     }
 
+    public int getId(){return id;}
 
     @Override
     public String toString() {

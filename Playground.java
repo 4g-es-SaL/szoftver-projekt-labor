@@ -315,9 +315,6 @@ public class Playground {
     public void changeSwitch(int id) {
         MethodPrinter.enterMethod();
         ((Switch)rails.get(id)).changeDir();
-
-        //így jól lefutna a teszt!!!!
-        //switches.get(0).changeDir();
         MethodPrinter.leaveMethod();
     }
 
