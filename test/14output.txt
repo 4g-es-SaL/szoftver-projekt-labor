@@ -5,19 +5,19 @@ Rail{id=3, from=4, to=-1}
 Rail{id=4, from=3, to=5}
 Rail{id=5, from=4, to=-1}
 Locomotive{Car{rail=2, prevRail=1, color=NO_COLOR, empty=true,
-	next=Car{rail=1, prevRail=0, color=NO_COLOR, empty=true,
+	next=Car{rail=1, prevRail=0, color=RED, empty=false,
 	next=null}}, speed=1}
 Tunnel{Rail{id=6, from=2, to=0}, fromsNeighbor=null, tosNeighbor=null}
 Tunnel{Rail{id=6, from=-1, to=-1}, fromsNeighbor=null, tosNeighbor=null}
 Tunnel{Rail{id=6, from=3, to=2}, fromsNeighbor=null, tosNeighbor=null}
 Tunnel{Rail{id=6, from=3, to=2}, fromsNeighbor=null, tosNeighbor=null}
 Locomotive{Car{rail=6, prevRail=2, color=NO_COLOR, empty=true,
-	next=Car{rail=2, prevRail=1, color=NO_COLOR, empty=true,
+	next=Car{rail=2, prevRail=1, color=RED, empty=false,
 	next=null}}, speed=1}
 Tunnel{Rail{id=6, from=3, to=2}, fromsNeighbor=null, tosNeighbor=null}
 Locomotive{Car{rail=3, prevRail=6, color=NO_COLOR, empty=true,
-	next=Car{rail=6, prevRail=2, color=NO_COLOR, empty=true,
+	next=Car{rail=6, prevRail=2, color=RED, empty=false,
 	next=null}}, speed=1}
 Locomotive{Car{rail=4, prevRail=3, color=NO_COLOR, empty=true,
-	next=Car{rail=3, prevRail=6, color=NO_COLOR, empty=true,
+	next=Car{rail=3, prevRail=6, color=RED, empty=false,
 	next=null}}, speed=1}
