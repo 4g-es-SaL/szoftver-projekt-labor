@@ -7,10 +7,10 @@ public class CrossRail extends Rail{
     private Rail to2;
 
     /**
-     * Create a new {@link Rail} object.
+     * Creates a new {@link Rail} object.
      *
-     * @param from Connected to this {@link Rail}.
-     * @param to   Connected to this {@link Rail}. If Tunnel will build this neighbor will be replaced.
+     * @param from Connected to this {@link Rail} on first "branch".
+     * @param to   Connected to this {@link Rail} on first "branch". If Tunnel will build this neighbor will be replaced.
      */
     public CrossRail(Rail from, Rail to, Rail from2, Rail to2) {
         super(from, to);
@@ -18,10 +18,18 @@ public class CrossRail extends Rail{
         this.to2 = to2;
     }
 
+    /**
+     * Sets the from of other "branch" of the crossrail.
+     * @param f2 The {@link Rail} which is to be setted to from2.
+     */
     public void setFrom2(Rail f2){
         from2 = f2;
     }
 
+    /**
+     * Sets the to of other "branch" of the crossrail.
+     * @param f2 The {@link Rail} which is to be setted to to2.
+     */
     public void setTo2(Rail t2){
         to2 = t2;
     }

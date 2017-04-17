@@ -26,7 +26,7 @@ public class Locomotive extends Car {
     }
 
     /**
-     * The Locomotive moves to the next {@link Rail} in the network. Repeats it with speed time. Pulls the {@link Car} behind it.
+     * The Locomotive moves to the next {@link Rail} in the network. Repeats it 'speed' times. Pulls the {@link Car} behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() { MethodPrinter.enterMethod();
@@ -45,7 +45,7 @@ public class Locomotive extends Car {
 
     /**
      * Notifies the {@link Car}s behind it, that they can empty.
-     * @param s The {@link Color} to compare.
+     * @param s The {@link Station} on which the Locomotive arrives.
      */
     @Override
     public void atStation(Station s) { MethodPrinter.enterMethod();

@@ -13,7 +13,7 @@ public class Car {
     private int canEmpty;
 
     /**
-     * Create a new {@link Car} object. And notifies the {@link Rail}s about its presence.
+     * Creates a new {@link Car} object and notifies the {@link Rail}s about its presence.
      * @param rail The {@link Car} will stand on this Rail.
      * @param prevRail The {@link Car} has come from this Rail.
      * @param next In the train, the {@link Car} behind this {@link Car}.
@@ -79,15 +79,17 @@ public class Car {
     }
     //endregion
 
-
+    /**
+     * Sets whether the car is empty or not.
+     * @param empty True, if you want to set it to empty, false otherwise.
+     */
     public void setEmpty(boolean empty) {
         this.empty = empty;
     }
 
     /**
-     *  If c equals the Cars Color and canEmpty is true, sets the Cars Color to {@link Color#NO_COLOR} and calls the
-     *  {@link Car}s behind it, not to empty.
-     * @param s The Color to compare.
+     * Handles itself according to the given situation, empties itself, fills itself or forbids emptying behind itself.
+     * @param s The station where the car arrives.
      */
     public void atStation(Station s) {
         if (empty && s.removePassenger(color)) {
@@ -101,7 +103,11 @@ public class Car {
             }
         }
     }
-
+    
+    /**
+     * Sets whether the Car is allowed to be emptied.
+     * @param b True if you want to allow emptying, false otherwise.
+     */
     public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
         if (b) {
             canEmpty++;
@@ -114,6 +120,10 @@ public class Car {
         MethodPrinter.leaveMethod();
     }
 
+    /**
+     * Tests whether the whole train is empty.
+     * @return True if it is empty, false otherwise.
+     */
     public boolean isTrainEmpty() {
         if (!empty){
             return false;
@@ -125,11 +135,19 @@ public class Car {
             }
         }
     }
-
+    
+    /**
+     * Tests whether the car is empty.
+     * @return True if empty, false otherwise.
+     */
     public boolean isEmpty() {
         return empty;
     }
 
+    /**
+     * Gives back the colour of the Car.
+     * @return The colour ({@link Color}).
+     */
     public Color getColor() {
         return color;
     }

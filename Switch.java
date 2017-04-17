@@ -14,7 +14,7 @@ public class Switch extends Rail {
      * Create a {@link Switch} object.
      * @param from Connected to this {@link Rail}. If {@link Car} comes from one of the to2 direction, it will go this way.
      * @param to Connected to this {@link Rail}.
-     * @param to2 to can be replaced with this ones. Muss contain to too.
+     * @param to2 to can be replaced with this ones. Must contain to too.
      */
     public Switch(Rail from, Rail to, ArrayList<Rail> to2) {
         super(from, to); MethodPrinter.enterMethod();
@@ -25,7 +25,7 @@ public class Switch extends Rail {
 
 
     /**
-     * Rotates alternativeWays.
+     * Rotates alternativeWays. After the last one it flips to the first one again.
      */
     public void changeDir() {
         if(car == null){
