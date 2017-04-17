@@ -7,4 +7,3 @@ move
 destroy 2 3
 move
 move
-exit

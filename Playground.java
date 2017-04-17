@@ -384,4 +384,11 @@ public class Playground {
         res += "}";
         return res;
     }
+
+    public void printMap() {
+        for (Rail r :
+                rails) {
+            System.out.println(r);
+        }
+    }
 }

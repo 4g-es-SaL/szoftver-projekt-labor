@@ -25,14 +25,12 @@ public class Program {
         while (!exit) {
             String userInput = scanner.nextLine();
             String[] userInputSplit = userInput.split(" ");
-            //try {
+            try {
                 switch (userInputSplit[0]) {
                     case "init":
-                        //TODO
                         init(userInputSplit[1]);
                         break;
                     case "switch":
-                        //TODO
                         playground.changeSwitch(Integer.parseInt(userInputSplit[1]));
                         break;
                     case "build": 
@@ -40,7 +38,6 @@ public class Program {
                     	break;
                     case "destroy":
                     	playground.destroyTunnelEnd(0);
-                    	
                         break;
                     case "passenger":
                         playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
@@ -61,16 +58,18 @@ public class Program {
                             System.out.println(res);
                         }
                         break;
+                    case "map":
+                        playground.printMap();
+                        break;
                     case "exit":
                         exit = true;
                         break;
                     default:
                         printHelp();
                 }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                printHelp();
-//            }
+            } catch (Exception e) {
+                printHelp();
+            }
         }
     }
 
@@ -84,6 +83,9 @@ public class Program {
         System.out.println("init <file>\n" +
                 "Leírás: beolvassa a megadott file-t és ez alapján felépíti a játékterepet\n" +
                 "Opciók: file: a beolvasandó file\n" +
+                "\n" +
+                "map\n"+
+                "Leírás: Kiírja az összes sínt, alagutat és váltót\n"+
                 "\n" +
                 "switch <switch id>\n" +
                 "Leírás: A <switch id>-val azonosított Switch objektum állását átállítja\n" +
@@ -101,11 +103,11 @@ public class Program {
                 "Leírás: A <rail id>-val azonosított állomáshoz(ha az állomás) hozzáad color színű utasokat\n" +
                 "Opciók: <color>: a felszállítandó utasok színe\n" +
                 "\t\t  <rail id>: az állomás azonosítója\n" +
+                "\n" +
                 "move\n" +
                 "Leírás: Egy kör lejátszása\n" +
-                "Opciók: N/A\n" +
+                "\n" +
                 "exit\n" +
-                "Leírás: Kilépés" +
-                "Opciók: N/A");
+                "Leírás: Kilépés");
     }
 }
