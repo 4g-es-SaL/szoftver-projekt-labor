@@ -9,7 +9,7 @@ public class Tunnel extends Rail {
 
 
     /**
-     * Create a new {@link Tunnel} object.
+     * Creates a new {@link Tunnel} object.
      * @param from
      * @param to
      */
@@ -20,7 +20,7 @@ public class Tunnel extends Rail {
     }
 
     /**
-     * Builds the {@link Tunnel}s end to r {@link Rail#to} end.
+     * Builds the {@link Tunnel}s end to r {@link Rail#to} end. If 'from' is not yet linked to a rail, then that one, if it is then 'to'.
      * @param r
      */
     public void buildTunnel(Rail r) {
@@ -41,7 +41,7 @@ public class Tunnel extends Rail {
     }
 
     /**
-     * Destroy both end of the {@link Tunnel}.
+     * Destroy both ends of the {@link Tunnel}.
      */
     public void destroyTunnel() {
         MethodPrinter.enterMethod();

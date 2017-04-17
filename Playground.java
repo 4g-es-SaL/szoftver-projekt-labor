@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Maneges the objects({@link Rail}s, {@link Car}s) of the game.
+ * Manages the objects({@link Rail}s, {@link Car}s) of the game.
  */
 public class Playground {
 
@@ -350,7 +350,9 @@ public class Playground {
     }
     
     /**
-     * @param id Identifies the Rail which will be the Tunnel's end.
+     * Builds new {@link Tunnel}.
+     * @param e1 Id of one of the rails which will be the Tunnel's end.
+     * @param e1 Id of one of the rails which will be the Tunnel's end.
      */
     public void buildNewTunnel(int e1, int e2) {         MethodPrinter.enterMethod();
     tunnel.buildTunnel(this.rails.get(e2));
@@ -360,6 +362,7 @@ public class Playground {
     }
 
     /**
+     * Destroys an end of the {@link Tunnel}.
      * @param id Identifies the Rail that will be removed as the Tunnel's end.
      */
     public void destroyTunnelEnd(int id) {
@@ -367,6 +370,11 @@ public class Playground {
         System.out.println(this.tunnel);
     }
 
+    /**
+     * Adds passengers with given colour to given station, calls {@link Station#addPassanger} of given station.
+     * @param id Rail ID of the {@link Station}, to which the passengers are to be added.
+     * @param colorID {@link Color} of the passengers to be added.
+     */
     public void addPassenger(int id, int colorID) {
         Station s = (Station) rails.get(id);
         Color c = Color.values()[colorID];
@@ -385,6 +393,9 @@ public class Playground {
         return res;
     }
 
+    /**
+    * Prints the map, properties of all rails
+    */
     public void printMap() {
         for (Rail r :
                 rails) {
