@@ -102,6 +102,10 @@ public class ProgramTest {
         runTestCase(14);
     }
 
+    /**
+     * @param i The id number of the test case
+     * Runs the given test case
+     */
     public void runTestCase(int i) throws IOException {
         String InputFileName = "test/" + String.valueOf(i) + "input.txt";
         System.setIn(new FileInputStream(InputFileName));

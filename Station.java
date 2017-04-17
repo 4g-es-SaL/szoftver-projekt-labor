@@ -26,18 +26,35 @@ public class Station extends Rail {
         c.atStation(this);
     }
 
+    /**
+     * Gives back the colour of the station.
+     * @return The colour({@link Color}) of the station.
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Adds passengers given colour to the station.
+     * @param c The colour({@link Color}) of the passengers to be added.
+     */
     public void addPassanger(Color c) {
         passColors.add(c);
     }
 
+    /**
+     * Removes the passengers given colour from the station.
+     * @param c The colour({@link Color}) of the passengers to be removed.
+     * @return True if there were passengers given colour and they were successfully removed, false otherwise.
+     */
     public boolean removePassenger(Color c) {
         return passColors.remove(c);
     }
 
+    /**
+     * Gives back whether the station is empty.
+     * @return True if no passengers are present on the station, false otherwise.
+     */
     public boolean isEmpty() {
         return passColors.isEmpty();
     }

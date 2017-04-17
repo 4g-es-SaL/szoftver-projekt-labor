@@ -63,29 +63,49 @@ public class Rail {
             car = c;
         }
     }
-
+    
+    /**
+     * Sets 'from' of the rail.
+     * @param r Rail to be set.
+     */
     public void setFrom(Rail r) { MethodPrinter.enterMethod();
         from = r;
 
         MethodPrinter.leaveMethod();
     }
 
+    /**
+     * Sets 'to' of the rail.
+     * @param r Rail to be set.
+     */
     public void setTo(Rail r) { MethodPrinter.enterMethod();
         to = r;
 
         MethodPrinter.leaveMethod();
     }
 
+    /**
+     * Gives 'from' back.
+     * @return Rail 'from' of this rail.
+     */
     public Rail getFrom() { //MethodPrinter.enterMethod();
 //    MethodPrinter.leaveMethod();
         return from;
     }
 
+    /**
+     * Gives 'to' back.
+     * @return Rail 'to' of this rail.
+     */
     public Rail getTo() { //MethodPrinter.enterMethod();
 //        MethodPrinter.leaveMethod();
         return to;
     }
 
+    /**
+     * Gives back the id of the rail.
+     * @return The id.
+     */
     public int getId(){return id;}
 
     @Override
