@@ -271,7 +271,7 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
-
+            
             switches.add(sw);
         }
     }
@@ -325,6 +325,17 @@ public class Playground {
     public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
         tunnel.buildTunnel(tunnelEndPoints.get(id));
         MethodPrinter.leaveMethod();
+        System.out.println(this.tunnel);
+    }
+    
+    /**
+     * @param id Identifies the Rail which will be the Tunnel's end.
+     */
+    public void buildNewTunnel(int e1, int e2) {         MethodPrinter.enterMethod();
+    tunnel.buildTunnel(this.rails.get(e2));
+    tunnel.buildTunnel(this.rails.get(e1));    
+        System.out.println(this.tunnel);
+        MethodPrinter.leaveMethod();
     }
 
     /**
@@ -332,6 +343,7 @@ public class Playground {
      */
     public void destroyTunnelEnd(int id) {
         tunnel.destroyTunnel();
+        System.out.println(this.tunnel);
     }
 
     public void addPassenger(int id, int colorID) {

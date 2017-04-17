@@ -113,12 +113,27 @@ public class ProgramTest {
         try {
             Program.main(new String[0]);
         } catch(NoSuchElementException e) {
+        	
             //Our file has no more lines and scanner is just upset.
         }
         String expectedOutputFileName = "test/" + String.valueOf(i) + "output.txt";
         String output = outContent.toString();
         new FileInputStream((expectedOutputFileName));
         String expectedOutput = new String(Files.readAllBytes(Paths.get(expectedOutputFileName)));
+        ////szeme't ko"vetkezik (by A'rkos)
+        
+        String output2=output.replace("\r","");
+        String expectedOutput2=expectedOutput.replace("\r","");
+        String[] outSpl=output2.split("\n");
+        String[] exoutSpl=expectedOutput2.split("\n");
+        for (int j = 0; j < exoutSpl.length&&j < outSpl.length; j++) {
+        	if(!exoutSpl[j].equals(outSpl[j])){
+        		System.out.println(exoutSpl[j]);
+        		System.out.println(outSpl[j]);
+        	}
+		}
+		
+        ////szeme't ve'ge
         assertEquals(expectedOutput.replace("\r",""), output.replace("\r",""));
     }
 

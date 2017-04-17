@@ -25,13 +25,22 @@ public class Tunnel extends Rail {
      */
     public void buildTunnel(Rail r) {
         MethodPrinter.enterMethod();
+        
 	    if(this.car==null){
-	        if(from == null) {
+	    	/*if(r.to==null){
+	    		fromsNeighbor = r.getTo();
+	            r.setTo(this);
+	            from = r;
+	    	}else if(r.from==null){
+	    		 tosNeighbor = r.getFrom();
+		         r.setTo(this);
+		         to = r;
+	    	}else*/ if(from == null) {
 	            fromsNeighbor = r.getTo();
 	            r.setTo(this);
 	            from = r;
 	        } else if(to == null) {
-	            tosNeighbor = r.getFrom();
+	            tosNeighbor = r.getTo();
 	            r.setTo(this);
 	            to = r;
 	        }
@@ -54,10 +63,10 @@ public class Tunnel extends Rail {
     }
 
     @Override
-    public String toString() {
+    public String toString() { 
         return "Tunnel{" +
+        		super.toString()+", "+
                 "fromsNeighbor=" + fromsNeighbor +
-                ", tosNeighbor=" + tosNeighbor +
-                super.toString() + "} ";
+                ", tosNeighbor=" + tosNeighbor + "} ";
     }
 }

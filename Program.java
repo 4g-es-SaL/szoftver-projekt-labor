@@ -35,11 +35,12 @@ public class Program {
                         //TODO
                         playground.changeSwitch(Integer.parseInt(userInputSplit[1]));
                         break;
-                    case "build":
-                        //TODO
-                        break;
+                    case "build": 
+                    	playground.buildNewTunnel(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
+                    	break;
                     case "destroy":
-                        //TODO
+                    	playground.destroyTunnelEnd(0);
+                    	
                         break;
                     case "passenger":
                         playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
