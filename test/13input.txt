@@ -1,0 +1,6 @@
+init alagut.txt
+build 0 2
+destroy 0 2
+build 2 3
+build 0 5
+exit

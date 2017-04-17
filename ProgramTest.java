@@ -108,6 +108,7 @@ public class ProgramTest {
         try {
             Program.main(new String[0]);
         } catch(NoSuchElementException e) {
+        	
             //Our file has no more lines and scanner is just upset.
         }
         String expectedOutputFileName = "test/" + String.valueOf(i) + "output.txt";

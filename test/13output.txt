@@ -1,0 +1,10 @@
+Rail{id=0, from=1, to=-1}
+Rail{id=1, from=0, to=2}
+Rail{id=2, from=1, to=-1}
+Rail{id=3, from=4, to=-1}
+Rail{id=4, from=3, to=5}
+Rail{id=5, from=4, to=-1}
+Tunnel{Rail{id=6, from=2, to=0}, fromsNeighbor=null, tosNeighbor=null}
+Tunnel{Rail{id=6, from=-1, to=-1}, fromsNeighbor=null, tosNeighbor=null}
+Tunnel{Rail{id=6, from=3, to=2}, fromsNeighbor=null, tosNeighbor=null}
+Tunnel{Rail{id=6, from=3, to=2}, fromsNeighbor=null, tosNeighbor=null}
