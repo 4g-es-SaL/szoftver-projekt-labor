@@ -128,8 +128,14 @@ public class ProgramTest {
         String[] exoutSpl=expectedOutput2.split("\n");
         for (int j = 0; j < exoutSpl.length&&j < outSpl.length; j++) {
         	if(!exoutSpl[j].equals(outSpl[j])){
-        		System.out.println(exoutSpl[j]);
-        		System.out.println(outSpl[j]);
+        		System.out.println("x");//command for brakepoint
+        		for (int j2 = 0; j2 < exoutSpl[j].length()&&j2 < exoutSpl[j].length(); j2++) {
+        			String ex=exoutSpl[j].substring(j2, j2+1);
+        			String e=outSpl[j].substring(j2, j2+1);
+					if(!e.equals(ex)){
+						System.out.println("x");//command for brakepoint
+					}
+				}
         	}
 		}
 		

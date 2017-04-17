@@ -27,15 +27,7 @@ public class Tunnel extends Rail {
         MethodPrinter.enterMethod();
         
 	    if(this.car==null){
-	    	/*if(r.to==null){
-	    		fromsNeighbor = r.getTo();
-	            r.setTo(this);
-	            from = r;
-	    	}else if(r.from==null){
-	    		 tosNeighbor = r.getFrom();
-		         r.setTo(this);
-		         to = r;
-	    	}else*/ if(from == null) {
+	    	if(from == null) {
 	            fromsNeighbor = r.getTo();
 	            r.setTo(this);
 	            from = r;
@@ -67,6 +59,6 @@ public class Tunnel extends Rail {
         return "Tunnel{" +
         		super.toString()+", "+
                 "fromsNeighbor=" + fromsNeighbor +
-                ", tosNeighbor=" + tosNeighbor + "} ";
+                ", tosNeighbor=" + tosNeighbor + "}";
     }
 }
