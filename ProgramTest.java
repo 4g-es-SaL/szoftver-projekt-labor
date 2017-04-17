@@ -112,7 +112,6 @@ public class ProgramTest {
         }
         String expectedOutputFileName = "test/" + String.valueOf(i) + "output.txt";
         String output = outContent.toString();
-        new FileInputStream((expectedOutputFileName));
         String expectedOutput = new String(Files.readAllBytes(Paths.get(expectedOutputFileName)));
         assertEquals(expectedOutput.replace("\r",""), output.replace("\r",""));
     }
