@@ -9,4 +9,5 @@ Locomotive{Car{rail=5, prevRail=4, color=NO_COLOR, empty=true,
 	next=null}, speed=1}
 Locomotive{Car{rail=6, prevRail=5, color=NO_COLOR, empty=true,
 	next=null}, speed=1}
+GAME OVER
 Switch cannot be changed!

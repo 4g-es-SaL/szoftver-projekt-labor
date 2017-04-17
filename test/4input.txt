@@ -1,0 +1,5 @@
+init kiurules.txt
+move
+move
+move
+move
