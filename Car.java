@@ -10,7 +10,7 @@ public class Car {
     protected final Color color;
     protected boolean empty;
     protected Station stationWhereEmpty;
-    private boolean canEmpty;
+    private int canEmpty;
 
     /**
      * Create a new {@link Car} object. And notifies the {@link Rail}s about its presence.
@@ -27,7 +27,7 @@ public class Car {
         if (color == Color.NO_COLOR) {
             empty = true;
         }
-        canEmpty = false;
+        canEmpty = 0;
         signUpCarOnRail(rail, prevRail);
     }
 
@@ -92,24 +92,38 @@ public class Car {
     public void atStation(Station s) {
         if (empty && s.removePassenger(color)) {
             empty = false;
-        } else if(canEmpty){
-            if(!empty){
-                if(next != null) {
-                    next.setCanEmpty(false);
-                }
-            }
+        } else if(canEmpty > 0){
             if(color == s.getColor()){
                 empty = true;
+            }
+            if(!empty){
+                setCanEmpty(false);
             }
         }
     }
 
     public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
-        canEmpty = b;
+        if (b) {
+            canEmpty++;
+        } else {
+            canEmpty--;
+        }
         if(next != null) {
             next.setCanEmpty(b);
         }
         MethodPrinter.leaveMethod();
+    }
+
+    public boolean isTrainEmpty() {
+        if (!empty){
+            return false;
+        } else {
+            if (next != null) {
+                return next.isTrainEmpty();
+            } else {
+                return true;
+            }
+        }
     }
 
     public boolean isEmpty() {
@@ -127,6 +141,7 @@ public class Car {
                 ", prevRail=" + prevRail.id +
                 ", color=" + color +
                 ", empty=" + empty +
+                //", canEmpty=" + canEmpty +
                 ",\n\tnext=" + next +
                 '}';
     }

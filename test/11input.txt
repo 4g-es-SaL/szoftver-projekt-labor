@@ -1,0 +1,4 @@
+init szenes_utas.txt
+passenger 0 0
+move
+move

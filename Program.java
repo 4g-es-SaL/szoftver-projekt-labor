@@ -45,8 +45,19 @@ public class Program {
                         playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
                         break;
                     case "move":
-                        if (playground.runTurn() == 1) {
-                            System.out.println("Collision!");
+                        String res = "";
+                        switch (playground.runTurn()) {
+                            case 1:
+                                res = "Collision!";
+                                break;
+                            case 2:
+                                res = "GAME OVER";
+                                break;
+                            default:
+                                break;
+                        }
+                        if (!res.equals("")) {
+                            System.out.println(res);
                         }
                         break;
                     case "exit":

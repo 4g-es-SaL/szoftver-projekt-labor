@@ -102,11 +102,6 @@ public class ProgramTest {
         runTestCase(14);
     }
 
-    @Test
-    public void Case15() throws Exception {
-        runTestCase(15);
-    }
-
     public void runTestCase(int i) throws IOException {
         String InputFileName = "test/" + String.valueOf(i) + "input.txt";
         System.setIn(new FileInputStream(InputFileName));

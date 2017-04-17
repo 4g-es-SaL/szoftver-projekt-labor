@@ -295,17 +295,38 @@ public class Playground {
 
     /**
      * Calls all locomotives {@link Locomotive#runTurn()}.
-     * @return 1 if there was an error, 0 otherwise.
+     * @return 1 if there was an error, 2 if victory, 0 otherwise.
      */
     public int runTurn() {
-        int res = 0;
+        boolean gameOver = true;
         for (Locomotive loc:locomotives) {
-            res = loc.runTurn();
+            int res = loc.runTurn();
             if (res == 1) {
                 return res;
             }
+            if (!loc.isTrainEmpty()) {
+                gameOver = false;
+            }
         }
-        return res;
+        if (gameOver) {
+            for (Rail r :
+                    rails) {
+                try {
+                    Station s = (Station) r;
+                    if (!s.isEmpty()) {
+                        gameOver = false;
+                        break;
+                    }
+                } catch(Exception e) {
+
+                }
+
+            }
+        }
+        if (gameOver) {
+            return 2;
+        }
+        return 0;
 
     }
     /**

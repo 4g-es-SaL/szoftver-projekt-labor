@@ -38,6 +38,10 @@ public class Station extends Rail {
         return passColors.remove(c);
     }
 
+    public boolean isEmpty() {
+        return passColors.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "Station{" +
