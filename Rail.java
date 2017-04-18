@@ -10,11 +10,9 @@ public class Rail {
      * @param to Connected to this {@link Rail}. If Tunnel will build this neighbor will be replaced.
      */
     public Rail(Rail from, Rail to) {
-        MethodPrinter.enterMethod();
         id = idGenerator++;
         this.from = from;
         this.to = to;
-        MethodPrinter.leaveMethod();
     }
 
     public static int idGenerator = 0;
@@ -31,23 +29,15 @@ public class Rail {
      * @throws Exception In occasion of collision!
      */
     public Rail carMoves(Car c, Rail prev) throws Exception {
-//        for (int i = 0; i < MethodPrinter.tabCount+1; i++)  System.out.print("\t");
-//        System.out.println(this.toString());
-        MethodPrinter.enterMethod();
-
         car = null;
         Rail nextRail = getNextRail(prev);
-        try {
-            nextRail.addCar(c);
-        } catch (Exception e) {
-            MethodPrinter.leaveMethod();
-            throw e;
-        }
-
-        MethodPrinter.leaveMethod();
+        nextRail.addCar(c);
         return nextRail;
     }
 
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
     protected Rail getNextRail(Rail prev) {
         if(from == prev) {
             return to;
@@ -56,6 +46,9 @@ public class Rail {
         }
     }
 
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
     protected void addCar(Car c) throws Exception {
         if (car != null) {
             throw new Exception("Collision!");
@@ -68,28 +61,23 @@ public class Rail {
      * Sets 'from' of the rail.
      * @param r Rail to be set.
      */
-    public void setFrom(Rail r) { MethodPrinter.enterMethod();
+    public void setFrom(Rail r) {
         from = r;
-
-        MethodPrinter.leaveMethod();
     }
 
     /**
      * Sets 'to' of the rail.
      * @param r Rail to be set.
      */
-    public void setTo(Rail r) { MethodPrinter.enterMethod();
+    public void setTo(Rail r) {
         to = r;
-
-        MethodPrinter.leaveMethod();
     }
 
     /**
      * Gives 'from' back.
      * @return Rail 'from' of this rail.
      */
-    public Rail getFrom() { //MethodPrinter.enterMethod();
-//    MethodPrinter.leaveMethod();
+    public Rail getFrom() {
         return from;
     }
 
@@ -97,8 +85,7 @@ public class Rail {
      * Gives 'to' back.
      * @return Rail 'to' of this rail.
      */
-    public Rail getTo() { //MethodPrinter.enterMethod();
-//        MethodPrinter.leaveMethod();
+    public Rail getTo() {
         return to;
     }
 

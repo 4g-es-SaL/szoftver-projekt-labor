@@ -108,7 +108,7 @@ public class Car {
      * Sets whether the Car is allowed to be emptied.
      * @param b True if you want to allow emptying, false otherwise.
      */
-    public void setCanEmpty(boolean b) { MethodPrinter.enterMethod();
+    public void setCanEmpty(boolean b) {
         if (b) {
             canEmpty++;
         } else {
@@ -117,7 +117,6 @@ public class Car {
         if(next != null) {
             next.setCanEmpty(b);
         }
-        MethodPrinter.leaveMethod();
     }
 
     /**
@@ -125,15 +124,7 @@ public class Car {
      * @return True if it is empty, false otherwise.
      */
     public boolean isTrainEmpty() {
-        if (!empty){
-            return false;
-        } else {
-            if (next != null) {
-                return next.isTrainEmpty();
-            } else {
-                return true;
-            }
-        }
+        return empty && (next == null || next.isTrainEmpty());
     }
     
     /**
