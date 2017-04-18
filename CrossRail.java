@@ -28,7 +28,7 @@ public class CrossRail extends Rail{
 
     /**
      * Sets the to of other "branch" of the crossrail.
-     * @param f2 The {@link Rail} which is to be setted to to2.
+     * @param t2 The {@link Rail} which is to be setted to to2.
      */
     public void setTo2(Rail t2){
         to2 = t2;

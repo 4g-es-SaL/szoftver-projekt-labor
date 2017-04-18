@@ -18,6 +18,9 @@ public class Program {
         p.run();
     }
 
+    /**
+     * Game loop.
+     */
     protected void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -37,26 +40,15 @@ public class Program {
                     	playground.buildNewTunnel(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
                     	break;
                     case "destroy":
-                    	playground.destroyTunnelEnd(0);
+                    	playground.destroyTunnelEnd();
                         break;
                     case "passenger":
                         playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
                         break;
                     case "move":
-                        String res = "";
-                        switch (playground.runTurn()) {
-                            case 1:
-                                res = "Collision!";
-                                break;
-                            case 2:
-                                res = "GAME OVER";
-                                break;
-                            default:
-                                break;
-                        }
-                        if (!res.equals("")) {
-                            System.out.println(res);
-                        }
+                        int ires = playground.runTurn();
+                        String res = getRunResultText(ires);
+                        printTextIfNotEmpty(res);
                         break;
                     case "map":
                         playground.printMap();
@@ -71,6 +63,33 @@ public class Program {
                 printHelp();
             }
         }
+    }
+
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
+    private void printTextIfNotEmpty(String res) {
+        if (!res.equals("")) {
+            System.out.println(res);
+        }
+    }
+
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
+    private String getRunResultText(int ires) {
+        String res = "";
+        switch (ires) {
+            case 1:
+                res = "Collision!";
+                break;
+            case 2:
+                res = "GAME OVER";
+                break;
+            default:
+                break;
+        }
+        return res;
     }
 
     protected void init(String s) {

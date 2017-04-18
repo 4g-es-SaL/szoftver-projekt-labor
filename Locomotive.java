@@ -29,17 +29,15 @@ public class Locomotive extends Car {
      * The Locomotive moves to the next {@link Rail} in the network. Repeats it 'speed' times. Pulls the {@link Car} behind it.
      * @return 1 if there was a collision, 0 otherwise.
      */
-    public int runTurn() { MethodPrinter.enterMethod();
-        int res = 0;
+    public int runTurn() {
         for (int i = 0; i < speed; i++) {
-            res = super.runTurn();
+            int res = super.runTurn();
             if (res == 1) {
-                MethodPrinter.leaveMethod();
                 return 1;
             }
         }
         System.out.println(this);
-        MethodPrinter.leaveMethod(); return res;
+        return 0;
     }
 
 
@@ -48,11 +46,10 @@ public class Locomotive extends Car {
      * @param s The {@link Station} on which the Locomotive arrives.
      */
     @Override
-    public void atStation(Station s) { MethodPrinter.enterMethod();
+    public void atStation(Station s) {
         if (next != null) {
             next.setCanEmpty(true);
         }
-        MethodPrinter.leaveMethod();
     }
 
     @Override
@@ -62,11 +59,12 @@ public class Locomotive extends Car {
                 "}";
     }
 
-    // helper function for reading in
+    // region helper function for reading in
     public Car getLastCar(){
         Car tmp = this;
         while (tmp.next != null)
             tmp = tmp.next;
         return tmp;
     }
+    //endregion
 }

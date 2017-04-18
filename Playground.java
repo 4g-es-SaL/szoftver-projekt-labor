@@ -12,7 +12,6 @@ public class Playground {
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
     protected Tunnel tunnel;
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
-    private ArrayList<Switch> switches = new ArrayList<>();
 
     /**
      * Creat a new instance of Playground
@@ -81,8 +80,6 @@ public class Playground {
      */
 
     Playground(File f) {
-        MethodPrinter.enterMethod();
-
         Rail.idGenerator = 0;
         try(FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
@@ -104,8 +101,6 @@ public class Playground {
         } catch (Exception e){
             System.out.println(e.toString());
         }
-
-        MethodPrinter.leaveMethod();
     }
 
     //region File reading helper functions
@@ -271,8 +266,6 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
-            
-            switches.add(sw);
         }
     }
 
@@ -298,74 +291,95 @@ public class Playground {
      * @return 1 if there was an error, 2 if victory, 0 otherwise.
      */
     public int runTurn() {
-        boolean gameOver = true;
-        for (Locomotive loc:locomotives) {
-            int res = loc.runTurn();
-            if (res == 1) {
-                return res;
-            }
-            if (!loc.isTrainEmpty()) {
-                gameOver = false;
-            }
+        Integer res = runLocomotives();
+        if (res == 1){
+            return 1;
         }
-        if (gameOver) {
-            for (Rail r :
-                    rails) {
-                try {
-                    Station s = (Station) r;
-                    if (!s.isEmpty()) {
-                        gameOver = false;
-                        break;
-                    }
-                } catch(Exception e) {
-
-                }
-
-            }
-        }
-        if (gameOver) {
+        if (areTrainsEmpty() && areStationsEmpty()) {
             return 2;
         }
         return 0;
 
     }
+
+    //region runTurn() privates
+
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
+    protected int runLocomotives() {
+        for (Locomotive loc:locomotives) {
+            int res = loc.runTurn();
+            if (res == 1) {
+                return res;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
+    protected boolean areTrainsEmpty() {
+        for (Locomotive loc:locomotives) {
+            if (!loc.isTrainEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * If you can't figure out by the name, you are not worthy to be called 'programmer'.
+     */
+    protected boolean areStationsEmpty() {
+        for (Rail r : rails) {
+            try {
+                Station s = (Station) r;
+                if (!s.isEmpty()) {
+                    return false;
+                }
+            } catch(Exception e) {
+                //Not station, pass
+            }
+        }
+        return true;
+    }
+
+    //endregion
+
     /**
      * Changes the {@link Switch} direction.
      * @param id Identifies the Switch.
      */
     public void changeSwitch(int id) {
-        MethodPrinter.enterMethod();
         ((Switch)rails.get(id)).changeDir();
-        MethodPrinter.leaveMethod();
     }
 
 
     /**
      * @param id Identifies the Rail which will be the Tunnel's end.
      */
-    public void buildTunnelEnd(int id) {         MethodPrinter.enterMethod();
+    public void buildTunnelEnd(int id){
         tunnel.buildTunnel(tunnelEndPoints.get(id));
-        MethodPrinter.leaveMethod();
         System.out.println(this.tunnel);
     }
     
     /**
      * Builds new {@link Tunnel}.
      * @param e1 Id of one of the rails which will be the Tunnel's end.
-     * @param e1 Id of one of the rails which will be the Tunnel's end.
+     * @param e2 Id of one of the rails which will be the Tunnel's end.
      */
-    public void buildNewTunnel(int e1, int e2) {         MethodPrinter.enterMethod();
-    tunnel.buildTunnel(this.rails.get(e2));
-    tunnel.buildTunnel(this.rails.get(e1));    
+    public void buildNewTunnel(int e1, int e2) {
+        tunnel.buildTunnel(this.rails.get(e2));
+        tunnel.buildTunnel(this.rails.get(e1));
         System.out.println(this.tunnel);
-        MethodPrinter.leaveMethod();
     }
 
     /**
-     * Destroys an end of the {@link Tunnel}.
-     * @param id Identifies the Rail that will be removed as the Tunnel's end.
+     * Destroys the {@link Tunnel}.
      */
-    public void destroyTunnelEnd(int id) {
+    public void destroyTunnelEnd() {
         tunnel.destroyTunnel();
         System.out.println(this.tunnel);
     }
@@ -397,8 +411,7 @@ public class Playground {
     * Prints the map, properties of all rails
     */
     public void printMap() {
-        for (Rail r :
-                rails) {
+        for (Rail r : rails) {
             System.out.println(r);
         }
     }

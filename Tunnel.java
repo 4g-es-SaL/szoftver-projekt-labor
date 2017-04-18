@@ -10,22 +10,18 @@ public class Tunnel extends Rail {
 
     /**
      * Creates a new {@link Tunnel} object.
-     * @param from
-     * @param to
+     * @param from End of the Tunnel.
+     * @param to End of the Tunnel.
      */
     public Tunnel(Rail from, Rail to) {
         super(from, to);
-        MethodPrinter.enterMethod();
-        MethodPrinter.leaveMethod();
     }
 
     /**
      * Builds the {@link Tunnel}s end to r {@link Rail#to} end. If 'from' is not yet linked to a rail, then that one, if it is then 'to'.
-     * @param r
+     * @param r The {@link Rail}.
      */
     public void buildTunnel(Rail r) {
-        MethodPrinter.enterMethod();
-        
 	    if(this.car==null){
 	    	if(from == null) {
 	            fromsNeighbor = r.getTo();
@@ -37,21 +33,18 @@ public class Tunnel extends Rail {
 	            to = r;
 	        }
         }
-        MethodPrinter.leaveMethod();
     }
 
     /**
      * Destroy both ends of the {@link Tunnel}.
      */
     public void destroyTunnel() {
-        MethodPrinter.enterMethod();
         if(this.car==null){
 	        from.setTo(fromsNeighbor);
 	        to.setTo(tosNeighbor);
 	        from = null;
 	        to = null;
         }
-        MethodPrinter.leaveMethod();
     }
 
     @Override
