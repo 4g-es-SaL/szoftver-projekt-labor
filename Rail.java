@@ -21,6 +21,9 @@ public class Rail {
     protected Rail to;
     protected Car car;
 
+    protected float x, y;
+    protected float angle;
+
     /**
      * Moves the {@link Car} to the next Rail in the network.
      * @param c The {@link Car} that moves.
@@ -72,6 +75,24 @@ public class Rail {
     public void setTo(Rail r) {
         to = r;
     }
+
+    /**
+     * Sets 'x' of the rail.
+     * @param x 'x' to be set.
+     */
+    public void setX(float x) { this.x = x; }
+
+    /**
+     * Sets 'y' of the rail.
+     * @param y 'y' to be set.
+     */
+    public void setY(float y) { this.y = y; }
+
+    /**
+     * Sets 'angle' of the rail.
+     * @param angle 'angle' to be set.
+     */
+    public void setAngle(float angle) { this.angle = angle; }
 
     /**
      * Gives 'from' back.
