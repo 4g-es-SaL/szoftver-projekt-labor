@@ -20,16 +20,16 @@ public class Playground {
      * A file tartalma a következő:
      *
          * R
-         * from0 to0 [{sz0 | from02, to02}]
-         * from1 to1 [{sz1 | from12, to12}]
+         * from0 to0 x0 y0 angle0 [{sz0 | from02, to02}]
+         * from1 to1 x1 y1 angle1 [{sz1 | from12, to12}]
          * ...
-         * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}]
+         * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}] xR-1 yR-1 angleR-1
          * [ENTER]
          * S
-         * from0 to0 alt00 alt01 ...
-         * from1 to1 alt10 alt11 ...
+         * from0 to0 x0 y0 angle0 alt00 alt01 ...
+         * from1 to1 x1 y1 angle1 alt10 alt11 ...
          * ...
-         * fromS-1 toS-1 altS-10 altS-11 ...
+         * fromS-1 toS-1 xS-1 yS-1 angleS-1 altS-10 altS-11 ...
          * [ENTER]
          * T
          * E0
@@ -156,9 +156,9 @@ public class Playground {
 
         for (int i = 0; i < numRails; i++) {
             String[] tmp = railData[i+1].split(" ");
-            if(tmp.length == 3)
+            if(tmp.length == 6)
                 rails.add(new Station(null, null, null));
-            else if(tmp.length == 4)
+            else if(tmp.length == 7)
                 rails.add(new CrossRail(null, null, null, null));
             else
                 rails.add(new Rail(null, null));
@@ -192,6 +192,9 @@ public class Playground {
             String[] line = railData[i+1].split(" ");
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
+            float x = Float.parseFloat(line[2]);
+            float y = Float.parseFloat(line[3]);
+            float angle = Float.parseFloat(line[4]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -202,16 +205,19 @@ public class Playground {
             Rail current = rails.get(i);
             current.setFrom(from);
             current.setTo(to);
+            current.setX(x);
+            current.setY(y);
+            current.setAngle(angle);
 
             // total ertelmetlen, de a doksiban ugy maradt,
             // hogy a rail blokkban vannak a Station-k és
             // a CrossRail-k is, ugyhogy ime...
-            if(line.length == 3){
+            if(line.length == 6){
                 Color c = Color.values()[Integer.parseInt(line[2])];
                 Station tmp = (Station)current;
                 tmp.color = c;
             }
-            else if(line.length == 4){
+            else if(line.length == 7){
                 int from2ID = Integer.parseInt(line[2]);
                 int to2ID = Integer.parseInt(line[3]);
 
@@ -246,6 +252,9 @@ public class Playground {
 
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
+            float x = Float.parseFloat(line[2]);
+            float y = Float.parseFloat(line[3]);
+            float angle = Float.parseFloat(line[4]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -266,6 +275,9 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
+            sw.setX(x);
+            sw.setY(y);
+            sw.setAngle(angle);
         }
     }
 
