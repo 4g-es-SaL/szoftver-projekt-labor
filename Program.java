@@ -1,5 +1,8 @@
 
+import javafx.scene.shape.Rectangle;
+
 import java.io.File;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -7,21 +10,24 @@ import java.util.Scanner;
  */
 public class Program {
 
-    protected Playground playground;
+    protected static Playground playground;
+
+    protected static Map<Rail, Rectangle> rectangles;
+    public static Map< Rectangle, Switch> switches;
+    public static Map<Rectangle, Rail> tunnelEnds;
 
     /**
      * Starts the program.
      * @param args Ignored.
      */
     public static void main(String[] args) {
-        Program p = new Program();
-        p.run();
+        run();
     }
 
     /**
      * Game loop.
      */
-    protected void run() {
+    protected static void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -68,7 +74,7 @@ public class Program {
     /**
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
-    private void printTextIfNotEmpty(String res) {
+    private static void printTextIfNotEmpty(String res) {
         if (!res.equals("")) {
             System.out.println(res);
         }
@@ -77,7 +83,7 @@ public class Program {
     /**
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
-    private String getRunResultText(int ires) {
+    private static String getRunResultText(int ires) {
         String res = "";
         switch (ires) {
             case 1:
@@ -92,12 +98,54 @@ public class Program {
         return res;
     }
 
-    protected void init(String s) {
+    protected static void init(String s) {
         File f = new File(s);
         playground = new Playground(f);
     }
 
-    protected void printHelp() {
+    /**
+     * @param rail
+     * @param x
+     * @param y
+     */
+    public static void addRail(Rail rail, int x, int y) {
+        // TODO implement here
+    }
+
+    /**
+     * @param s
+     * @param x
+     * @param y
+     */
+    public static void addStation(Station s, int x, int y) {
+        // TODO implement here
+    }
+
+    /**
+     * @param r
+     * @param x
+     * @param y
+     */
+    public static void addMountainEntryPoint(Rail r, int x, int y) {
+        // TODO implement here
+    }
+
+    /**
+     * @param x
+     * @param y
+     */
+    public static void addMountain(int x, int y) {
+        // TODO implement here
+    }
+
+    /**
+     * @param r
+     */
+    public static void updateRail(Rail r) {
+        // TODO implement here
+    }
+
+    protected static void printHelp() {
         System.out.println("Your input is not recognizable as an existing command!");
         System.out.println("init <file>\n" +
                 "Leírás: beolvassa a megadott file-t és ez alapján felépíti a játékterepet\n" +
