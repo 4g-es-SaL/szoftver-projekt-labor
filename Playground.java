@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Playground {
 
     protected long startTime;
+    protected Program program;
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails = new ArrayList<>();
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
@@ -79,8 +80,9 @@ public class Playground {
      *
      */
 
-    Playground(File f) {
+    Playground(File f, Program p) {
         Rail.idGenerator = 0;
+        program = p;
         try(FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
             in.read(rawData);
