@@ -207,8 +207,7 @@ public class Playground {
             Rail current = rails.get(i);
             current.setFrom(from);
             current.setTo(to);
-            current.setX(x);
-            current.setY(y);
+            program.addRail(current, x, y);
             current.setAngle(angle);
 
             // total ertelmetlen, de a doksiban ugy maradt,

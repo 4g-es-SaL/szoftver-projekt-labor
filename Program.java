@@ -1,17 +1,13 @@
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -21,10 +17,11 @@ import java.util.Scanner;
 public class Program extends Application {
 
     protected static Playground playground;
+    ObservableList<Node> observableList;
 
-    protected static Map<Rail, Rectangle> rectangles;
-    public static Map< Rectangle, Switch> switches;
-    public static Map<Rectangle, Rail> tunnelEnds;
+    protected static Map<Rail, Rectangle> rectangles = new HashMap<>();
+    public static Map< Rectangle, Switch> switches = new HashMap<>();
+    public static Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
 
     /**
      * Starts the program.
@@ -37,32 +34,30 @@ public class Program extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Rectangle rec = new Rectangle(100,100);
-
-        final FileChooser fileChooser = new FileChooser();
-        final Button openButton = new Button("Open a Picture...");
-        openButton.setAlignment(Pos.CENTER);
-        openButton.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                        File file = fileChooser.showOpenDialog(primaryStage);
-                        if (file != null) {
-                            playground = new Playground(file, Program.this);
-                        }
-                    }
-                });
-
         Group root = new Group();
-        ObservableList<Node> observableList = root.getChildren();
-        //observableList.add(rec);
-        observableList.add(openButton);
+        observableList = root.getChildren();
+
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setInitialFileName("D:\\projektek\\szoftver-projekt-labor\\src");
+//        final Button openButton = new Button("Open a Picture...");
+//        openButton.setAlignment(Pos.CENTER);
+//        openButton.setOnAction(e -> {
+//                    File file = fileChooser.showOpenDialog(primaryStage);
+//                    if (file != null) {
+//                        playground = new Playground(file, Program.this);
+//                    }
+//                    observableList.remove(openButton);
+//                });
+//        observableList.add(openButton);
+        File file = new File("D:\\projektek\\szoftver-projekt-labor\\src\\kiurules.txt");
+        playground = new Playground(file, Program.this);
 
         Scene s = new Scene(root, 600,600);
         primaryStage.setScene(s);
         primaryStage.show();
     }
 
+    //region text based
     /**
      * Game loop.
      */
@@ -141,14 +136,21 @@ public class Program extends Application {
         File f = new File(s);
         playground = new Playground(f, null);
     }
+    //endregion
 
     /**
      * @param rail
      * @param x
      * @param y
      */
-    public static void addRail(Rail rail, int x, int y) {
+    public void addRail(Rail rail, float x, float y) {
         // TODO implement here
+        System.out.println(x);
+        System.out.println(y);
+        final int size = 75;
+        Rectangle rectangle = new Rectangle(x*size, y*size, size, size);
+        rectangles.put(rail, rectangle);
+        observableList.add(rectangle);
     }
 
     /**
