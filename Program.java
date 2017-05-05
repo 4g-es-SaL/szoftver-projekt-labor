@@ -3,6 +3,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -15,13 +16,16 @@ import java.util.Scanner;
  * Communicates with the user and the {@link Playground}.
  */
 public class Program extends Application {
+    final int size = 75;
+    final int bias = 75;
 
     protected static Playground playground;
     ObservableList<Node> observableList;
 
-    protected static Map<Rail, Rectangle> rectangles = new HashMap<>();
-    public static Map< Rectangle, Switch> switches = new HashMap<>();
-    public static Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
+    protected static Map<Rail, Line> rectangles = new HashMap<>();
+    protected static Map<Rail, Coordinates> coordinates = new HashMap<>();
+    protected static Map< Rectangle, Switch> switches = new HashMap<>();
+    protected static Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
 
     /**
      * Starts the program.
@@ -138,19 +142,24 @@ public class Program extends Application {
     }
     //endregion
 
+    private Coordinates transformToLocalCoordinates(int x, int y) {
+        return new Coordinates(x*size + bias, y*size + bias);
+    }
+
     /**
      * @param rail
      * @param x
      * @param y
      */
-    public void addRail(Rail rail, float x, float y) {
+    public void addRail(Rail rail, int x, int y) {
         // TODO implement here
-        System.out.println(x);
-        System.out.println(y);
-        final int size = 75;
-        Rectangle rectangle = new Rectangle(x*size, y*size, size, size);
-        rectangles.put(rail, rectangle);
-        observableList.add(rectangle);
+        Coordinates railCoords = transformToLocalCoordinates(x, y);
+        Program.coordinates.put(rail, railCoords);
+
+        Rail from = rail.getFrom();
+        drawLineFromRailToPoint(from, railCoords);
+        Rail to = rail.getTo();
+        drawLineFromRailToPoint(to, railCoords);
     }
 
     /**
@@ -158,8 +167,29 @@ public class Program extends Application {
      * @param x
      * @param y
      */
-    public static void addStation(Station s, int x, int y) {
-        // TODO implement here
+    public void addStation(Station s, int x, int y) {
+        Coordinates coords = transformToLocalCoordinates(x, y);
+        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
+        rec.setFill(javafx.scene.paint.Color.RED);
+        observableList.add(rec);
+    }
+
+    public void addCrossRail(CrossRail cross, int x, int y) {
+        addRail(cross, x ,y);
+        Coordinates crossCoords = transformToLocalCoordinates(x, y);
+
+        Rail from2 = cross.getFrom2();
+        drawLineFromRailToPoint(from2, crossCoords);
+        Rail to2 = cross.getTo2();
+        drawLineFromRailToPoint(to2, crossCoords);
+    }
+
+    private void drawLineFromRailToPoint(Rail rail, Coordinates coords) {
+        Coordinates fCoord = coordinates.get(rail);
+        if (fCoord != null) {
+            Line fLine = new Line(coords.getX(), coords.getY(), fCoord.getX(), fCoord.getY());
+            observableList.add(fLine);
+        }
     }
 
     /**

@@ -158,9 +158,9 @@ public class Playground {
 
         for (int i = 0; i < numRails; i++) {
             String[] tmp = railData[i+1].split(" ");
-            if(tmp.length == 6)
+            if(tmp.length == 5)
                 rails.add(new Station(null, null, null));
-            else if(tmp.length == 7)
+            else if(tmp.length == 6)
                 rails.add(new CrossRail(null, null, null, null));
             else
                 rails.add(new Rail(null, null));
@@ -194,9 +194,8 @@ public class Playground {
             String[] line = railData[i+1].split(" ");
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
-            float x = Float.parseFloat(line[2]);
-            float y = Float.parseFloat(line[3]);
-            float angle = Float.parseFloat(line[4]);
+            int x = Integer.parseInt(line[2]);
+            int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -208,17 +207,17 @@ public class Playground {
             current.setFrom(from);
             current.setTo(to);
             program.addRail(current, x, y);
-            current.setAngle(angle);
 
             // total ertelmetlen, de a doksiban ugy maradt,
             // hogy a rail blokkban vannak a Station-k és
             // a CrossRail-k is, ugyhogy ime...
-            if(line.length == 6){
+            if(line.length == 5){
                 Color c = Color.values()[Integer.parseInt(line[2])];
                 Station tmp = (Station)current;
                 tmp.color = c;
+                program.addStation(tmp, x, y);
             }
-            else if(line.length == 7){
+            else if(line.length == 6){
                 int from2ID = Integer.parseInt(line[2]);
                 int to2ID = Integer.parseInt(line[3]);
 
@@ -232,6 +231,7 @@ public class Playground {
                 CrossRail cross = (CrossRail)current;
                 cross.setFrom2(from2);
                 cross.setTo2(to2);
+                program.addCrossRail(cross, x, y);
             }
         }
     }
