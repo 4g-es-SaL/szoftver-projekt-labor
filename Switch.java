@@ -35,6 +35,9 @@ public class Switch extends Rail {
         }
     }
 
+    public ArrayList<Rail> getTos() {
+        return alternativeWays;
+    }
 
     @Override
     public String toString() {

@@ -24,13 +24,13 @@ public class Playground {
          * from0 to0 x0 y0 [{sz0 | from02, to02}]
          * from1 to1 x1 y1 [{sz1 | from12, to12}]
          * ...
-         * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}] xR-1 yR-1 angleR-1
+         * fromR-1 toR-1 xR-1 yR-1 [{szR-1 | fromR-12, toR-12}]
          * [ENTER]
          * S
-         * from0 to0 x0 y0 angle0 alt00 alt01 ...
-         * from1 to1 x1 y1 angle1 alt10 alt11 ...
+         * from0 to0 x0 y0 alt00 alt01 ...
+         * from1 to1 x1 y1 alt10 alt11 ...
          * ...
-         * fromS-1 toS-1 xS-1 yS-1 angleS-1 altS-10 altS-11 ...
+         * fromS-1 toS-1 xS-1 yS-1 altS-10 altS-11 ...
          * [ENTER]
          * T
          * E0
@@ -101,7 +101,7 @@ public class Playground {
             rails.add(tunnel);
 
         } catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -253,9 +253,8 @@ public class Playground {
 
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
-            float x = Float.parseFloat(line[2]);
-            float y = Float.parseFloat(line[3]);
-            float angle = Float.parseFloat(line[4]);
+            int x = Integer.parseInt(line[2]);
+            int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -264,7 +263,8 @@ public class Playground {
                 to = rails.get(toID);
 
             ArrayList<Rail> alternativeRails = new ArrayList<>();
-            for (int j = 1; j < line.length; j++) {
+            alternativeRails.add(to);
+            for (int j = 4; j < line.length; j++) {
                 Rail alt = null;
                 int altID = Integer.parseInt(line[j]);
                 if(altID > -1)
@@ -276,9 +276,7 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
-            sw.setX(x);
-            sw.setY(y);
-            sw.setAngle(angle);
+            program.addSwitch(sw, x, y);
         }
     }
 

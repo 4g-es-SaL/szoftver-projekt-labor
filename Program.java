@@ -3,11 +3,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -19,13 +22,13 @@ public class Program extends Application {
     final int size = 75;
     final int bias = 75;
 
-    protected static Playground playground;
+    protected Playground playground;
     ObservableList<Node> observableList;
 
-    protected static Map<Rail, Line> rectangles = new HashMap<>();
-    protected static Map<Rail, Coordinates> coordinates = new HashMap<>();
-    protected static Map< Rectangle, Switch> switches = new HashMap<>();
-    protected static Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
+    protected Map<LineIdentifier, Line> lines = new HashMap<>();
+    protected Map<Rail, Coordinates> coordinates = new HashMap<>();
+    protected Map< Rectangle, Switch> switches = new HashMap<>();
+    protected Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
 
     /**
      * Starts the program.
@@ -52,7 +55,7 @@ public class Program extends Application {
 //                    observableList.remove(openButton);
 //                });
 //        observableList.add(openButton);
-        File file = new File("C:\\Users\\matech\\IdeaProjects\\szoftver-projekt-labor\\kiurules.txt");
+        File file = new File("switch.txt");
         playground = new Playground(file, Program.this);
 
         Scene s = new Scene(root, 600,600);
@@ -69,7 +72,7 @@ public class Program extends Application {
     /**
      * Game loop.
      */
-    protected static void run() {
+    protected void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -140,7 +143,7 @@ public class Program extends Application {
         return res;
     }
 
-    protected static void init(String s) {
+    protected void init(String s) {
         File f = new File(s);
         playground = new Playground(f, null);
     }
@@ -158,12 +161,28 @@ public class Program extends Application {
     public void addRail(Rail rail, int x, int y) {
         // TODO implement here
         Coordinates railCoords = transformToLocalCoordinates(x, y);
-        Program.coordinates.put(rail, railCoords);
+        coordinates.put(rail, railCoords);
 
         Rail from = rail.getFrom();
-        drawLineFromRailToPoint(from, railCoords);
+        drawLineBetweenRails(from, rail);
         Rail to = rail.getTo();
-        drawLineFromRailToPoint(to, railCoords);
+        drawLineBetweenRails(to, rail);
+    }
+
+    private Line drawLineBetweenRails(Rail a, Rail b) {
+        Coordinates aCoord = coordinates.get(a);
+        Coordinates bCoord = coordinates.get(b);
+
+        if (aCoord != null && bCoord != null) {
+            Line line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
+            line.setStrokeWidth(size/15);
+            observableList.add(line);
+
+            LineIdentifier li = new LineIdentifier(a, b);
+            lines.put(li, line);
+            return line;
+        }
+        return null;
     }
 
     /**
@@ -184,21 +203,50 @@ public class Program extends Application {
     }
 
     public void extendRailToCrossRail(CrossRail cross) {
-        Coordinates crossCoords = Program.coordinates.get(cross);
+        Coordinates crossCoords = coordinates.get(cross);
 
         Rail from2 = cross.getFrom2();
-        drawLineFromRailToPoint(from2, crossCoords);
+        drawLineBetweenRails(from2, cross);
         Rail to2 = cross.getTo2();
-        drawLineFromRailToPoint(to2, crossCoords);
+        drawLineBetweenRails(to2, cross);
 
     }
 
-    private void drawLineFromRailToPoint(Rail rail, Coordinates coords) {
-        Coordinates fCoord = coordinates.get(rail);
-        if (fCoord != null) {
-            Line fLine = new Line(coords.getX(), coords.getY(), fCoord.getX(), fCoord.getY());
-            observableList.add(fLine);
+    public void addSwitch(Switch sw, int x, int y) {
+        addRail(sw, x, y);
+        extendRailToSwitch(sw);
+        drawSwitchCircle(sw);
+    }
+
+    public void extendRailToSwitch(Switch sw) {
+        ArrayList<Rail> tos = sw.getTos();
+        for (Rail r : tos) {
+            Line line = drawLineBetweenRails(r, sw);
+            line.setStroke(Color.GRAY);
         }
+        Rail t = sw.getTo();
+        changeLineColor(sw, t, Color.BLACK);
+        Rail from = sw.getFrom();
+        changeLineColor(sw, from, Color.BLUE);
+    }
+
+    public void drawSwitchCircle(Switch sw) {
+        Coordinates coords = coordinates.get(sw);
+        Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
+        cir.setFill(Color.BLACK);
+        cir.setOnMouseClicked(event -> {
+            Rail to = sw.getTo();
+            changeLineColor(sw, to, Color.GRAY);
+            sw.changeDir();
+            to = sw.getTo();
+            changeLineColor(sw, to, Color.BLACK);
+        });
+        observableList.add(cir);
+    }
+
+    private void changeLineColor(Rail a, Rail b, javafx.scene.paint.Color color) {
+        Line line = lines.get(new LineIdentifier(a, b));
+        line.setStroke(color);
     }
 
     /**
