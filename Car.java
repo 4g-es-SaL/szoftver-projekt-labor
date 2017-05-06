@@ -65,6 +65,7 @@ public class Car {
                 empty = true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return 1;
         }
         prevRail = tmp;
@@ -141,6 +142,10 @@ public class Car {
      */
     public Color getColor() {
         return color;
+    }
+
+    public Rail getCurrentRail() {
+        return rail;
     }
 
     @Override

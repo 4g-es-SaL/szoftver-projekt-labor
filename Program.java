@@ -1,13 +1,15 @@
+import javafx.animation.AnimationTimer;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class Program extends Application {
 
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
-    protected Map< Rectangle, Switch> switches = new HashMap<>();
+    protected Map<Car, Circle> carCircles = new HashMap<>();
     protected Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
 
     /**
@@ -55,12 +57,32 @@ public class Program extends Application {
 //                    observableList.remove(openButton);
 //                });
 //        observableList.add(openButton);
-        File file = new File("switch.txt");
+        File file = new File("cross.txt");
         playground = new Playground(file, Program.this);
 
         Scene s = new Scene(root, 600,600);
         primaryStage.setScene(s);
+
         primaryStage.show();
+
+        new AnimationTimer() {
+            long prevRun = 0;
+            @Override
+            public void handle(long now) {
+                if (now - prevRun > 1e9) {
+                    int res = playground.runTurn();
+                    if (res != 0) {
+                        if (res == 1) {
+                            System.out.println("You have lost!");
+                        } else if (res == 2) {
+                            System.out.println("You have won!");
+                        }
+                        //Platform.exit();
+                    }
+                    prevRun = now;
+                }
+            }
+        }.start();
 
 //        int res = 0;
 //        do {
@@ -145,7 +167,7 @@ public class Program extends Application {
 
     protected void init(String s) {
         File f = new File(s);
-        playground = new Playground(f, null);
+        playground = new Playground(f, this);
     }
     //endregion
 
@@ -193,7 +215,7 @@ public class Program extends Application {
     public void addStation(Station s, int x, int y) {
         Coordinates coords = transformToLocalCoordinates(x, y);
         Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
-        rec.setFill(javafx.scene.paint.Color.RED);
+        rec.setFill(Program.ColorToJavafx(s.getColor()));
         observableList.add(rec);
     }
 
@@ -222,24 +244,24 @@ public class Program extends Application {
         ArrayList<Rail> tos = sw.getTos();
         for (Rail r : tos) {
             Line line = drawLineBetweenRails(r, sw);
-            line.setStroke(Color.GRAY);
+            line.setStroke(javafx.scene.paint.Color.GRAY);
         }
         Rail t = sw.getTo();
-        changeLineColor(sw, t, Color.BLACK);
+        changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
         Rail from = sw.getFrom();
-        changeLineColor(sw, from, Color.BLUE);
+        changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
     }
 
     public void drawSwitchCircle(Switch sw) {
         Coordinates coords = coordinates.get(sw);
         Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
-        cir.setFill(Color.BLACK);
+        cir.setFill(javafx.scene.paint.Color.BLACK);
         cir.setOnMouseClicked(event -> {
             Rail to = sw.getTo();
-            changeLineColor(sw, to, Color.GRAY);
+            changeLineColor(sw, to, javafx.scene.paint.Color.GRAY);
             sw.changeDir();
             to = sw.getTo();
-            changeLineColor(sw, to, Color.BLACK);
+            changeLineColor(sw, to, javafx.scene.paint.Color.BLACK);
         });
         observableList.add(cir);
     }
@@ -266,11 +288,45 @@ public class Program extends Application {
         // TODO implement here
     }
 
+    public void addCar(Car car) {
+        Circle circle = new Circle(size/2);
+        carCircles.put(car, circle);
+        observableList.add(circle);
+        updateCar(car);
+    }
+
     /**
-     * @param r
+     * @param car
      */
-    public static void updateRail(Rail r) {
+    public void updateCar(Car car) {
         // TODO implement here
+        Rail rail = car.getCurrentRail();
+        Coordinates coords = this.coordinates.get(rail);
+        Circle circle = carCircles.get(car);
+//
+//        if (circle.getCenterX() < 1 && circle.getCenterX() < 1) {
+//            setCarPosition(coords, circle);
+//        } else {
+            animateCarPosition(coords, circle, 900);
+//        }
+
+        javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
+        if (car.isEmpty()) {
+            color = color.brighter();
+        }
+        circle.setFill(color);
+    }
+
+    private void animateCarPosition(Coordinates coords, Circle circle, double duration) {
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
+        translateTransition.setToX(coords.getX());
+        translateTransition.setToY(coords.getY());
+        translateTransition.play();
+    }
+
+    private void setCarPosition(Coordinates coords, Circle circle) {
+        circle.setCenterX(coords.getX());
+        circle.setCenterY(coords.getY()); //Does NOT works dont know why.
     }
 
     protected static void printHelp() {
@@ -306,4 +362,22 @@ public class Program extends Application {
                 "Leírás: Kilépés");
     }
 
+    private static javafx.scene.paint.Color ColorToJavafx(Color c) {
+        switch (c){
+            case RED:
+                return javafx.scene.paint.Color.RED;
+            case GREEN:
+                return javafx.scene.paint.Color.GREEN;
+            case BLUE:
+                return javafx.scene.paint.Color.BLUE;
+            case YELLOW:
+                return javafx.scene.paint.Color.YELLOW;
+            case PURPLE:
+                return javafx.scene.paint.Color.PURPLE;
+            case NO_COLOR:
+                return javafx.scene.paint.Color.BLACK;
+            default:
+                return javafx.scene.paint.Color.BLACK;
+        }
+    }
 }

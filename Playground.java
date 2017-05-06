@@ -122,6 +122,7 @@ public class Playground {
             int currentRailID = Integer.parseInt(locomotiveData[2]);
 
             Locomotive locomotive = new Locomotive(rails.get(currentRailID), rails.get(prevRailID), null, speed, entryTime);
+            program.addCar(locomotive);
 
             for (int j = 0; j < numCars; j++) {
                 String[] carData = trainData[dataPointer++].split(" ");
@@ -129,7 +130,9 @@ public class Playground {
                 Color color = Color.values()[Integer.parseInt(carData[0])];
                 prevRailID = Integer.parseInt(carData[1]);
                 currentRailID = Integer.parseInt(carData[2]);
-                locomotive.getLastCar().next = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+                Car newCar = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+                program.addCar(newCar);
+                locomotive.getLastCar().next = newCar;
             }
             locomotives.add(locomotive);
         }
@@ -212,7 +215,7 @@ public class Playground {
             // hogy a rail blokkban vannak a Station-k és
             // a CrossRail-k is, ugyhogy ime...
             if(line.length == 5){
-                Color c = Color.values()[Integer.parseInt(line[2])];
+                Color c = Color.values()[Integer.parseInt(line[4])];
                 Station tmp = (Station)current;
                 tmp.color = c;
                 program.addStation(tmp, x, y);
@@ -323,6 +326,10 @@ public class Playground {
             int res = loc.runTurn();
             if (res == 1) {
                 return res;
+            }
+            System.out.println(loc);
+            for (Car car : loc) {
+                program.updateCar(car);
             }
         }
         return 0;

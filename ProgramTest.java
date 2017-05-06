@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
-import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
 import static junit.framework.TestCase.assertEquals;
 
 
@@ -111,7 +110,8 @@ public class ProgramTest {
         String InputFileName = "test/" + String.valueOf(i) + "input.txt";
         System.setIn(new FileInputStream(InputFileName));
         try {
-            Program.main(new String[0]);
+            Program p = new Program();
+            p.run();
         } catch(NoSuchElementException e) {
         	
             //Our file has no more lines and scanner is just upset.
