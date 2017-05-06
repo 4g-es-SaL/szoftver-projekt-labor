@@ -30,7 +30,6 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
-    protected Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
 
     /**
      * Starts the program.
@@ -57,7 +56,7 @@ public class Program extends Application {
 //                    observableList.remove(openButton);
 //                });
 //        observableList.add(openButton);
-        File file = new File("cross.txt");
+        File file = new File("complexMap.txt");
         playground = new Playground(file, Program.this);
 
         Scene s = new Scene(root, 600,600);
@@ -192,13 +191,17 @@ public class Program extends Application {
     }
 
     private Line drawLineBetweenRails(Rail a, Rail b) {
+        Line line = lines.get(new LineIdentifier(a, b));
+        if (line != null) return line;
+
         Coordinates aCoord = coordinates.get(a);
         Coordinates bCoord = coordinates.get(b);
 
         if (aCoord != null && bCoord != null) {
-            Line line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
+            line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
             line.setStrokeWidth(size/15);
             observableList.add(line);
+            line.toBack();
 
             LineIdentifier li = new LineIdentifier(a, b);
             lines.put(li, line);
@@ -244,7 +247,9 @@ public class Program extends Application {
         ArrayList<Rail> tos = sw.getTos();
         for (Rail r : tos) {
             Line line = drawLineBetweenRails(r, sw);
-            line.setStroke(javafx.scene.paint.Color.GRAY);
+            if (line != null) {
+                line.setStroke(javafx.scene.paint.Color.GRAY);
+            }
         }
         Rail t = sw.getTo();
         changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
@@ -252,7 +257,7 @@ public class Program extends Application {
         changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
     }
 
-    public void drawSwitchCircle(Switch sw) {
+    private void drawSwitchCircle(Switch sw) {
         Coordinates coords = coordinates.get(sw);
         Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
         cir.setFill(javafx.scene.paint.Color.BLACK);
