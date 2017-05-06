@@ -21,8 +21,8 @@ public class Playground {
      * A file tartalma a következő:
      *
          * R
-         * from0 to0 x0 y0 angle0 [{sz0 | from02, to02}]
-         * from1 to1 x1 y1 angle1 [{sz1 | from12, to12}]
+         * from0 to0 x0 y0 [{sz0 | from02, to02}]
+         * from1 to1 x1 y1 [{sz1 | from12, to12}]
          * ...
          * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}] xR-1 yR-1 angleR-1
          * [ENTER]
@@ -218,8 +218,8 @@ public class Playground {
                 program.addStation(tmp, x, y);
             }
             else if(line.length == 6){
-                int from2ID = Integer.parseInt(line[2]);
-                int to2ID = Integer.parseInt(line[3]);
+                int from2ID = Integer.parseInt(line[4]);
+                int to2ID = Integer.parseInt(line[5]);
 
                 Rail from2 = null, to2 = null;
 
@@ -231,7 +231,7 @@ public class Playground {
                 CrossRail cross = (CrossRail)current;
                 cross.setFrom2(from2);
                 cross.setTo2(to2);
-                program.addCrossRail(cross, x, y);
+                program.extendRailToCrossRail(cross);
             }
         }
     }

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
+import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
 import static junit.framework.TestCase.assertEquals;
 
 

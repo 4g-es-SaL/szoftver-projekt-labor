@@ -33,7 +33,6 @@ public class Program extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-        //run();
     }
 
     @Override
@@ -53,12 +52,17 @@ public class Program extends Application {
 //                    observableList.remove(openButton);
 //                });
 //        observableList.add(openButton);
-        File file = new File("D:\\projektek\\szoftver-projekt-labor\\src\\kiurules.txt");
+        File file = new File("C:\\Users\\matech\\IdeaProjects\\szoftver-projekt-labor\\kiurules.txt");
         playground = new Playground(file, Program.this);
 
         Scene s = new Scene(root, 600,600);
         primaryStage.setScene(s);
         primaryStage.show();
+
+//        int res = 0;
+//        do {
+//            res = playground.runTurn();
+//        } while(res == 0);
     }
 
     //region text based
@@ -176,12 +180,17 @@ public class Program extends Application {
 
     public void addCrossRail(CrossRail cross, int x, int y) {
         addRail(cross, x ,y);
-        Coordinates crossCoords = transformToLocalCoordinates(x, y);
+        extendRailToCrossRail(cross);
+    }
+
+    public void extendRailToCrossRail(CrossRail cross) {
+        Coordinates crossCoords = Program.coordinates.get(cross);
 
         Rail from2 = cross.getFrom2();
         drawLineFromRailToPoint(from2, crossCoords);
         Rail to2 = cross.getTo2();
         drawLineFromRailToPoint(to2, crossCoords);
+
     }
 
     private void drawLineFromRailToPoint(Rail rail, Coordinates coords) {
