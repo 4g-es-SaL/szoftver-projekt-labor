@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -22,7 +23,7 @@ import java.util.Scanner;
  */
 public class Program extends Application {
     final int size = 75;
-    final int bias = 75;
+    final int bias = 0;
 
     protected Playground playground;
     ObservableList<Node> observableList;
@@ -44,27 +45,7 @@ public class Program extends Application {
         Group root = new Group();
         observableList = root.getChildren();
 
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setInitialFileName("D:\\projektek\\szoftver-projekt-labor\\src");
-//        final Button openButton = new Button("Open a Picture...");
-//        openButton.setAlignment(Pos.CENTER);
-//        openButton.setOnAction(e -> {
-//                    File file = fileChooser.showOpenDialog(primaryStage);
-//                    if (file != null) {
-//                        playground = new Playground(file, Program.this);
-//                    }
-//                    observableList.remove(openButton);
-//                });
-//        observableList.add(openButton);
-        File file = new File("complexMap.txt");
-        playground = new Playground(file, Program.this);
-
-        Scene s = new Scene(root, 600,600);
-        primaryStage.setScene(s);
-
-        primaryStage.show();
-
-        new AnimationTimer() {
+        AnimationTimer loop = new AnimationTimer() {
             long prevRun = 0;
             @Override
             public void handle(long now) {
@@ -81,7 +62,25 @@ public class Program extends Application {
                     prevRun = now;
                 }
             }
-        }.start();
+        };
+
+        FileChooser fileChooser = new FileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(workingDirectory);
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            playground = new Playground(file, Program.this);
+            loop.start();
+        }
+
+//        File file = new File("complexMap.txt");
+//        playground = new Playground(file, Program.this);
+
+        Scene s = new Scene(root, 600,600);
+        primaryStage.setScene(s);
+
+        primaryStage.show();
+
 
 //        int res = 0;
 //        do {
@@ -305,15 +304,8 @@ public class Program extends Application {
      */
     public void updateCar(Car car) {
         // TODO implement here
-        Rail rail = car.getCurrentRail();
-        Coordinates coords = this.coordinates.get(rail);
         Circle circle = carCircles.get(car);
-//
-//        if (circle.getCenterX() < 1 && circle.getCenterX() < 1) {
-//            setCarPosition(coords, circle);
-//        } else {
-            animateCarPosition(coords, circle, 900);
-//        }
+        animateCarPosition(car, 900);
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
         if (car.isEmpty()) {
@@ -322,7 +314,10 @@ public class Program extends Application {
         circle.setFill(color);
     }
 
-    private void animateCarPosition(Coordinates coords, Circle circle, double duration) {
+    private void animateCarPosition(Car car, double duration) {
+        Rail rail = car.getCurrentRail();
+        Coordinates coords = this.coordinates.get(rail);
+        Circle circle = carCircles.get(car);
         TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
         translateTransition.setToX(coords.getX());
         translateTransition.setToY(coords.getY());
