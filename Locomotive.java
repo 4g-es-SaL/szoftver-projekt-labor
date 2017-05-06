@@ -4,7 +4,7 @@
  */
 public class Locomotive extends Car {
     protected int speed;
-    protected int entryTime;
+    protected int entryTimeLeft;
 
     /**
      * Create a new {@link Locomotive} object. Locomotives {@link Color} is {@link Color#NO_COLOR}.
@@ -21,7 +21,7 @@ public class Locomotive extends Car {
             throw new Exception("A train cant have multiple Locomotives.");
         }
         this.speed = speed;
-        this.entryTime = entryTime;
+        this.entryTimeLeft = entryTime;
         this.empty = true;
     }
 
@@ -30,6 +30,10 @@ public class Locomotive extends Car {
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {
+        if(entryTimeLeft > 0) {
+            entryTimeLeft--;
+            return 0;
+        }
         for (int i = 0; i < speed; i++) {
             int res = super.runTurn();
             if (res == 1) {
@@ -40,6 +44,9 @@ public class Locomotive extends Car {
         return 0;
     }
 
+    public boolean hasStarted(){
+        return entryTimeLeft == 0;
+    }
 
     /**
      * Notifies the {@link Car}s behind it, that they can empty.
