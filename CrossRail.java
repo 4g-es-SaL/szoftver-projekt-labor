@@ -34,6 +34,14 @@ public class CrossRail extends Rail{
         to2 = t2;
     }
 
+    public Rail getFrom2() {
+        return from2;
+    }
+
+    public Rail getTo2() {
+        return to2;
+    }
+
     @Override
     protected Rail getNextRail(Rail prev) {
         if(from == prev) {

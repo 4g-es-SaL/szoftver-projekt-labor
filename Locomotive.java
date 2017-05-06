@@ -1,8 +1,9 @@
+import java.util.Iterator;
 
 /**
  * Represents a {@link Locomotive}. A {@link Locomotive} is a special type of {@link Car}. It can have a speed.
  */
-public class Locomotive extends Car {
+public class Locomotive extends Car implements Iterable<Car> {
     protected int speed;
     protected int entryTime;
 
@@ -67,4 +68,22 @@ public class Locomotive extends Car {
         return tmp;
     }
     //endregion
+
+    @Override
+    public Iterator<Car> iterator() {
+        return new Iterator<Car>() {
+            private Car nextCar = Locomotive.this;
+            @Override
+            public boolean hasNext() {
+                return nextCar != null;
+            }
+
+            @Override
+            public Car next() {
+                Car res = nextCar;
+                nextCar = nextCar.next;
+                return res;
+            }
+        };
+    }
 }

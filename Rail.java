@@ -53,11 +53,10 @@ public class Rail {
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
     protected void addCar(Car c) throws Exception {
-        if (car != null) {
-            throw new Exception("Collision!");
-        } else {
-            car = c;
-        }
+        System.out.println(this);
+        if (car != null) throw new Exception("Collision!");
+        car = c;
+        System.out.println(this);
     }
     
     /**
@@ -122,6 +121,7 @@ public class Rail {
                 "id=" + id +
                 ", from=" + (from != null ? from.id : "-1") +
                 ", to=" + (to != null ? to.id : "-1") +
+                ", car=" + (car != null ? car.getColor() : "null") +
                 '}';
     }
 }

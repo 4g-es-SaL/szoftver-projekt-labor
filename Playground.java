@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Playground {
 
     protected long startTime;
+    protected Program program;
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails = new ArrayList<>();
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
@@ -20,16 +21,16 @@ public class Playground {
      * A file tartalma a következő:
      *
          * R
-         * from0 to0 x0 y0 angle0 [{sz0 | from02, to02}]
-         * from1 to1 x1 y1 angle1 [{sz1 | from12, to12}]
+         * from0 to0 x0 y0 [{sz0 | from02, to02}]
+         * from1 to1 x1 y1 [{sz1 | from12, to12}]
          * ...
-         * fromR-1 toR-1 [{szR-1 | fromR-12, toR-12}] xR-1 yR-1 angleR-1
+         * fromR-1 toR-1 xR-1 yR-1 [{szR-1 | fromR-12, toR-12}]
          * [ENTER]
          * S
-         * from0 to0 x0 y0 angle0 alt00 alt01 ...
-         * from1 to1 x1 y1 angle1 alt10 alt11 ...
+         * from0 to0 x0 y0 alt00 alt01 ...
+         * from1 to1 x1 y1 alt10 alt11 ...
          * ...
-         * fromS-1 toS-1 xS-1 yS-1 angleS-1 altS-10 altS-11 ...
+         * fromS-1 toS-1 xS-1 yS-1 altS-10 altS-11 ...
          * [ENTER]
          * T
          * E0
@@ -79,8 +80,9 @@ public class Playground {
      *
      */
 
-    Playground(File f) {
+    Playground(File f, Program p) {
         Rail.idGenerator = 0;
+        program = p;
         try(FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
             in.read(rawData);
@@ -99,7 +101,7 @@ public class Playground {
             rails.add(tunnel);
 
         } catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -120,6 +122,7 @@ public class Playground {
             int currentRailID = Integer.parseInt(locomotiveData[2]);
 
             Locomotive locomotive = new Locomotive(rails.get(currentRailID), rails.get(prevRailID), null, speed, entryTime);
+            program.addCar(locomotive);
 
             for (int j = 0; j < numCars; j++) {
                 String[] carData = trainData[dataPointer++].split(" ");
@@ -127,7 +130,9 @@ public class Playground {
                 Color color = Color.values()[Integer.parseInt(carData[0])];
                 prevRailID = Integer.parseInt(carData[1]);
                 currentRailID = Integer.parseInt(carData[2]);
-                locomotive.getLastCar().next = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+                Car newCar = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+                program.addCar(newCar);
+                locomotive.getLastCar().next = newCar;
             }
             locomotives.add(locomotive);
         }
@@ -156,9 +161,9 @@ public class Playground {
 
         for (int i = 0; i < numRails; i++) {
             String[] tmp = railData[i+1].split(" ");
-            if(tmp.length == 6)
+            if(tmp.length == 5)
                 rails.add(new Station(null, null, null));
-            else if(tmp.length == 7)
+            else if(tmp.length == 6)
                 rails.add(new CrossRail(null, null, null, null));
             else
                 rails.add(new Rail(null, null));
@@ -192,9 +197,8 @@ public class Playground {
             String[] line = railData[i+1].split(" ");
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
-            float x = Float.parseFloat(line[2]);
-            float y = Float.parseFloat(line[3]);
-            float angle = Float.parseFloat(line[4]);
+            int x = Integer.parseInt(line[2]);
+            int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -205,21 +209,20 @@ public class Playground {
             Rail current = rails.get(i);
             current.setFrom(from);
             current.setTo(to);
-            current.setX(x);
-            current.setY(y);
-            current.setAngle(angle);
+            program.addRail(current, x, y);
 
             // total ertelmetlen, de a doksiban ugy maradt,
             // hogy a rail blokkban vannak a Station-k és
             // a CrossRail-k is, ugyhogy ime...
-            if(line.length == 6){
-                Color c = Color.values()[Integer.parseInt(line[2])];
+            if(line.length == 5){
+                Color c = Color.values()[Integer.parseInt(line[4])];
                 Station tmp = (Station)current;
                 tmp.color = c;
+                program.addStation(tmp, x, y);
             }
-            else if(line.length == 7){
-                int from2ID = Integer.parseInt(line[2]);
-                int to2ID = Integer.parseInt(line[3]);
+            else if(line.length == 6){
+                int from2ID = Integer.parseInt(line[4]);
+                int to2ID = Integer.parseInt(line[5]);
 
                 Rail from2 = null, to2 = null;
 
@@ -231,6 +234,7 @@ public class Playground {
                 CrossRail cross = (CrossRail)current;
                 cross.setFrom2(from2);
                 cross.setTo2(to2);
+                program.extendRailToCrossRail(cross);
             }
         }
     }
@@ -252,9 +256,8 @@ public class Playground {
 
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
-            float x = Float.parseFloat(line[2]);
-            float y = Float.parseFloat(line[3]);
-            float angle = Float.parseFloat(line[4]);
+            int x = Integer.parseInt(line[2]);
+            int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
             if(fromID > -1)
@@ -263,7 +266,8 @@ public class Playground {
                 to = rails.get(toID);
 
             ArrayList<Rail> alternativeRails = new ArrayList<>();
-            for (int j = 1; j < line.length; j++) {
+            alternativeRails.add(to);
+            for (int j = 4; j < line.length; j++) {
                 Rail alt = null;
                 int altID = Integer.parseInt(line[j]);
                 if(altID > -1)
@@ -275,9 +279,7 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
-            sw.setX(x);
-            sw.setY(y);
-            sw.setAngle(angle);
+            program.addSwitch(sw, x, y);
         }
     }
 
@@ -324,6 +326,10 @@ public class Playground {
             int res = loc.runTurn();
             if (res == 1) {
                 return res;
+            }
+            System.out.println(loc);
+            for (Car car : loc) {
+                program.updateCar(car);
             }
         }
         return 0;
