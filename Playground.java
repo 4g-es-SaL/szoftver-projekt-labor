@@ -287,7 +287,8 @@ public class Playground {
         String[] tunnelEndData = data[3].split(" ");
         for (String tep : tunnelEndData) {
             int idx = Integer.parseInt(tep);
-            tunnelEndPoints.add(rails.get(idx));
+            //tunnelEndPoints.add(rails.get(idx));
+            program.extendRailToMountainEntryPoint(rails.get(idx));
         }
     }
 
@@ -378,9 +379,14 @@ public class Playground {
     /**
      * @param id Identifies the Rail which will be the Tunnel's end.
      */
-    public void buildTunnelEnd(int id){
-        tunnel.buildTunnel(tunnelEndPoints.get(id));
+    public Tunnel buildTunnelEnd(int id){
+        return buildTunnelEnd(tunnelEndPoints.get(id));
+    }
+
+    public Tunnel buildTunnelEnd(Rail end) {
+        tunnel.buildTunnel(end);
         System.out.println(this.tunnel);
+        return tunnel;
     }
     
     /**

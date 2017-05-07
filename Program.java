@@ -2,12 +2,15 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -31,6 +34,9 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
+    protected Map<Rectangle, Rail> mountainPoints = new HashMap<>();
+
+    Line draggedLine;
 
     /**
      * Starts the program.
@@ -73,8 +79,9 @@ public class Program extends Application {
             loop.start();
         }
 
-//        File file = new File("complexMap.txt");
+//        File file = new File("mountain.txt");
 //        playground = new Playground(file, Program.this);
+//        loop.start();
 
         Scene s = new Scene(root, 600,600);
         primaryStage.setScene(s);
@@ -199,6 +206,7 @@ public class Program extends Application {
         if (aCoord != null && bCoord != null) {
             line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
             line.setStrokeWidth(size/15);
+            line.setStrokeLineCap(StrokeLineCap.ROUND);
             observableList.add(line);
             line.toBack();
 
@@ -239,7 +247,6 @@ public class Program extends Application {
     public void addSwitch(Switch sw, int x, int y) {
         addRail(sw, x, y);
         extendRailToSwitch(sw);
-        drawSwitchCircle(sw);
     }
 
     public void extendRailToSwitch(Switch sw) {
@@ -254,6 +261,7 @@ public class Program extends Application {
         changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
         Rail from = sw.getFrom();
         changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
+        drawSwitchCircle(sw);
     }
 
     private void drawSwitchCircle(Switch sw) {
@@ -276,12 +284,106 @@ public class Program extends Application {
     }
 
     /**
-     * @param r
+     * @param rail
      * @param x
      * @param y
      */
-    public static void addMountainEntryPoint(Rail r, int x, int y) {
+    public void addMountainEntryPoint(Rail rail, int x, int y) {
         // TODO implement here
+        addRail(rail, x, y);
+        extendRailToMountainEntryPoint(rail);
+    }
+
+    public void extendRailToMountainEntryPoint(Rail rail) {
+        Coordinates coords = this.coordinates.get(rail);
+        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
+        rec.setFill(javafx.scene.paint.Color.BROWN);
+        rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            private Tunnel prevTunnel;
+            private Line prevLine;
+            @Override
+            public void handle(MouseEvent event) {
+                Tunnel tunnel = playground.buildTunnelEnd(rail);
+                if (prevLine != null) {
+                    observableList.remove(prevLine);
+                }
+                Rail from = tunnel.getFrom();
+                Rail to = tunnel.getTo();
+                if (from != null && to != null) {
+                    Line line = drawLineBetweenRails(from, to);
+                    line.setStrokeWidth(size);
+                    line.setStroke(javafx.scene.paint.Color.BROWN);
+                    line.toFront();
+                    line.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            lines.remove(new LineIdentifier(tunnel.from, tunnel.to));
+                            if (tunnel.destroyTunnel()) {
+                                observableList.remove(line);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+//
+//        rec.setOnMousePressed(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                rec.setMouseTransparent(true);
+//                event.setDragDetect(true);
+//            }
+//        });
+//
+//        rec.setOnDragDetected(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                draggedLine = new Line(coords.getX(), coords.getY(), coords.getX(), coords.getY());
+//                observableList.add(draggedLine);
+//                rec.setFill(javafx.scene.paint.Color.BROWN);
+//            }
+//        });
+//
+//        rec.setOnMouseDragged(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                event.setDragDetect(false);
+//                double x = event.getX();
+//                double y = event.getY();
+//                draggedLine.setEndX(x);
+//                draggedLine.setEndY(y);
+//            }
+//        });
+//
+//        rec.setOnMouseReleased(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                rec.setMouseTransparent(false);
+//                Rectangle a = (Rectangle)event.getSource();
+//                Rectangle b = (Rectangle)event.getTarget();
+//                a.setFill(javafx.scene.paint.Color.BLACK);
+//                b.setFill(javafx.scene.paint.Color.BLACK);
+//                observableList.remove(draggedLine);
+//            }
+//        });
+//
+//        rec.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//            public void handle(MouseEvent event)
+//            {
+//                Rectangle a = (Rectangle)event.getSource();
+//                Rectangle b = (Rectangle)event.getTarget();
+//                a.setFill(javafx.scene.paint.Color.BLACK);
+//                b.setFill(javafx.scene.paint.Color.BLACK);
+//            }
+//        });
+
+//        Rectangle a = (Rectangle)event.getSource();
+//        Rectangle b = (Rectangle)event.getTarget();
+        mountainPoints.put(rec, rail);
+        observableList.add(rec);
     }
 
     /**
