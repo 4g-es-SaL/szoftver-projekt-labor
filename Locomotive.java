@@ -15,7 +15,7 @@ public class Locomotive extends Car implements Iterable<Car> {
      * @param speed The speed of the {@link Locomotive}.
      */
     public Locomotive(Rail rail, Rail prevRail, Car next, int speed, int entryTime) throws Exception {
-        super(rail, prevRail, next,Color.NO_COLOR);
+        super(rail, prevRail, next,Color.NO_COLOR, entryTime);
         if (next != null && next.getClass().equals(Locomotive.class)) {
             //TODO: Free Rail from Car
             System.exit(1);

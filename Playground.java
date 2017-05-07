@@ -130,7 +130,7 @@ public class Playground {
                 Color color = Color.values()[Integer.parseInt(carData[0])];
                 prevRailID = Integer.parseInt(carData[1]);
                 currentRailID = Integer.parseInt(carData[2]);
-                Car newCar = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color);
+                Car newCar = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color, entryTime);
                 program.addCar(newCar);
                 locomotive.getLastCar().next = newCar;
             }

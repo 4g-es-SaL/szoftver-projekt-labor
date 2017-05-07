@@ -11,6 +11,7 @@ public class Car {
     protected boolean empty;
     protected Station stationWhereEmpty;
     private int canEmpty;
+    protected int spawn;
 
     /**
      * Creates a new {@link Car} object and notifies the {@link Rail}s about its presence.
@@ -19,16 +20,16 @@ public class Car {
      * @param next In the train, the {@link Car} behind this {@link Car}.
      * @param color The {@link Color} of the {@link Car}.
      */
-    public Car(Rail rail, Rail prevRail, Car next, Color color) throws Exception {
+    public Car(Rail rail, Rail prevRail, Car next, Color color, int spawn) throws Exception {
         this.rail = rail;
         this.prevRail = prevRail;
         this.next = next;
+        this.spawn = spawn;
         this.color = color;
         if (color == Color.NO_COLOR) {
             empty = true;
         }
         canEmpty = 0;
-        signUpCarOnRail(rail, prevRail);
     }
 
     //region Constructor privates
@@ -48,6 +49,18 @@ public class Car {
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {
+        if (spawn > 0) {
+            if (spawn == 1) {
+                try {
+                    signUpCarOnRail(rail, prevRail);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return 1;
+                }
+            }
+            spawn--;
+            return callNextCar();
+        }
         int isCollision = move();
         if (isCollision == 1) {
             return isCollision;
@@ -145,7 +158,11 @@ public class Car {
     }
 
     public Rail getCurrentRail() {
-        return rail;
+        if (spawn == 0) {
+            return rail;
+        } else {
+            return null;
+        }
     }
 
     @Override
