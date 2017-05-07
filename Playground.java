@@ -364,7 +364,7 @@ public class Playground {
 
     protected Station fillRandomStationIfAny() {
         Random rand = new Random();
-        if (rand.nextInt(10) == 1) {
+        if (rand.nextInt(100) == 1) {
             int index = rand.nextInt(stations.size());
             Station station = stations.get(index);
             station.addPassanger();

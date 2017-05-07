@@ -279,7 +279,7 @@ public class Program extends Application {
         Rectangle rec = stationRectangles.get(s);
         int arc = 0;
         if (s.isEmpty()) {
-            arc = size / 3;
+            arc = size / 2;
         }
         rec.setArcHeight(arc);
         rec.setArcWidth(arc);
