@@ -4,10 +4,13 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -29,6 +32,7 @@ public class Program extends Application {
     final int timeBetweenTurns = 1000;
     @SuppressWarnings("FieldCanBeLocal")
     private int drugFactor = 1;
+    int level=0;
 
     protected Playground playground;
     ObservableList<Node> observableList;
@@ -41,6 +45,13 @@ public class Program extends Application {
     protected Polygon mountain = new Polygon();
     protected boolean isMountainInitialized = false;
 
+    
+    
+    Scene playgroundScene;
+    Scene menuScene;
+    Stage thestage;
+    Button[] playButtons;
+    AnimationTimer loop;
     /**
      * Starts the program.
      *
@@ -98,22 +109,48 @@ public class Program extends Application {
                 }
             }
         };
+           
+        ///////////////////////////////////////////////////////////////////////////////////////
+        
+        thestage=primaryStage;
+        
+        //make 2 Panes
+        FlowPane pane1=new FlowPane();
+        pane1.setVgap(10);
+        //set background color of each Pane
+        pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");
+        
+        playButtons=new Button[4];
+        String[] buttonNames=new String[4];
+        buttonNames[0]="easy";
+        buttonNames[1]="complex";
+        buttonNames[2]="hard";
+        
+        for (int i=0; i<4; i++) {
+        	playButtons[i]=new Button(buttonNames[i]);
+        	playButtons[i].setOnAction(e-> ButtonClicked(e));
+            pane1.getChildren().addAll(playButtons[i]);
+		}
 
-        FileChooser fileChooser = new FileChooser();
-        File workingDirectory = new File(System.getProperty("user.dir"));
-        fileChooser.setInitialDirectory(workingDirectory);
-        File file = fileChooser.showOpenDialog(primaryStage);
-        if (file != null) {
-            playground = new Playground(file, Program.this);
-            loop.start();
-        }
+        
+        
+        //menuScene =new Scene(root, 700, 700, javafx.scene.paint.Color.BEIGE);
+        
 
-//        File file = new File("mountain.txt");
-//        playground = new Playground(file, Program.this);
-//        loop.start();
-
-
-
+           
+        //add everything to panes
+       
+        
+   
+        /////////////////////////////////////////////////////////////////////////////////////////
+        playgroundScene = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
+        menuScene =new Scene(pane1, 700, 700, javafx.scene.paint.Color.BEIGE);
+        
+        
+        primaryStage.setScene(menuScene);
+        observableList.add(mountain);
+        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
+        mountain.toBack();
         //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
@@ -555,4 +592,48 @@ public class Program extends Application {
                 return javafx.scene.paint.Color.BLACK;
         }
     }
+    
+    public void ButtonClicked(ActionEvent e)
+    {
+    	String filename;
+    	
+    	int k=-1;
+        for (int i = 0; i < playButtons.length; i++) {
+        	if(e.getSource().equals(playButtons[i]))
+        		k=i;
+		}
+    	switch (k) {
+		case 0:
+			filename="easyMap.txt";
+			break;
+		case 1:
+			filename="complexMap.txt";
+			break;
+		case 2:
+			filename="hardMap.txt";
+			break;
+		default:
+			filename="easyMap.txt";
+			break;
+		}
+    	
+    	
+        thestage.setScene(playgroundScene);
+        
+        /*FileChooser fileChooser = new FileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(workingDirectory);
+        File file = fileChooser.showOpenDialog(thestage);*/
+        File file=new File(filename);
+        if (file != null) {
+            playground = new Playground(file, Program.this);
+            loop.start();
+        }
+
+//        File file = new File("mountain.txt");
+//        playground = new Playground(file, Program.this);
+//        loop.start();
+     
+    }
+    
 }
