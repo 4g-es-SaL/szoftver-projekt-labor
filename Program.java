@@ -2,12 +2,16 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -22,7 +26,7 @@ import java.util.Scanner;
  */
 public class Program extends Application {
     final int size = 75;
-    final int bias = 75;
+    final int bias = 0;
 
     protected Playground playground;
     ObservableList<Node> observableList;
@@ -30,7 +34,9 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
-    protected Map<Rectangle, Rail> tunnelEnds = new HashMap<>();
+    protected Map<Rectangle, Rail> mountainPoints = new HashMap<>();
+
+    Line draggedLine;
 
     /**
      * Starts the program.
@@ -45,27 +51,7 @@ public class Program extends Application {
         Group root = new Group();
         observableList = root.getChildren();
 
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setInitialFileName("D:\\projektek\\szoftver-projekt-labor\\src");
-//        final Button openButton = new Button("Open a Picture...");
-//        openButton.setAlignment(Pos.CENTER);
-//        openButton.setOnAction(e -> {
-//                    File file = fileChooser.showOpenDialog(primaryStage);
-//                    if (file != null) {
-//                        playground = new Playground(file, Program.this);
-//                    }
-//                    observableList.remove(openButton);
-//                });
-//        observableList.add(openButton);
-        File file = new File("cross.txt");
-        playground = new Playground(file, Program.this);
-
-        Scene s = new Scene(root, 600,600);
-        primaryStage.setScene(s);
-
-        primaryStage.show();
-
-        new AnimationTimer() {
+        AnimationTimer loop = new AnimationTimer() {
             long prevRun = 0;
             @Override
             public void handle(long now) {
@@ -82,7 +68,26 @@ public class Program extends Application {
                     prevRun = now;
                 }
             }
-        }.start();
+        };
+
+        FileChooser fileChooser = new FileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(workingDirectory);
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            playground = new Playground(file, Program.this);
+            loop.start();
+        }
+
+//        File file = new File("mountain.txt");
+//        playground = new Playground(file, Program.this);
+//        loop.start();
+
+        Scene s = new Scene(root, 600,600);
+        primaryStage.setScene(s);
+
+        primaryStage.show();
+
 
 //        int res = 0;
 //        do {
@@ -192,13 +197,18 @@ public class Program extends Application {
     }
 
     private Line drawLineBetweenRails(Rail a, Rail b) {
+        Line line = lines.get(new LineIdentifier(a, b));
+        if (line != null) return line;
+
         Coordinates aCoord = coordinates.get(a);
         Coordinates bCoord = coordinates.get(b);
 
         if (aCoord != null && bCoord != null) {
-            Line line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
+            line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
             line.setStrokeWidth(size/15);
+            line.setStrokeLineCap(StrokeLineCap.ROUND);
             observableList.add(line);
+            line.toBack();
 
             LineIdentifier li = new LineIdentifier(a, b);
             lines.put(li, line);
@@ -237,22 +247,24 @@ public class Program extends Application {
     public void addSwitch(Switch sw, int x, int y) {
         addRail(sw, x, y);
         extendRailToSwitch(sw);
-        drawSwitchCircle(sw);
     }
 
     public void extendRailToSwitch(Switch sw) {
         ArrayList<Rail> tos = sw.getTos();
         for (Rail r : tos) {
             Line line = drawLineBetweenRails(r, sw);
-            line.setStroke(javafx.scene.paint.Color.GRAY);
+            if (line != null) {
+                line.setStroke(javafx.scene.paint.Color.GRAY);
+            }
         }
         Rail t = sw.getTo();
         changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
         Rail from = sw.getFrom();
         changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
+        drawSwitchCircle(sw);
     }
 
-    public void drawSwitchCircle(Switch sw) {
+    private void drawSwitchCircle(Switch sw) {
         Coordinates coords = coordinates.get(sw);
         Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
         cir.setFill(javafx.scene.paint.Color.BLACK);
@@ -272,12 +284,106 @@ public class Program extends Application {
     }
 
     /**
-     * @param r
+     * @param rail
      * @param x
      * @param y
      */
-    public static void addMountainEntryPoint(Rail r, int x, int y) {
+    public void addMountainEntryPoint(Rail rail, int x, int y) {
         // TODO implement here
+        addRail(rail, x, y);
+        extendRailToMountainEntryPoint(rail);
+    }
+
+    public void extendRailToMountainEntryPoint(Rail rail) {
+        Coordinates coords = this.coordinates.get(rail);
+        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
+        rec.setFill(javafx.scene.paint.Color.BROWN);
+        rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            private Tunnel prevTunnel;
+            private Line prevLine;
+            @Override
+            public void handle(MouseEvent event) {
+                Tunnel tunnel = playground.buildTunnelEnd(rail);
+                if (prevLine != null) {
+                    observableList.remove(prevLine);
+                }
+                Rail from = tunnel.getFrom();
+                Rail to = tunnel.getTo();
+                if (from != null && to != null) {
+                    Line line = drawLineBetweenRails(from, to);
+                    line.setStrokeWidth(size);
+                    line.setStroke(javafx.scene.paint.Color.BROWN);
+                    line.toFront();
+                    line.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            lines.remove(new LineIdentifier(tunnel.from, tunnel.to));
+                            if (tunnel.destroyTunnel()) {
+                                observableList.remove(line);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+//
+//        rec.setOnMousePressed(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                rec.setMouseTransparent(true);
+//                event.setDragDetect(true);
+//            }
+//        });
+//
+//        rec.setOnDragDetected(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                draggedLine = new Line(coords.getX(), coords.getY(), coords.getX(), coords.getY());
+//                observableList.add(draggedLine);
+//                rec.setFill(javafx.scene.paint.Color.BROWN);
+//            }
+//        });
+//
+//        rec.setOnMouseDragged(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                event.setDragDetect(false);
+//                double x = event.getX();
+//                double y = event.getY();
+//                draggedLine.setEndX(x);
+//                draggedLine.setEndY(y);
+//            }
+//        });
+//
+//        rec.setOnMouseReleased(new EventHandler <MouseEvent>()
+//        {
+//            public void handle(MouseEvent event)
+//            {
+//                rec.setMouseTransparent(false);
+//                Rectangle a = (Rectangle)event.getSource();
+//                Rectangle b = (Rectangle)event.getTarget();
+//                a.setFill(javafx.scene.paint.Color.BLACK);
+//                b.setFill(javafx.scene.paint.Color.BLACK);
+//                observableList.remove(draggedLine);
+//            }
+//        });
+//
+//        rec.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//            public void handle(MouseEvent event)
+//            {
+//                Rectangle a = (Rectangle)event.getSource();
+//                Rectangle b = (Rectangle)event.getTarget();
+//                a.setFill(javafx.scene.paint.Color.BLACK);
+//                b.setFill(javafx.scene.paint.Color.BLACK);
+//            }
+//        });
+
+//        Rectangle a = (Rectangle)event.getSource();
+//        Rectangle b = (Rectangle)event.getTarget();
+        mountainPoints.put(rec, rail);
+        observableList.add(rec);
     }
 
     /**
@@ -300,15 +406,8 @@ public class Program extends Application {
      */
     public void updateCar(Car car) {
         // TODO implement here
-        Rail rail = car.getCurrentRail();
-        Coordinates coords = this.coordinates.get(rail);
         Circle circle = carCircles.get(car);
-//
-//        if (circle.getCenterX() < 1 && circle.getCenterX() < 1) {
-//            setCarPosition(coords, circle);
-//        } else {
-            animateCarPosition(coords, circle, 900);
-//        }
+        animateCarPosition(car, 900);
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
         if (car.isEmpty()) {
@@ -317,7 +416,10 @@ public class Program extends Application {
         circle.setFill(color);
     }
 
-    private void animateCarPosition(Coordinates coords, Circle circle, double duration) {
+    private void animateCarPosition(Car car, double duration) {
+        Rail rail = car.getCurrentRail();
+        Coordinates coords = this.coordinates.get(rail);
+        Circle circle = carCircles.get(car);
         TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
         translateTransition.setToX(coords.getX());
         translateTransition.setToY(coords.getY());
