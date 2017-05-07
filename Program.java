@@ -2,11 +2,9 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -34,16 +32,17 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
-    protected Map<Rectangle, Rail> mountainPoints = new HashMap<>();
-
-    Line draggedLine;
 
     /**
      * Starts the program.
      * @param args Ignored.
      */
     public static void main(String[] args) {
-        launch(args);
+        try {
+            launch(args);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -87,12 +86,6 @@ public class Program extends Application {
         primaryStage.setScene(s);
 
         primaryStage.show();
-
-
-//        int res = 0;
-//        do {
-//            res = playground.runTurn();
-//        } while(res == 0);
     }
 
     //region text based
@@ -174,262 +167,6 @@ public class Program extends Application {
         File f = new File(s);
         playground = new Playground(f, this);
     }
-    //endregion
-
-    private Coordinates transformToLocalCoordinates(int x, int y) {
-        return new Coordinates(x*size + bias, y*size + bias);
-    }
-
-    /**
-     * @param rail
-     * @param x
-     * @param y
-     */
-    public void addRail(Rail rail, int x, int y) {
-        // TODO implement here
-        Coordinates railCoords = transformToLocalCoordinates(x, y);
-        coordinates.put(rail, railCoords);
-
-        Rail from = rail.getFrom();
-        drawLineBetweenRails(from, rail);
-        Rail to = rail.getTo();
-        drawLineBetweenRails(to, rail);
-    }
-
-    private Line drawLineBetweenRails(Rail a, Rail b) {
-        Line line = lines.get(new LineIdentifier(a, b));
-        if (line != null) return line;
-
-        Coordinates aCoord = coordinates.get(a);
-        Coordinates bCoord = coordinates.get(b);
-
-        if (aCoord != null && bCoord != null) {
-            line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
-            line.setStrokeWidth(size/15);
-            line.setStrokeLineCap(StrokeLineCap.ROUND);
-            observableList.add(line);
-            line.toBack();
-
-            LineIdentifier li = new LineIdentifier(a, b);
-            lines.put(li, line);
-            return line;
-        }
-        return null;
-    }
-
-    /**
-     * @param s
-     * @param x
-     * @param y
-     */
-    public void addStation(Station s, int x, int y) {
-        Coordinates coords = transformToLocalCoordinates(x, y);
-        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
-        rec.setFill(Program.ColorToJavafx(s.getColor()));
-        observableList.add(rec);
-    }
-
-    public void addCrossRail(CrossRail cross, int x, int y) {
-        addRail(cross, x ,y);
-        extendRailToCrossRail(cross);
-    }
-
-    public void extendRailToCrossRail(CrossRail cross) {
-        Coordinates crossCoords = coordinates.get(cross);
-
-        Rail from2 = cross.getFrom2();
-        drawLineBetweenRails(from2, cross);
-        Rail to2 = cross.getTo2();
-        drawLineBetweenRails(to2, cross);
-
-    }
-
-    public void addSwitch(Switch sw, int x, int y) {
-        addRail(sw, x, y);
-        extendRailToSwitch(sw);
-    }
-
-    public void extendRailToSwitch(Switch sw) {
-        ArrayList<Rail> tos = sw.getTos();
-        for (Rail r : tos) {
-            Line line = drawLineBetweenRails(r, sw);
-            if (line != null) {
-                line.setStroke(javafx.scene.paint.Color.GRAY);
-            }
-        }
-        Rail t = sw.getTo();
-        changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
-        Rail from = sw.getFrom();
-        changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
-        drawSwitchCircle(sw);
-    }
-
-    private void drawSwitchCircle(Switch sw) {
-        Coordinates coords = coordinates.get(sw);
-        Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
-        cir.setFill(javafx.scene.paint.Color.BLACK);
-        cir.setOnMouseClicked(event -> {
-            Rail to = sw.getTo();
-            changeLineColor(sw, to, javafx.scene.paint.Color.GRAY);
-            sw.changeDir();
-            to = sw.getTo();
-            changeLineColor(sw, to, javafx.scene.paint.Color.BLACK);
-        });
-        observableList.add(cir);
-    }
-
-    private void changeLineColor(Rail a, Rail b, javafx.scene.paint.Color color) {
-        Line line = lines.get(new LineIdentifier(a, b));
-        line.setStroke(color);
-    }
-
-    /**
-     * @param rail
-     * @param x
-     * @param y
-     */
-    public void addMountainEntryPoint(Rail rail, int x, int y) {
-        // TODO implement here
-        addRail(rail, x, y);
-        extendRailToMountainEntryPoint(rail);
-    }
-
-    public void extendRailToMountainEntryPoint(Rail rail) {
-        Coordinates coords = this.coordinates.get(rail);
-        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
-        rec.setFill(javafx.scene.paint.Color.BROWN);
-        rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            private Tunnel prevTunnel;
-            private Line prevLine;
-            @Override
-            public void handle(MouseEvent event) {
-                Tunnel tunnel = playground.buildTunnelEnd(rail);
-                if (prevLine != null) {
-                    observableList.remove(prevLine);
-                }
-                Rail from = tunnel.getFrom();
-                Rail to = tunnel.getTo();
-                if (from != null && to != null) {
-                    Line line = drawLineBetweenRails(from, to);
-                    line.setStrokeWidth(size);
-                    line.setStroke(javafx.scene.paint.Color.BROWN);
-                    line.toFront();
-                    line.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            lines.remove(new LineIdentifier(tunnel.from, tunnel.to));
-                            if (tunnel.destroyTunnel()) {
-                                observableList.remove(line);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-//
-//        rec.setOnMousePressed(new EventHandler <MouseEvent>()
-//        {
-//            public void handle(MouseEvent event)
-//            {
-//                rec.setMouseTransparent(true);
-//                event.setDragDetect(true);
-//            }
-//        });
-//
-//        rec.setOnDragDetected(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                draggedLine = new Line(coords.getX(), coords.getY(), coords.getX(), coords.getY());
-//                observableList.add(draggedLine);
-//                rec.setFill(javafx.scene.paint.Color.BROWN);
-//            }
-//        });
-//
-//        rec.setOnMouseDragged(new EventHandler <MouseEvent>()
-//        {
-//            public void handle(MouseEvent event)
-//            {
-//                event.setDragDetect(false);
-//                double x = event.getX();
-//                double y = event.getY();
-//                draggedLine.setEndX(x);
-//                draggedLine.setEndY(y);
-//            }
-//        });
-//
-//        rec.setOnMouseReleased(new EventHandler <MouseEvent>()
-//        {
-//            public void handle(MouseEvent event)
-//            {
-//                rec.setMouseTransparent(false);
-//                Rectangle a = (Rectangle)event.getSource();
-//                Rectangle b = (Rectangle)event.getTarget();
-//                a.setFill(javafx.scene.paint.Color.BLACK);
-//                b.setFill(javafx.scene.paint.Color.BLACK);
-//                observableList.remove(draggedLine);
-//            }
-//        });
-//
-//        rec.setOnMouseReleased(new EventHandler<MouseEvent>() {
-//            public void handle(MouseEvent event)
-//            {
-//                Rectangle a = (Rectangle)event.getSource();
-//                Rectangle b = (Rectangle)event.getTarget();
-//                a.setFill(javafx.scene.paint.Color.BLACK);
-//                b.setFill(javafx.scene.paint.Color.BLACK);
-//            }
-//        });
-
-//        Rectangle a = (Rectangle)event.getSource();
-//        Rectangle b = (Rectangle)event.getTarget();
-        mountainPoints.put(rec, rail);
-        observableList.add(rec);
-    }
-
-    /**
-     * @param x
-     * @param y
-     */
-    public static void addMountain(int x, int y) {
-        // TODO implement here
-    }
-
-    public void addCar(Car car) {
-        Circle circle = new Circle(size/2);
-        carCircles.put(car, circle);
-        observableList.add(circle);
-        updateCar(car);
-    }
-
-    /**
-     * @param car
-     */
-    public void updateCar(Car car) {
-        // TODO implement here
-        Circle circle = carCircles.get(car);
-        animateCarPosition(car, 900);
-
-        javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
-        if (car.isEmpty()) {
-            color = color.brighter();
-        }
-        circle.setFill(color);
-    }
-
-    private void animateCarPosition(Car car, double duration) {
-        Rail rail = car.getCurrentRail();
-        Coordinates coords = this.coordinates.get(rail);
-        Circle circle = carCircles.get(car);
-        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
-        translateTransition.setToX(coords.getX());
-        translateTransition.setToY(coords.getY());
-        translateTransition.play();
-    }
-
-    private void setCarPosition(Coordinates coords, Circle circle) {
-        circle.setCenterX(coords.getX());
-        circle.setCenterY(coords.getY()); //Does NOT works dont know why.
-    }
 
     protected static void printHelp() {
         System.out.println("Your input is not recognizable as an existing command!");
@@ -462,6 +199,262 @@ public class Program extends Application {
                 "\n" +
                 "exit\n" +
                 "Leírás: Kilépés");
+    }
+    //endregion
+
+    /**
+     * Multiplies the give x and y with size and add bias, and converts to a {@link Coordinates}.
+     * @param x
+     * @param y
+     * @return
+     */
+    private Coordinates transformToLocalCoordinates(int x, int y) {
+        return new Coordinates(x*size + bias, y*size + bias);
+    }
+
+    /**Draws a {@link Rail} at the given place. If its neighboors was not previously added, the drawing will happen,
+     * when they are added.
+     * @param rail
+     * @param x
+     * @param y
+     */
+    public void addRail(Rail rail, int x, int y) {
+        Coordinates railCoords = transformToLocalCoordinates(x, y);
+        coordinates.put(rail, railCoords);
+
+        Rail from = rail.getFrom();
+        drawLineBetweenRails(from, rail);
+        Rail to = rail.getTo();
+        drawLineBetweenRails(to, rail);
+    }
+
+    /**
+     * Draws a {@link Line} between the given {@link Rail}s.
+     * @param a
+     * @param b
+     * @return the created {@link Line}.
+     */
+    private Line drawLineBetweenRails(Rail a, Rail b) {
+        Line line = lines.get(new LineIdentifier(a, b));
+        if (line != null) return line;
+
+        Coordinates aCoord = coordinates.get(a);
+        Coordinates bCoord = coordinates.get(b);
+
+        if (aCoord != null && bCoord != null) {
+            line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
+            line.setStrokeWidth(size/15);
+            line.setStrokeLineCap(StrokeLineCap.ROUND);
+            observableList.add(line);
+            line.toBack();
+
+            LineIdentifier li = new LineIdentifier(a, b);
+            lines.put(li, line);
+            return line;
+        }
+        return null;
+    }
+
+    /**Draws a {@link Station} at the given place. {@link #addRail(Rail, int, int)} muss be called first.
+     * @param s
+     * @param x
+     * @param y
+     */
+    public void addStation(Station s, int x, int y) {
+        Coordinates coords = transformToLocalCoordinates(x, y);
+        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
+        rec.setFill(Program.ColorToJavafx(s.getColor()));
+        observableList.add(rec);
+    }
+
+    /**
+     * Draws a {@link CrossRail} at the given place.
+     * @param cross
+     * @param x
+     * @param y
+     */
+    public void addCrossRail(CrossRail cross, int x, int y) {
+        addRail(cross, x ,y);
+        extendRailToCrossRail(cross);
+    }
+
+    /**
+     * Extends the graphic of a previously added {@link Rail}s to a {@link CrossRail}s.
+     * @param cross
+     */
+    public void extendRailToCrossRail(CrossRail cross) {
+        Coordinates crossCoords = coordinates.get(cross);
+
+        Rail from2 = cross.getFrom2();
+        drawLineBetweenRails(from2, cross);
+        Rail to2 = cross.getTo2();
+        drawLineBetweenRails(to2, cross);
+    }
+
+    /**
+     * Draws a {@link Switch} at the given place.
+     * @param sw
+     * @param x
+     * @param y
+     */
+    public void addSwitch(Switch sw, int x, int y) {
+        addRail(sw, x, y);
+        extendRailToSwitch(sw);
+    }
+
+    /**
+     * Extends the graphic of a previously added {@link Rail}s to a {@link Switch}s.
+     * @param sw
+     */
+    public void extendRailToSwitch(Switch sw) {
+        ArrayList<Rail> tos = sw.getTos();
+        for (Rail r : tos) {
+            Line line = drawLineBetweenRails(r, sw);
+            if (line != null) {
+                line.setStroke(javafx.scene.paint.Color.GRAY);
+            }
+        }
+        Rail t = sw.getTo();
+        changeLineColor(sw, t, javafx.scene.paint.Color.BLACK);
+        Rail from = sw.getFrom();
+        changeLineColor(sw, from, javafx.scene.paint.Color.BLUE);
+        drawSwitchCircle(sw);
+    }
+
+    /**
+     * Draws the Circle, which can be clicked, to change the {@link Switch}.
+     * @param sw
+     */
+    private void drawSwitchCircle(Switch sw) {
+        Coordinates coords = coordinates.get(sw);
+        Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
+        cir.setFill(javafx.scene.paint.Color.BLACK);
+        cir.setOnMouseClicked(event -> changeSwitch(sw));
+        observableList.add(cir);
+    }
+
+    /**
+     * Changes the {@link Switch} and draws the result. It is called by a click.
+     * @param sw
+     */
+    private void changeSwitch(Switch sw) {
+        Rail to = sw.getTo();
+        changeLineColor(sw, to, javafx.scene.paint.Color.GRAY);
+        sw.changeDir();
+        to = sw.getTo();
+        changeLineColor(sw, to, javafx.scene.paint.Color.BLACK);
+    }
+
+    /**
+     * Changes rhe {@link Line}s color, which is between the {@link Rail}s.
+     * @param a
+     * @param b
+     * @param color
+     */
+    private void changeLineColor(Rail a, Rail b, javafx.scene.paint.Color color) {
+        Line line = lines.get(new LineIdentifier(a, b));
+        line.setStroke(color);
+    }
+
+    /**
+     * Draws a {@link Rail} and a clickable mountain entrypoint at the given place.
+     * @param rail
+     * @param x
+     * @param y
+     */
+    public void addMountainEntryPoint(Rail rail, int x, int y) {
+        addRail(rail, x, y);
+        extendRailToMountainEntryPoint(rail);
+    }
+
+    /**
+     * Draws a clickable mountain entrypoint at the top of the given {@link Rail}.
+     * @param rail
+     */
+    public void extendRailToMountainEntryPoint(Rail rail) {
+        Coordinates coords = this.coordinates.get(rail);
+        Circle rec = new Circle(coords.getX(), coords.getY(), size/4);
+        rec.setFill(javafx.scene.paint.Color.BROWN);
+        rec.setOnMouseClicked(event -> {
+            Tunnel tunnel = playground.buildTunnelEnd(rail);
+            drawTunnelsLine(tunnel);
+        });
+        observableList.add(rec);
+    }
+
+    /**
+     * Draws a clickable {@link Line} for the {@link Tunnel}, if possible. If the {@link Line} is clicked, the tunnel is destroyed.
+     * @param tunnel
+     */
+    private void drawTunnelsLine(Tunnel tunnel) {
+        Rail from = tunnel.getFrom();
+        Rail to = tunnel.getTo();
+        if (from != null && to != null) {
+            Line line = drawLineBetweenRails(from, to);
+            line.setStrokeWidth(size);
+            line.setStroke(javafx.scene.paint.Color.BROWN);
+            line.toFront();
+            line.setOnMouseClicked(event1 -> destroyTunnel(tunnel, line));
+        }
+    }
+
+    /**
+     * Destroys the {@link Tunnel} and the {@link Line} related to it, if possible.
+     * @param tunnel
+     * @param line
+     */
+    private void destroyTunnel(Tunnel tunnel, Line line) {
+        lines.remove(new LineIdentifier(tunnel.from, tunnel.to));
+        if (tunnel.destroyTunnel()) {
+            observableList.remove(line);
+        }
+    }
+
+    /**
+     * Draws a circle, whit the {@link Car}s color.
+     * @param car
+     */
+    public void addCar(Car car) {
+        Circle circle = new Circle(size/2);
+        carCircles.put(car, circle);
+        observableList.add(circle);
+        updateCar(car);
+    }
+
+    /**
+     * Updates a previously added {@link Car} to its current station.
+     * @param car
+     */
+    public void updateCar(Car car) {
+        Circle circle = carCircles.get(car);
+        animateCarPosition(car, 900);
+
+        javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
+        if (car.isEmpty()) {
+            color = color.brighter();
+        }
+        circle.setFill(color);
+    }
+
+    /**
+     * Moves the graphic of the {@link Car} to its new position, in the given duration.
+     * @param car
+     * @param duration
+     */
+    private void animateCarPosition(Car car, double duration) {
+        Rail rail = car.getCurrentRail();
+        Coordinates coords = this.coordinates.get(rail);
+        if (coords == null) return;
+        Circle circle = carCircles.get(car);
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
+        translateTransition.setToX(coords.getX());
+        translateTransition.setToY(coords.getY());
+        translateTransition.play();
+    }
+
+    private void setCarPosition(Coordinates coords, Circle circle) {
+        circle.setCenterX(coords.getX());
+        circle.setCenterY(coords.getY()); //Does NOT works dont know why.
     }
 
     private static javafx.scene.paint.Color ColorToJavafx(Color c) {
