@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -52,19 +54,39 @@ public class Program extends Application {
         Group root = new Group();
         observableList = root.getChildren();
 
+        Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
+        primaryStage.setScene(s);
+        observableList.add(mountain);
+        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
+        mountain.toBack();
+
         AnimationTimer loop = new AnimationTimer() {
             long prevRun = 0;
+            boolean hasEnded = false;
             @Override
             public void handle(long now) {
-                if (now - prevRun > 1e9) {
+                if ((now - prevRun > 1e9) && !hasEnded) {
                     int res = playground.runTurn();
                     if (res != 0) {
                         if (res == 1) {
                             System.out.println("You have lost!");
+                            Text text = new Text(150, 40, "You have lost!");
+                            text.setFill(javafx.scene.paint.Color.RED);
+                            text.setScaleX(4);
+                            text.setScaleY(4);
+                            text.setScaleZ(4);
+                            observableList.add(text);
                         } else if (res == 2) {
                             System.out.println("You have won!");
+                            Text text = new Text(150, 40, "You have won!");
+                            text.setFill(javafx.scene.paint.Color.RED);
+                            text.setScaleX(4);
+                            text.setScaleY(4);
+                            text.setScaleZ(4);
+                            observableList.add(text);
                         }
-                        Platform.exit();
+                        s.addEventFilter(KeyEvent.KEY_PRESSED, event -> Platform.exit());
+                        hasEnded = true;
                     }
                     prevRun = now;
                 }
@@ -84,11 +106,7 @@ public class Program extends Application {
 //        playground = new Playground(file, Program.this);
 //        loop.start();
 
-        Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
-        primaryStage.setScene(s);
-        observableList.add(mountain);
-        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
-        mountain.toBack();
+
 
         //primaryStage.setFullScreen(true);
         primaryStage.show();
