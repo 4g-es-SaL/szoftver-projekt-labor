@@ -49,6 +49,18 @@ public class Car {
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {
+        Integer x = waitOrSpawn();
+        if (x != null) return x;
+
+        int isCollision = move();
+        if (isCollision == 1) {
+            return isCollision;
+        }
+
+        return callNextCar();
+    }
+
+    protected Integer waitOrSpawn() {
         if (spawn > 0) {
             if (spawn == 1) {
                 try {
@@ -61,12 +73,7 @@ public class Car {
             spawn--;
             return callNextCar();
         }
-        int isCollision = move();
-        if (isCollision == 1) {
-            return isCollision;
-        }
-
-        return callNextCar();
+        return null;
     }
 
     //region runTurn privates

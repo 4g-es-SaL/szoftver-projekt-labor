@@ -5,7 +5,6 @@ import java.util.Iterator;
  */
 public class Locomotive extends Car implements Iterable<Car> {
     protected int speed;
-    protected int entryTimeLeft;
 
     /**
      * Create a new {@link Locomotive} object. Locomotives {@link Color} is {@link Color#NO_COLOR}.
@@ -22,7 +21,6 @@ public class Locomotive extends Car implements Iterable<Car> {
             throw new Exception("A train cant have multiple Locomotives.");
         }
         this.speed = speed;
-        this.entryTimeLeft = entryTime;
         this.empty = true;
     }
 
@@ -31,10 +29,8 @@ public class Locomotive extends Car implements Iterable<Car> {
      * @return 1 if there was a collision, 0 otherwise.
      */
     public int runTurn() {
-        if(entryTimeLeft > 0) {
-            entryTimeLeft--;
-            return 0;
-        }
+        Integer x = waitOrSpawn();
+        if (x != null) return x;
         for (int i = 0; i < speed; i++) {
             int res = super.runTurn();
             if (res == 1) {
@@ -43,10 +39,6 @@ public class Locomotive extends Car implements Iterable<Car> {
         }
         System.out.println(this);
         return 0;
-    }
-
-    public boolean hasStarted(){
-        return entryTimeLeft == 0;
     }
 
     /**

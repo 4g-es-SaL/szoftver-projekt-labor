@@ -88,7 +88,7 @@ public class Program extends Application {
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
         mountain.toBack();
 
-        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
