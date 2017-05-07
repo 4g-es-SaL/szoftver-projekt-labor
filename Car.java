@@ -172,7 +172,9 @@ public class Car {
         }
     }
 
-
+    public boolean hasSpawn() {
+        return spawn == 0;
+    }
 
     @Override
     public String toString() {

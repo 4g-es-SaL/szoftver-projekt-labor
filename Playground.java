@@ -364,11 +364,14 @@ public class Playground {
 
     protected Station fillRandomStationIfAny() {
         Random rand = new Random();
-        int index = rand.nextInt(stations.size());
-        Station station = stations.get(index);
-        station.addPassanger();
-        program.updateStation(station);
-        return station;
+        if (rand.nextInt(10) == 1) {
+            int index = rand.nextInt(stations.size());
+            Station station = stations.get(index);
+            station.addPassanger();
+            program.updateStation(station);
+            return station;
+        }
+        return null;
     }
 
     /**

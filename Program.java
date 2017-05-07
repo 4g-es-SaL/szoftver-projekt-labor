@@ -279,7 +279,7 @@ public class Program extends Application {
         Rectangle rec = stationRectangles.get(s);
         int arc = 0;
         if (s.isEmpty()) {
-            arc = size / 4;
+            arc = size / 3;
         }
         rec.setArcHeight(arc);
         rec.setArcWidth(arc);
@@ -402,8 +402,8 @@ public class Program extends Application {
 
     public void addMountainPoint(float x, float y) {
         Coordinates coords = transformToLocalCoordinates(x, y);
-        mountain.getPoints().add(Double.valueOf(coords.getX()));
-        mountain.getPoints().add(Double.valueOf(coords.getY()));
+        mountain.getPoints().add((double) coords.getX());
+        mountain.getPoints().add((double) coords.getY());
     }
 
     /**
@@ -439,7 +439,7 @@ public class Program extends Application {
      * @param car
      */
     public void addCar(Car car) {
-        Circle circle = new Circle(size/2);
+        Circle circle = new Circle(0);
         carCircles.put(car, circle);
         observableList.add(circle);
         updateCar(car);
@@ -452,6 +452,9 @@ public class Program extends Application {
     public void updateCar(Car car) {
         Circle circle = carCircles.get(car);
         animateCarPosition(car, 900);
+        if (car.hasSpawn()) {
+            circle.setRadius(size / 2);
+        }
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
         if (car.isEmpty()) {
