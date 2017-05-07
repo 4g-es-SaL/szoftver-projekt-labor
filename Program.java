@@ -82,7 +82,7 @@ public class Program extends Application {
 //        playground = new Playground(file, Program.this);
 //        loop.start();
 
-        Scene s = new Scene(root, 600,600);
+        Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
         primaryStage.setScene(s);
 
         primaryStage.show();
@@ -431,7 +431,9 @@ public class Program extends Application {
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
         if (car.isEmpty()) {
-            color = color.brighter();
+            for(int i=0;i<3;i++){
+                color = color.darker();
+            }
         }
         circle.setFill(color);
     }
