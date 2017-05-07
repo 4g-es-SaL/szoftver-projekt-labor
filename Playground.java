@@ -11,7 +11,7 @@ public class Playground {
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails = new ArrayList<>();
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
-    protected Tunnel tunnel;
+    protected Tunnel tunnel = new Tunnel(null, null);
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
 
     /**

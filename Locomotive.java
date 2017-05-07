@@ -37,7 +37,6 @@ public class Locomotive extends Car implements Iterable<Car> {
                 return 1;
             }
         }
-        System.out.println(this);
         return 0;
     }
 
