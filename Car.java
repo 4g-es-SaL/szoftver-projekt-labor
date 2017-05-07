@@ -109,9 +109,11 @@ public class Car {
     public void atStation(Station s) {
         if (empty && s.removePassenger(color)) {
             empty = false;
+            setCanEmpty(false);
         } else if (canEmpty > 0) {
             if (color == s.getColor()) {
                 empty = true;
+                canEmpty = 0;
             }
             if (!empty) {
                 setCanEmpty(false);
