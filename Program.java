@@ -1,4 +1,5 @@
 import javafx.animation.AnimationTimer;
+import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,8 +22,10 @@ import java.util.Scanner;
  * Communicates with the user and the {@link Playground}.
  */
 public class Program extends Application {
-    final int size = 75;
+    final int carSize = 75;
     final int bias = 0;
+    final int timeBetweenTurns = 1000;
+    private int drugFactor = 1;
 
     protected Playground playground;
     ObservableList<Node> observableList;
@@ -56,7 +59,8 @@ public class Program extends Application {
             long prevRun = 0;
             @Override
             public void handle(long now) {
-                if (now - prevRun > 1e9) {
+                final int nano = (int) 1e6;
+                if (now - prevRun > timeBetweenTurns * nano) {
                     int res = playground.runTurn();
                     if (res != 0) {
                         if (res == 1) {
@@ -209,13 +213,13 @@ public class Program extends Application {
     //endregion
 
     /**
-     * Multiplies the give x and y with size and add bias, and converts to a {@link Coordinates}.
+     * Multiplies the give x and y with carSize and add bias, and converts to a {@link Coordinates}.
      * @param x
      * @param y
      * @return
      */
     private Coordinates transformToLocalCoordinates(float x, float y) {
-        return new Coordinates(x*size + bias, y*size + bias);
+        return new Coordinates(x* carSize + bias, y* carSize + bias);
     }
 
     /**Draws a {@link Rail} at the given place. If its neighboors was not previously added, the drawing will happen,
@@ -249,7 +253,7 @@ public class Program extends Application {
 
         if (aCoord != null && bCoord != null) {
             line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
-            line.setStrokeWidth(size/15);
+            line.setStrokeWidth(carSize /15);
             line.setStrokeLineCap(StrokeLineCap.ROUND);
             observableList.add(line);
             line.toBack();
@@ -268,7 +272,7 @@ public class Program extends Application {
      */
     public void addStation(Station s, int x, int y) {
         Coordinates coords = transformToLocalCoordinates(x, y);
-        Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
+        Rectangle rec = new Rectangle(coords.getX()- carSize /4, coords.getY()- carSize /4, carSize /2, carSize /2);
         rec.setFill(Program.ColorToJavafx(s.getColor()));
         observableList.add(rec);
         stationRectangles.put(s, rec);
@@ -279,7 +283,7 @@ public class Program extends Application {
         Rectangle rec = stationRectangles.get(s);
         int arc = 0;
         if (s.isEmpty()) {
-            arc = size / 2;
+            arc = carSize / 2;
         }
         rec.setArcHeight(arc);
         rec.setArcWidth(arc);
@@ -345,7 +349,7 @@ public class Program extends Application {
      */
     private void drawSwitchCircle(Switch sw) {
         Coordinates coords = coordinates.get(sw);
-        Circle cir = new Circle(coords.getX(), coords.getY(), size/4);
+        Circle cir = new Circle(coords.getX(), coords.getY(), carSize /4);
         cir.setFill(javafx.scene.paint.Color.BLACK);
         cir.setOnMouseClicked(event -> changeSwitch(sw));
         observableList.add(cir);
@@ -391,7 +395,7 @@ public class Program extends Application {
      */
     public void extendRailToTunnelEntryPoint(Rail rail) {
         Coordinates coords = this.coordinates.get(rail);
-        Circle rec = new Circle(coords.getX(), coords.getY(), size/4);
+        Circle rec = new Circle(coords.getX(), coords.getY(), carSize /4);
         rec.setFill(javafx.scene.paint.Color.BROWN);
         rec.setOnMouseClicked(event -> {
             Tunnel tunnel = playground.buildTunnelEnd(rail);
@@ -415,7 +419,7 @@ public class Program extends Application {
         Rail to = tunnel.getTo();
         if (from != null && to != null) {
             Line line = drawLineBetweenRails(from, to);
-            line.setStrokeWidth(size);
+            line.setStrokeWidth(carSize);
             line.setStroke(javafx.scene.paint.Color.BROWN);
             line.toFront();
             line.setOnMouseClicked(event1 -> destroyTunnel(tunnel, line));
@@ -451,9 +455,9 @@ public class Program extends Application {
      */
     public void updateCar(Car car) {
         Circle circle = carCircles.get(car);
-        animateCarPosition(car, 900);
+        animateCarPosition(car, timeBetweenTurns*drugFactor);
         if (car.hasSpawn()) {
-            circle.setRadius(size / 2);
+            circle.setRadius(carSize / 2);
         }
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
@@ -478,6 +482,7 @@ public class Program extends Application {
         TranslateTransition translateTransition = new TranslateTransition(Duration.millis(duration), circle);
         translateTransition.setToX(coords.getX());
         translateTransition.setToY(coords.getY());
+        translateTransition.setInterpolator(Interpolator.LINEAR);
         translateTransition.play();
     }
 
