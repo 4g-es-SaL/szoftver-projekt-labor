@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -327,14 +329,20 @@ public class Playground {
             return 1;
         }
         fillRandomStationIfAny();
+        updateAllStations();
         if (areTrainsEmpty() && areStationsEmpty()) {
             return 2;
         }
         return 0;
 
     }
-
     //region runTurn() privates
+
+    private void updateAllStations() {
+        for (Station s : stations) {
+            program.updateStation(s);
+        }
+    }
 
     /**
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
@@ -355,7 +363,7 @@ public class Playground {
 
     protected Station fillRandomStationIfAny() {
         Random rand = new Random();
-        if (rand.nextInt(100) == 1) {
+        if (rand.nextInt(10) == 1) {
             int index = rand.nextInt(stations.size());
             Station station = stations.get(index);
             station.addPassanger();
@@ -381,14 +389,9 @@ public class Playground {
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
     protected boolean areStationsEmpty() {
-        for (Rail r : rails) {
-            try {
-                Station s = (Station) r;
-                if (!s.isEmpty()) {
-                    return false;
-                }
-            } catch (Exception e) {
-                //Not station, pass
+        for (Station s : stations) {
+            if (!s.isEmpty()) {
+                return false;
             }
         }
         return true;
