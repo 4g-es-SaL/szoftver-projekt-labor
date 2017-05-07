@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -32,6 +29,9 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
+
+    protected Polygon  mountain = new Polygon();
+    protected boolean isMountainInitialized = false;
 
     /**
      * Starts the program.
@@ -84,7 +84,11 @@ public class Program extends Application {
 
         Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
         primaryStage.setScene(s);
+        observableList.add(mountain);
+        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
+        mountain.toBack();
 
+        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
@@ -208,7 +212,7 @@ public class Program extends Application {
      * @param y
      * @return
      */
-    private Coordinates transformToLocalCoordinates(int x, int y) {
+    private Coordinates transformToLocalCoordinates(float x, float y) {
         return new Coordinates(x*size + bias, y*size + bias);
     }
 
@@ -362,16 +366,16 @@ public class Program extends Application {
      * @param x
      * @param y
      */
-    public void addMountainEntryPoint(Rail rail, int x, int y) {
+    public void addTunnelEntryPoint(Rail rail, int x, int y) {
         addRail(rail, x, y);
-        extendRailToMountainEntryPoint(rail);
+        extendRailToTunnelEntryPoint(rail);
     }
 
     /**
      * Draws a clickable mountain entrypoint at the top of the given {@link Rail}.
      * @param rail
      */
-    public void extendRailToMountainEntryPoint(Rail rail) {
+    public void extendRailToTunnelEntryPoint(Rail rail) {
         Coordinates coords = this.coordinates.get(rail);
         Circle rec = new Circle(coords.getX(), coords.getY(), size/4);
         rec.setFill(javafx.scene.paint.Color.BROWN);
@@ -380,6 +384,12 @@ public class Program extends Application {
             drawTunnelsLine(tunnel);
         });
         observableList.add(rec);
+    }
+
+    public void addMountainPoint(float x, float y) {
+        Coordinates coords = transformToLocalCoordinates(x, y);
+        mountain.getPoints().add(Double.valueOf(coords.getX()));
+        mountain.getPoints().add(Double.valueOf(coords.getY()));
     }
 
     /**

@@ -50,6 +50,12 @@ public class Playground {
          * …
          * [ENTER]
          * {t0 t1 t2 ... | [SPACE]}
+         * [ENTER]
+         * m1x m1y
+         * m2x m2y
+         * ...
+         * mnx mny
+     *
      *
      * ahol R = #Rails + #Stations
      * a következő R sorban:
@@ -78,6 +84,8 @@ public class Playground {
      * Következő sor:
      * A lehetséges Tunnel építési pontok
      *
+     * Következő sor:
+     * A hegy alakjának koordinátái.
      */
 
     Playground(File f, Program p) {
@@ -95,6 +103,7 @@ public class Playground {
             createRails(data);
             createTrains(data);
             readTunnelEndPoints(data);
+            drawMountain(data);
 
             // create and add the only Tunnel object to the rails
             tunnel = new Tunnel(null, null);
@@ -287,8 +296,7 @@ public class Playground {
         String[] tunnelEndData = data[3].split(" ");
         for (String tep : tunnelEndData) {
             int idx = Integer.parseInt(tep);
-            //tunnelEndPoints.add(rails.get(idx));
-            program.extendRailToMountainEntryPoint(rails.get(idx));
+            program.extendRailToTunnelEntryPoint(rails.get(idx));
         }
     }
 
@@ -297,6 +305,18 @@ public class Playground {
         for (String aLine : line) {
             int idx = Integer.parseInt(aLine);
             enterPoints.add(rails.get(idx));
+        }
+    }
+
+    private void drawMountain(String[] data) {
+        if (data.length < 5) return;
+
+        String[] mountainData = data[4].split("\n");
+        for (String tep : mountainData) {
+            String[] coords = tep.split(" ");
+            float x = Float.parseFloat(coords[0]);
+            float y = Float.parseFloat(coords[1]);
+            program.addMountainPoint(x, y);
         }
     }
     //endregion
