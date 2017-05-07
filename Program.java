@@ -71,7 +71,7 @@ public class Program extends Application {
             @Override
             public void handle(long now) {
                 final int nano = (int) 1e6;
-                if (now - prevRun > timeBetweenTurns * nano) {
+                if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
                     int res = playground.runTurn();
                     if (res != 0) {
                         if (res == 1) {
