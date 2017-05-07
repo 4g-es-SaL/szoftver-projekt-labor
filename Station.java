@@ -10,8 +10,9 @@ public class Station extends Rail {
 
     /**
      * Create a new {@link Station} instance.
-     * @param from Connected to this {@link Rail}.
-     * @param to Connected to this {@link Rail}. If Tunnel will build this neighbor will be replaced.
+     *
+     * @param from  Connected to this {@link Rail}.
+     * @param to    Connected to this {@link Rail}. If Tunnel will build this neighbor will be replaced.
      * @param color The {@link Color} of the {@link Station}.
      */
     public Station(Rail from, Rail to, Color color) {
@@ -28,6 +29,7 @@ public class Station extends Rail {
 
     /**
      * Gives back the colour of the station.
+     *
      * @return The colour({@link Color}) of the station.
      */
     public Color getColor() {
@@ -42,6 +44,7 @@ public class Station extends Rail {
 
     /**
      * Adds passengers given colour to the station.
+     *
      * @param c The colour({@link Color}) of the passengers to be added.
      */
     public void addPassanger(Color c) {
@@ -50,6 +53,7 @@ public class Station extends Rail {
 
     /**
      * Removes the passengers given colour from the station.
+     *
      * @param c The colour({@link Color}) of the passengers to be removed.
      * @return True if there were passengers given colour and they were successfully removed, false otherwise.
      */
@@ -59,6 +63,7 @@ public class Station extends Rail {
 
     /**
      * Gives back whether the station is empty.
+     *
      * @return True if no passengers are present on the station, false otherwise.
      */
     public boolean isEmpty() {

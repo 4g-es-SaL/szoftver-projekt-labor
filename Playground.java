@@ -18,82 +18,83 @@ public class Playground {
 
     /**
      * Creat a new instance of Playground
+     *
      * @param f The file that stores the map of {@link Rail}s.
-     *
-     * A file tartalma a következő:
-     *
-         * R
-         * from0 to0 x0 y0 [{sz0 | from02, to02}]
-         * from1 to1 x1 y1 [{sz1 | from12, to12}]
-         * ...
-         * fromR-1 toR-1 xR-1 yR-1 [{szR-1 | fromR-12, toR-12}]
-         * [ENTER]
-         * S
-         * from0 to0 x0 y0 alt00 alt01 ...
-         * from1 to1 x1 y1 alt10 alt11 ...
-         * ...
-         * fromS-1 toS-1 xS-1 yS-1 altS-10 altS-11 ...
-         * [ENTER]
-         * T
-         * E0
-         * C0
-         * locospeed0 locoprev0 lococurr0
-         * color00 prev00 curr00
-         * color01 prev01 curr01
-         * …
-         * color0C0-1 prev0C0-1 curr0C0-1
-         * E1
-         * C1
-         * locospeed1 locoprev1 lococurr1
-         * …
-         * …
-         * ET-1
-         * CT-1
-         * …
-         * [ENTER]
-         * {t0 t1 t2 ... | [SPACE]}
-         * [ENTER]
-         * m1x m1y
-         * m2x m2y
-         * ...
-         * mnx mny
-     *
-     *
-     * ahol R = #Rails + #Stations
-     * a következő R sorban:
-     *      - fromi és toi mutatja, hogy az i-dik sínnek ki a fromja és toja,
-     *        és ha az i-dik éppen Station, akkor a 3-dik számérték a színét
-     *        jelenti.
-     *      - Ha 4 számérték van az i-dik sínnek, akkor az egy CrossRail
-     *        (kereszteződés). Ekkor 2 fromja és 2 to-ja van, az fromi-ból
-     *        az toi-ba, illetve from2i-ból a to2i felé haladhat tovább a
-     *        vonat. Egy CrossRail nem lehet station, tehát nem lehet színe.
-     *
-     * S = #Switches
-     * következő S sorban:
-     *      fromi, toi, alti0, alti1, ... mutatják az i-dik Switch
-     *      megfelelő tulajdonságait
-     *
-     *
-     * T = #Trains
-     * következő T blokkban:
-     *      Ei: hanyadik körben lép be
-     *      Ci: kocsik száma
-     *      locoprev lococurr: melyik sínről jött és melyiken van
-     *      locospeed: a mozdony sebessége
-     *      Következő Ci sor:
-     *
-     * Következő sor:
-     * A lehetséges Tunnel építési pontok
-     *
-     * Következő sor:
-     * A hegy alakjának koordinátái.
+     *          <p>
+     *          A file tartalma a következő:
+     *          <p>
+     *          R
+     *          from0 to0 x0 y0 [{sz0 | from02, to02}]
+     *          from1 to1 x1 y1 [{sz1 | from12, to12}]
+     *          ...
+     *          fromR-1 toR-1 xR-1 yR-1 [{szR-1 | fromR-12, toR-12}]
+     *          [ENTER]
+     *          S
+     *          from0 to0 x0 y0 alt00 alt01 ...
+     *          from1 to1 x1 y1 alt10 alt11 ...
+     *          ...
+     *          fromS-1 toS-1 xS-1 yS-1 altS-10 altS-11 ...
+     *          [ENTER]
+     *          T
+     *          E0
+     *          C0
+     *          locospeed0 locoprev0 lococurr0
+     *          color00 prev00 curr00
+     *          color01 prev01 curr01
+     *          …
+     *          color0C0-1 prev0C0-1 curr0C0-1
+     *          E1
+     *          C1
+     *          locospeed1 locoprev1 lococurr1
+     *          …
+     *          …
+     *          ET-1
+     *          CT-1
+     *          …
+     *          [ENTER]
+     *          {t0 t1 t2 ... | [SPACE]}
+     *          [ENTER]
+     *          m1x m1y
+     *          m2x m2y
+     *          ...
+     *          mnx mny
+     *          <p>
+     *          <p>
+     *          ahol R = #Rails + #Stations
+     *          a következő R sorban:
+     *          - fromi és toi mutatja, hogy az i-dik sínnek ki a fromja és toja,
+     *          és ha az i-dik éppen Station, akkor a 3-dik számérték a színét
+     *          jelenti.
+     *          - Ha 4 számérték van az i-dik sínnek, akkor az egy CrossRail
+     *          (kereszteződés). Ekkor 2 fromja és 2 to-ja van, az fromi-ból
+     *          az toi-ba, illetve from2i-ból a to2i felé haladhat tovább a
+     *          vonat. Egy CrossRail nem lehet station, tehát nem lehet színe.
+     *          <p>
+     *          S = #Switches
+     *          következő S sorban:
+     *          fromi, toi, alti0, alti1, ... mutatják az i-dik Switch
+     *          megfelelő tulajdonságait
+     *          <p>
+     *          <p>
+     *          T = #Trains
+     *          következő T blokkban:
+     *          Ei: hanyadik körben lép be
+     *          Ci: kocsik száma
+     *          locoprev lococurr: melyik sínről jött és melyiken van
+     *          locospeed: a mozdony sebessége
+     *          Következő Ci sor:
+     *          <p>
+     *          Következő sor:
+     *          A lehetséges Tunnel építési pontok
+     *          <p>
+     *          Következő sor:
+     *          A hegy alakjának koordinátái.
      */
 
     Playground(File f, Program p) {
         Rail.idGenerator = 0;
         program = p;
-        try(FileInputStream in = new FileInputStream(f)) {
+        try (FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
             in.read(rawData);
             in.close();
@@ -111,7 +112,7 @@ public class Playground {
             tunnel = new Tunnel(null, null);
             rails.add(tunnel);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -154,14 +155,11 @@ public class Playground {
     }
 
     /**
-     *
      * @param data input file in blocks
-     * @throws Exception
-     *
-     * first it creates the proper number of instances of
-     * Rail, Station and CrossRail classes, then it calls
-     * readRails() and readSwitches. These functions bind
-     * all these togather
+     * @throws Exception first it creates the proper number of instances of
+     *                   Rail, Station and CrossRail classes, then it calls
+     *                   readRails() and readSwitches. These functions bind
+     *                   all these togather
      */
     private void createRails(String[] data) throws Exception {
         String[] railData = data[0].split("\n");
@@ -171,13 +169,12 @@ public class Playground {
         int numSwitches = Integer.parseInt(switchData[0]);
 
         for (int i = 0; i < numRails; i++) {
-            String[] tmp = railData[i+1].split(" ");
-            if(tmp.length == 5) {
+            String[] tmp = railData[i + 1].split(" ");
+            if (tmp.length == 5) {
                 Station station = new Station(null, null, null);
                 rails.add(station);
                 stations.add(station);
-            }
-            else if(tmp.length == 6)
+            } else if (tmp.length == 6)
                 rails.add(new CrossRail(null, null, null, null));
             else
                 rails.add(new Rail(null, null));
@@ -197,27 +194,24 @@ public class Playground {
     }
 
     /**
-     *
      * @param numRails number of Rails
      * @param railData the Rail data block splitted along "\n" characters
-     * @throws Exception
-     *
-     * It reads the rail block (1st block) of the input
-     * and initializes the relationships
+     * @throws Exception It reads the rail block (1st block) of the input
+     *                   and initializes the relationships
      */
     private void readRails(int numRails, String[] railData) throws Exception {
 
         for (int i = 0; i < numRails; i++) {
-            String[] line = railData[i+1].split(" ");
+            String[] line = railData[i + 1].split(" ");
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
             int x = Integer.parseInt(line[2]);
             int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
-            if(fromID > -1)
+            if (fromID > -1)
                 from = rails.get(fromID);
-            if(toID > -1)
+            if (toID > -1)
                 to = rails.get(toID);
 
             Rail current = rails.get(i);
@@ -228,24 +222,23 @@ public class Playground {
             // total ertelmetlen, de a doksiban ugy maradt,
             // hogy a rail blokkban vannak a Station-k és
             // a CrossRail-k is, ugyhogy ime...
-            if(line.length == 5){
+            if (line.length == 5) {
                 Color c = Color.values()[Integer.parseInt(line[4])];
-                Station tmp = (Station)current;
+                Station tmp = (Station) current;
                 tmp.color = c;
                 program.addStation(tmp, x, y);
-            }
-            else if(line.length == 6){
+            } else if (line.length == 6) {
                 int from2ID = Integer.parseInt(line[4]);
                 int to2ID = Integer.parseInt(line[5]);
 
                 Rail from2 = null, to2 = null;
 
-                if(from2ID > -1)
+                if (from2ID > -1)
                     from2 = rails.get(from2ID);
-                if(to2ID > -1)
+                if (to2ID > -1)
                     to2 = rails.get(to2ID);
 
-                CrossRail cross = (CrossRail)current;
+                CrossRail cross = (CrossRail) current;
                 cross.setFrom2(from2);
                 cross.setTo2(to2);
                 program.extendRailToCrossRail(cross);
@@ -254,19 +247,16 @@ public class Playground {
     }
 
     /**
-     *
-     * @param startID this is needed to be able to follow the row-continuity of the input file
+     * @param startID     this is needed to be able to follow the row-continuity of the input file
      * @param numSwitches number of switches
-     * @param switchData String array of lines, that contains the Switches descriptions.
-     * @throws Exception
-     *
-     * It reads the Switch block (2nd block) of the input
-     * and initializes the relationships
+     * @param switchData  String array of lines, that contains the Switches descriptions.
+     * @throws Exception It reads the Switch block (2nd block) of the input
+     *                   and initializes the relationships
      */
     private void readSwitches(int startID, int numSwitches, String[] switchData) throws Exception {
 
         for (int i = 0; i < numSwitches; i++) {
-            String[] line = switchData[i+1].split(" ");
+            String[] line = switchData[i + 1].split(" ");
 
             int fromID = Integer.parseInt(line[0]);
             int toID = Integer.parseInt(line[1]);
@@ -274,9 +264,9 @@ public class Playground {
             int y = Integer.parseInt(line[3]);
             Rail from = null, to = null;
 
-            if(fromID > -1)
+            if (fromID > -1)
                 from = rails.get(fromID);
-            if(toID > -1)
+            if (toID > -1)
                 to = rails.get(toID);
 
             ArrayList<Rail> alternativeRails = new ArrayList<>();
@@ -284,7 +274,7 @@ public class Playground {
             for (int j = 4; j < line.length; j++) {
                 Rail alt = null;
                 int altID = Integer.parseInt(line[j]);
-                if(altID > -1)
+                if (altID > -1)
                     alt = rails.get(altID);
                 alternativeRails.add(alt);
             }
@@ -328,11 +318,12 @@ public class Playground {
 
     /**
      * Calls all locomotives {@link Locomotive#runTurn()}.
+     *
      * @return 1 if there was an error, 2 if victory, 0 otherwise.
      */
     public int runTurn() {
         Integer res = runLocomotives();
-        if (res == 1){
+        if (res == 1) {
             return 1;
         }
         fillRandomStationIfAny();
@@ -349,7 +340,7 @@ public class Playground {
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
     protected int runLocomotives() {
-        for (Locomotive loc:locomotives) {
+        for (Locomotive loc : locomotives) {
             int res = loc.runTurn();
             if (res == 1) {
                 return res;
@@ -378,7 +369,7 @@ public class Playground {
      * If you can't figure out by the name, you are not worthy to be called 'programmer'.
      */
     protected boolean areTrainsEmpty() {
-        for (Locomotive loc:locomotives) {
+        for (Locomotive loc : locomotives) {
             if (!loc.isTrainEmpty()) {
                 return false;
             }
@@ -396,7 +387,7 @@ public class Playground {
                 if (!s.isEmpty()) {
                     return false;
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 //Not station, pass
             }
         }
@@ -407,17 +398,18 @@ public class Playground {
 
     /**
      * Changes the {@link Switch} direction.
+     *
      * @param id Identifies the Switch.
      */
     public void changeSwitch(int id) {
-        ((Switch)rails.get(id)).changeDir();
+        ((Switch) rails.get(id)).changeDir();
     }
 
 
     /**
      * @param id Identifies the Rail which will be the Tunnel's end.
      */
-    public Tunnel buildTunnelEnd(int id){
+    public Tunnel buildTunnelEnd(int id) {
         return buildTunnelEnd(tunnelEndPoints.get(id));
     }
 
@@ -426,9 +418,10 @@ public class Playground {
         System.out.println(this.tunnel);
         return tunnel;
     }
-    
+
     /**
      * Builds new {@link Tunnel}.
+     *
      * @param e1 Id of one of the rails which will be the Tunnel's end.
      * @param e2 Id of one of the rails which will be the Tunnel's end.
      */
@@ -448,7 +441,8 @@ public class Playground {
 
     /**
      * Adds passengers with given colour to given station, calls {@link Station#addPassanger} of given station.
-     * @param id Rail ID of the {@link Station}, to which the passengers are to be added.
+     *
+     * @param id      Rail ID of the {@link Station}, to which the passengers are to be added.
      * @param colorID {@link Color} of the passengers to be added.
      */
     public void addPassenger(int id, int colorID) {
@@ -470,8 +464,8 @@ public class Playground {
     }
 
     /**
-    * Prints the map, properties of all rails
-    */
+     * Prints the map, properties of all rails
+     */
     public void printMap() {
         for (Rail r : rails) {
             System.out.println(r);

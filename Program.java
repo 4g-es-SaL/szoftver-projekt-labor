@@ -25,6 +25,7 @@ public class Program extends Application {
     final int carSize = 75;
     final int bias = 0;
     final int timeBetweenTurns = 1000;
+    @SuppressWarnings("FieldCanBeLocal")
     private int drugFactor = 1;
 
     protected Playground playground;
@@ -35,17 +36,18 @@ public class Program extends Application {
     protected Map<Car, Circle> carCircles = new HashMap<>();
     protected Map<Station, Rectangle> stationRectangles = new HashMap<>();
 
-    protected Polygon  mountain = new Polygon();
+    protected Polygon mountain = new Polygon();
     protected boolean isMountainInitialized = false;
 
     /**
      * Starts the program.
+     *
      * @param args Ignored.
      */
     public static void main(String[] args) {
         try {
             launch(args);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -57,6 +59,7 @@ public class Program extends Application {
 
         AnimationTimer loop = new AnimationTimer() {
             long prevRun = 0;
+
             @Override
             public void handle(long now) {
                 final int nano = (int) 1e6;
@@ -88,7 +91,7 @@ public class Program extends Application {
 //        playground = new Playground(file, Program.this);
 //        loop.start();
 
-        Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
+        Scene s = new Scene(root, 800, 800, javafx.scene.paint.Color.LIGHTGREEN);
         primaryStage.setScene(s);
         observableList.add(mountain);
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
@@ -99,6 +102,7 @@ public class Program extends Application {
     }
 
     //region text based
+
     /**
      * Game loop.
      */
@@ -117,11 +121,11 @@ public class Program extends Application {
                     case "switch":
                         playground.changeSwitch(Integer.parseInt(userInputSplit[1]));
                         break;
-                    case "build": 
-                    	playground.buildNewTunnel(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
-                    	break;
+                    case "build":
+                        playground.buildNewTunnel(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
+                        break;
                     case "destroy":
-                    	playground.destroyTunnelEnd();
+                        playground.destroyTunnelEnd();
                         break;
                     case "passenger":
                         playground.addPassenger(Integer.parseInt(userInputSplit[1]), Integer.parseInt(userInputSplit[2]));
@@ -184,8 +188,8 @@ public class Program extends Application {
                 "Leírás: beolvassa a megadott file-t és ez alapján felépíti a játékterepet\n" +
                 "Opciók: file: a beolvasandó file\n" +
                 "\n" +
-                "map\n"+
-                "Leírás: Kiírja az összes sínt, alagutat és váltót\n"+
+                "map\n" +
+                "Leírás: Kiírja az összes sínt, alagutat és váltót\n" +
                 "\n" +
                 "switch <switch id>\n" +
                 "Leírás: A <switch id>-val azonosított Switch objektum állását átállítja\n" +
@@ -214,16 +218,19 @@ public class Program extends Application {
 
     /**
      * Multiplies the give x and y with carSize and add bias, and converts to a {@link Coordinates}.
+     *
      * @param x
      * @param y
      * @return
      */
     private Coordinates transformToLocalCoordinates(float x, float y) {
-        return new Coordinates(x* carSize + bias, y* carSize + bias);
+        return new Coordinates(x * carSize + bias, y * carSize + bias);
     }
 
-    /**Draws a {@link Rail} at the given place. If its neighboors was not previously added, the drawing will happen,
+    /**
+     * Draws a {@link Rail} at the given place. If its neighboors was not previously added, the drawing will happen,
      * when they are added.
+     *
      * @param rail
      * @param x
      * @param y
@@ -240,6 +247,7 @@ public class Program extends Application {
 
     /**
      * Draws a {@link Line} between the given {@link Rail}s.
+     *
      * @param a
      * @param b
      * @return the created {@link Line}.
@@ -253,7 +261,7 @@ public class Program extends Application {
 
         if (aCoord != null && bCoord != null) {
             line = new Line(aCoord.getX(), aCoord.getY(), bCoord.getX(), bCoord.getY());
-            line.setStrokeWidth(carSize /15);
+            line.setStrokeWidth(carSize / 15);
             line.setStrokeLineCap(StrokeLineCap.ROUND);
             observableList.add(line);
             line.toBack();
@@ -265,20 +273,27 @@ public class Program extends Application {
         return null;
     }
 
-    /**Draws a {@link Station} at the given place. {@link #addRail(Rail, int, int)} muss be called first.
+    /**
+     * Draws a {@link Station} at the given place. {@link #addRail(Rail, int, int)} muss be called first.
+     *
      * @param s
      * @param x
      * @param y
      */
     public void addStation(Station s, int x, int y) {
         Coordinates coords = transformToLocalCoordinates(x, y);
-        Rectangle rec = new Rectangle(coords.getX()- carSize /4, coords.getY()- carSize /4, carSize /2, carSize /2);
+        Rectangle rec = new Rectangle(coords.getX() - carSize / 4, coords.getY() - carSize / 4, carSize / 2, carSize / 2);
         rec.setFill(Program.ColorToJavafx(s.getColor()));
         observableList.add(rec);
         stationRectangles.put(s, rec);
         updateStation(s);
     }
 
+    /**
+     * Updates a previously added {@link Station} to its current status.
+     *
+     * @param s
+     */
     public void updateStation(Station s) {
         Rectangle rec = stationRectangles.get(s);
         int arc = 0;
@@ -291,17 +306,19 @@ public class Program extends Application {
 
     /**
      * Draws a {@link CrossRail} at the given place.
+     *
      * @param cross
      * @param x
      * @param y
      */
     public void addCrossRail(CrossRail cross, int x, int y) {
-        addRail(cross, x ,y);
+        addRail(cross, x, y);
         extendRailToCrossRail(cross);
     }
 
     /**
      * Extends the graphic of a previously added {@link Rail}s to a {@link CrossRail}s.
+     *
      * @param cross
      */
     public void extendRailToCrossRail(CrossRail cross) {
@@ -315,6 +332,7 @@ public class Program extends Application {
 
     /**
      * Draws a {@link Switch} at the given place.
+     *
      * @param sw
      * @param x
      * @param y
@@ -326,6 +344,7 @@ public class Program extends Application {
 
     /**
      * Extends the graphic of a previously added {@link Rail}s to a {@link Switch}s.
+     *
      * @param sw
      */
     public void extendRailToSwitch(Switch sw) {
@@ -345,11 +364,12 @@ public class Program extends Application {
 
     /**
      * Draws the Circle, which can be clicked, to change the {@link Switch}.
+     *
      * @param sw
      */
     private void drawSwitchCircle(Switch sw) {
         Coordinates coords = coordinates.get(sw);
-        Circle cir = new Circle(coords.getX(), coords.getY(), carSize /4);
+        Circle cir = new Circle(coords.getX(), coords.getY(), carSize / 4);
         cir.setFill(javafx.scene.paint.Color.BLACK);
         cir.setOnMouseClicked(event -> changeSwitch(sw));
         observableList.add(cir);
@@ -357,6 +377,7 @@ public class Program extends Application {
 
     /**
      * Changes the {@link Switch} and draws the result. It is called by a click.
+     *
      * @param sw
      */
     private void changeSwitch(Switch sw) {
@@ -369,6 +390,7 @@ public class Program extends Application {
 
     /**
      * Changes rhe {@link Line}s color, which is between the {@link Rail}s.
+     *
      * @param a
      * @param b
      * @param color
@@ -380,6 +402,7 @@ public class Program extends Application {
 
     /**
      * Draws a {@link Rail} and a clickable mountain entrypoint at the given place.
+     *
      * @param rail
      * @param x
      * @param y
@@ -391,11 +414,12 @@ public class Program extends Application {
 
     /**
      * Draws a clickable mountain entrypoint at the top of the given {@link Rail}.
+     *
      * @param rail
      */
     public void extendRailToTunnelEntryPoint(Rail rail) {
         Coordinates coords = this.coordinates.get(rail);
-        Circle rec = new Circle(coords.getX(), coords.getY(), carSize /4);
+        Circle rec = new Circle(coords.getX(), coords.getY(), carSize / 4);
         rec.setFill(javafx.scene.paint.Color.BROWN);
         rec.setOnMouseClicked(event -> {
             Tunnel tunnel = playground.buildTunnelEnd(rail);
@@ -404,14 +428,9 @@ public class Program extends Application {
         observableList.add(rec);
     }
 
-    public void addMountainPoint(float x, float y) {
-        Coordinates coords = transformToLocalCoordinates(x, y);
-        mountain.getPoints().add((double) coords.getX());
-        mountain.getPoints().add((double) coords.getY());
-    }
-
     /**
      * Draws a clickable {@link Line} for the {@link Tunnel}, if possible. If the {@link Line} is clicked, the tunnel is destroyed.
+     *
      * @param tunnel
      */
     private void drawTunnelsLine(Tunnel tunnel) {
@@ -428,6 +447,7 @@ public class Program extends Application {
 
     /**
      * Destroys the {@link Tunnel} and the {@link Line} related to it, if possible.
+     *
      * @param tunnel
      * @param line
      */
@@ -438,8 +458,15 @@ public class Program extends Application {
         }
     }
 
+    public void addMountainPoint(float x, float y) {
+        Coordinates coords = transformToLocalCoordinates(x, y);
+        mountain.getPoints().add((double) coords.getX());
+        mountain.getPoints().add((double) coords.getY());
+    }
+
     /**
      * Draws a circle, whit the {@link Car}s color.
+     *
      * @param car
      */
     public void addCar(Car car) {
@@ -450,19 +477,20 @@ public class Program extends Application {
     }
 
     /**
-     * Updates a previously added {@link Car} to its current station.
+     * Updates a previously added {@link Car} to its current status.
+     *
      * @param car
      */
     public void updateCar(Car car) {
         Circle circle = carCircles.get(car);
-        animateCarPosition(car, timeBetweenTurns*drugFactor);
+        animateCarPosition(car, timeBetweenTurns * drugFactor);
         if (car.hasSpawn()) {
             circle.setRadius(carSize / 2);
         }
 
         javafx.scene.paint.Color color = Program.ColorToJavafx(car.getColor());
         if (car.isEmpty()) {
-            for(int i=0;i<3;i++){
+            for (int i = 0; i < 3; i++) {
                 color = color.darker();
             }
         }
@@ -471,6 +499,7 @@ public class Program extends Application {
 
     /**
      * Moves the graphic of the {@link Car} to its new position, in the given duration.
+     *
      * @param car
      * @param duration
      */
@@ -492,7 +521,7 @@ public class Program extends Application {
     }
 
     private static javafx.scene.paint.Color ColorToJavafx(Color c) {
-        switch (c){
+        switch (c) {
             case RED:
                 return javafx.scene.paint.Color.RED;
             case GREEN:

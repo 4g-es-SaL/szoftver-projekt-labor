@@ -26,11 +26,11 @@ public class Coordinates {
         this.y = y;
     }
 
-    public Coordinates add(Coordinates other){
+    public Coordinates add(Coordinates other) {
         return new Coordinates(x + other.x, y + other.y);
     }
 
-    public Coordinates multiply(float s){
+    public Coordinates multiply(float s) {
         return new Coordinates(s * x, s * y);
     }
 }
