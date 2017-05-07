@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Manages the objects({@link Rail}s, {@link Car}s) of the game.
@@ -10,6 +11,7 @@ public class Playground {
     protected Program program;
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails = new ArrayList<>();
+    protected ArrayList<Station> stations = new ArrayList<>();
     protected ArrayList<Rail> enterPoints = new ArrayList<>();
     protected Tunnel tunnel = new Tunnel(null, null);
     private ArrayList<Rail> tunnelEndPoints = new ArrayList<>();
@@ -170,8 +172,11 @@ public class Playground {
 
         for (int i = 0; i < numRails; i++) {
             String[] tmp = railData[i+1].split(" ");
-            if(tmp.length == 5)
-                rails.add(new Station(null, null, null));
+            if(tmp.length == 5) {
+                Station station = new Station(null, null, null);
+                rails.add(station);
+                stations.add(station);
+            }
             else if(tmp.length == 6)
                 rails.add(new CrossRail(null, null, null, null));
             else
@@ -330,6 +335,7 @@ public class Playground {
         if (res == 1){
             return 1;
         }
+        fillRandomStationIfAny();
         if (areTrainsEmpty() && areStationsEmpty()) {
             return 2;
         }
@@ -354,6 +360,15 @@ public class Playground {
             }
         }
         return 0;
+    }
+
+    protected Station fillRandomStationIfAny() {
+        Random rand = new Random();
+        int index = rand.nextInt(stations.size());
+        Station station = stations.get(index);
+        station.addPassanger();
+        program.updateStation(station);
+        return station;
     }
 
     /**

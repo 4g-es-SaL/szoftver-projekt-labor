@@ -34,6 +34,12 @@ public class Station extends Rail {
         return color;
     }
 
+    public void addPassanger() {
+        if (isEmpty()) {
+            addPassanger(color);
+        }
+    }
+
     /**
      * Adds passengers given colour to the station.
      * @param c The colour({@link Color}) of the passengers to be added.

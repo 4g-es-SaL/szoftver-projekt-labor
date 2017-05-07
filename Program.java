@@ -1,6 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -29,6 +30,7 @@ public class Program extends Application {
     protected Map<LineIdentifier, Line> lines = new HashMap<>();
     protected Map<Rail, Coordinates> coordinates = new HashMap<>();
     protected Map<Car, Circle> carCircles = new HashMap<>();
+    protected Map<Station, Rectangle> stationRectangles = new HashMap<>();
 
     protected Polygon  mountain = new Polygon();
     protected boolean isMountainInitialized = false;
@@ -62,7 +64,7 @@ public class Program extends Application {
                         } else if (res == 2) {
                             System.out.println("You have won!");
                         }
-                        //Platform.exit();
+                        Platform.exit();
                     }
                     prevRun = now;
                 }
@@ -269,6 +271,18 @@ public class Program extends Application {
         Rectangle rec = new Rectangle(coords.getX()-size/4, coords.getY()-size/4, size/2, size/2);
         rec.setFill(Program.ColorToJavafx(s.getColor()));
         observableList.add(rec);
+        stationRectangles.put(s, rec);
+        updateStation(s);
+    }
+
+    public void updateStation(Station s) {
+        Rectangle rec = stationRectangles.get(s);
+        int arc = 0;
+        if (s.isEmpty()) {
+            arc = size / 4;
+        }
+        rec.setArcHeight(arc);
+        rec.setArcWidth(arc);
     }
 
     /**
