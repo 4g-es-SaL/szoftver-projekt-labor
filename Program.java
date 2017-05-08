@@ -79,9 +79,9 @@ public class Program extends Application {
         public void handle(long now) {
             final int nano = (int) 1e6;
             if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
+            	playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> cleanAndStart(event));
                 int res = playground.runTurn();
                 if (res != 0) {
-                	playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> cleanAndStart(event));
                     if (res == 1) {
                         System.out.println("You have lost!");
                         Text text = new Text(150, 40, "You have lost!");
