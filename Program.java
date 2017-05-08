@@ -2,28 +2,26 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.*;
-import javafx.scene.shape.*;
-import javafx.scene.text.*;
 import javafx.scene.input.KeyCode;
-import javafx.geometry.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.shape.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.lang.management.PlatformLoggingMXBean;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +49,8 @@ public class Program extends Application {
     protected Polygon mountain = new Polygon();
     protected boolean isMountainInitialized = false;
 
-    
-    
+
+
     Scene playgroundScene;
     Scene menuScene;
     Stage thestage;
@@ -71,7 +69,7 @@ public class Program extends Application {
         }
     }
 
-    
+
     class at extends AnimationTimer{
         long prevRun = 0;
         boolean hasEnded = false;
@@ -106,17 +104,17 @@ public class Program extends Application {
             }
         }
     };
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
         observableList = root.getChildren();
-        
-        
+
+
 		///////////////////////////////////////////////////////////////////////////////////////
-		        
+
 		thestage=primaryStage;
-		
+
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(30);
@@ -125,44 +123,35 @@ public class Program extends Application {
 		Text scenetitle = new Text("Valassz terepasztalt!");
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 75));
 		grid.add(scenetitle, 0, 0, 2, 1);
-		
+
 		/*FlowPane pane1=new FlowPane();
 		pane1.setVgap(10);
 		//set background color of each Pane
 		pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");*/
-		
+
 		playButtons=new Button[4];
 		String[] buttonNames=new String[4];
 		buttonNames[0]="kezdo";
 		buttonNames[1]="halado";
 		buttonNames[2]="nehez";
-		
+
 		for (int i=0; i<3; i++) {
-		playButtons[i]=new Button(buttonNames[i]);
-		playButtons[i].setOnAction(e-> ButtonClicked(e));
-		HBox hb=new HBox(50);
-		hb.getChildren().addAll(playButtons[i]);
-		playButtons[i].setDisable(true);
-		grid.add(hb, 1, i+1);
+            playButtons[i]=new Button(buttonNames[i]);
+            playButtons[i].setOnAction(e-> ButtonClicked(e));
+            HBox hb=new HBox(50);
+            hb.getChildren().addAll(playButtons[i]);
+            playButtons[i].setDisable(true);
+            grid.add(hb, 1, i+1);
 		}
 		playButtons[0].setDisable(false);
-		
+
 		playgroundScene = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
 		menuScene =new Scene(grid, 700, 700, javafx.scene.paint.Color.BEIGE);
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 		loop = new at();
-        
-        observableList.add(mountain);
-        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
-        mountain.toBack();
-           
-        
+
         primaryStage.setScene(menuScene);
-        /*observableList.add(mountain);
-        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
-        mountain.toBack();*/
-        //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
@@ -603,7 +592,7 @@ public class Program extends Application {
                 return javafx.scene.paint.Color.BLACK;
         }
     }
-    
+
     public void ButtonClicked(ActionEvent e)
     {
     	String filename;
@@ -635,10 +624,12 @@ public class Program extends Application {
         }
      */
     }
+
     void incrementLevel(){
     	level++;
         playButtons[level].setDisable(false);
     }
+
     public void newGame(int level){
     	//loop.stop();
     	String filename;
@@ -647,7 +638,7 @@ public class Program extends Application {
 			filename="easyMap.txt";
 			break;
 		case 1:
-			filename="complexMap.txt";
+			filename="mediumMap.txt";
 			break;
 		case 2:
 			filename="hardMap.txt";
@@ -656,9 +647,13 @@ public class Program extends Application {
 			filename="easyMap.txt";
 			break;
 		}
-    	
+
+        observableList.add(mountain);
+        mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
+        mountain.toBack();
+        thestage.setFullScreen(true);
         thestage.setScene(playgroundScene);
-        
+
         /*FileChooser fileChooser = new FileChooser();
         File workingDirectory = new File(System.getProperty("user.dir"));
         fileChooser.setInitialDirectory(workingDirectory);
@@ -677,21 +672,22 @@ public class Program extends Application {
             loop= new at();
             loop.start();
         }
-     
+
     }
-    
-    
+
+
     void Clean(){
     	loop.stop();
-        	lines.clear();
-        	coordinates.clear();
-        	carCircles.clear();
-        	stationRectangles.clear();
-        	playground=null;
-        	System.gc();
-            //playground = new Playground(file, Program.this);
-            observableList.clear();
-        }
+        lines.clear();
+        coordinates.clear();
+        carCircles.clear();
+        stationRectangles.clear();
+        playground=null;
+        System.gc();
+        //playground = new Playground(file, Program.this);
+        observableList.clear();
+        mountain.getPoints().clear();
+    }
     void cleanAndStart(KeyEvent e){
     	Clean();
     	if(e.getCode()==KeyCode.ESCAPE){
@@ -700,5 +696,5 @@ public class Program extends Application {
     	}
     	newGame(level);
     }
-    
+
 }
