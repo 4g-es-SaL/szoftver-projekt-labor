@@ -34,6 +34,7 @@ public class Organizer extends Application {
     private Level level;
     private Loop loop = new Loop();
     private int levelNumber = 0;
+    private int currentLevel=0;
 
     private class Loop extends AnimationTimer {
         long prevRun = 0;
@@ -122,7 +123,7 @@ public class Organizer extends Application {
             playButtons[i].setOnAction(this::ButtonClicked);
             HBox hb = new HBox(50);
             hb.getChildren().addAll(playButtons[i]);
-            playButtons[i].setDisable(true);
+           playButtons[i].setDisable(true);
             grid.add(hb, 1, i + 1);
         }
     }
@@ -146,12 +147,15 @@ public class Organizer extends Application {
     }
 
     private void incrementLevel() {
-        levelNumber++;
+    	if(levelNumber>=3) return;
+        levelNumber= currentLevel+1>levelNumber? currentLevel+1:levelNumber;
         playButtons[levelNumber].setDisable(false);
     }
 
     private void newGame(int level) {
         String filename = getLevelsFileName(level);
+        
+        currentLevel=level;
 
         theStage.setScene(playgroundScene);
         theStage.setFullScreen(true);
