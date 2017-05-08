@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.*;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
+import javafx.scene.input.KeyCode;
 import javafx.geometry.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -80,6 +81,7 @@ public class Program extends Application {
             if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
                 int res = playground.runTurn();
                 if (res != 0) {
+                	playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> cleanAndStart(event));
                     if (res == 1) {
                         System.out.println("You have lost!");
                         Text text = new Text(150, 40, "You have lost!");
@@ -90,6 +92,7 @@ public class Program extends Application {
                         observableList.add(text);
                     } else if (res == 2) {
                         System.out.println("You have won!");
+                        incrementLevel();
                         Text text = new Text(150, 40, "You have won!");
                         text.setFill(javafx.scene.paint.Color.RED);
                         text.setScaleX(4);
@@ -97,9 +100,7 @@ public class Program extends Application {
                         text.setScaleZ(4);
                         observableList.add(text);
                     }
-                    playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> newGame(level));
                     hasEnded = true;
-                    
                 }
                 prevRun = now;
             }
@@ -150,13 +151,11 @@ public class Program extends Application {
 		menuScene =new Scene(grid, 700, 700, javafx.scene.paint.Color.BEIGE);
 		/////////////////////////////////////////////////////////////////////////////////////////
 
-
+		loop = new at();
         
         observableList.add(mountain);
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
         mountain.toBack();
-
-        loop = new at();
            
         
         primaryStage.setScene(menuScene);
@@ -608,13 +607,13 @@ public class Program extends Application {
     public void ButtonClicked(ActionEvent e)
     {
     	String filename;
-    	
     	int k=-1;
         for (int i = 0; i < playButtons.length; i++) {
         	if(e.getSource().equals(playButtons[i]))
         		k=i;
 		}
-    	switch (k) {
+        newGame(k);
+    	/*switch (k) {
 		case 0:
 			filename="easyMap.txt";
 			break;
@@ -628,23 +627,20 @@ public class Program extends Application {
 			filename="easyMap.txt";
 			break;
 		}
-    	
-    	
         thestage.setScene(playgroundScene);
-        
-        /*FileChooser fileChooser = new FileChooser();
-        File workingDirectory = new File(System.getProperty("user.dir"));
-        fileChooser.setInitialDirectory(workingDirectory);
-        File file = fileChooser.showOpenDialog(thestage);*/
         File file=new File(filename);
         if (file != null) {
             playground = new Playground(file, Program.this);
             loop.start();
         }
-     
+     */
+    }
+    void incrementLevel(){
+    	level++;
+        playButtons[level].setDisable(false);
     }
     public void newGame(int level){
-    	loop.stop();
+    	//loop.stop();
     	String filename;
     	switch (level) {
 		case 0:
@@ -661,10 +657,7 @@ public class Program extends Application {
 			break;
 		}
     	
-    	level++;
-        playButtons[level].setDisable(false);
-    	
-        thestage.setScene(menuScene);
+        thestage.setScene(playgroundScene);
         
         /*FileChooser fileChooser = new FileChooser();
         File workingDirectory = new File(System.getProperty("user.dir"));
@@ -672,19 +665,40 @@ public class Program extends Application {
         File file = fileChooser.showOpenDialog(thestage);*/
         File file=new File(filename);
         if (file != null) {
-        	lines.clear();
+        	/*lines.clear();
         	coordinates.clear();
         	carCircles.clear();
         	stationRectangles.clear();
         	playground=null;
         	System.gc();
-            playground = new Playground(file, Program.this);
-            observableList.clear();
+            //playground = new Playground(file, Program.this);
+            observableList.clear();*/
+        	playground = new Playground(file, Program.this);
             loop= new at();
             loop.start();
         }
      
     }
     
+    
+    void Clean(){
+    	loop.stop();
+        	lines.clear();
+        	coordinates.clear();
+        	carCircles.clear();
+        	stationRectangles.clear();
+        	playground=null;
+        	System.gc();
+            //playground = new Playground(file, Program.this);
+            observableList.clear();
+        }
+    void cleanAndStart(KeyEvent e){
+    	Clean();
+    	if(e.getCode()==KeyCode.ESCAPE){
+    		thestage.setScene(menuScene);
+    		return;
+    	}
+    	newGame(level);
+    }
     
 }
