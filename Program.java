@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,92 +66,89 @@ public class Program extends Application {
         }
     }
 
+    
+    class at extends AnimationTimer{
+        long prevRun = 0;
+        boolean hasEnded = false;
+        @Override
+        public void handle(long now) {
+            final int nano = (int) 1e6;
+            if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
+                int res = playground.runTurn();
+                if (res != 0) {
+                    if (res == 1) {
+                        System.out.println("You have lost!");
+                        Text text = new Text(150, 40, "You have lost!");
+                        text.setFill(javafx.scene.paint.Color.RED);
+                        text.setScaleX(4);
+                        text.setScaleY(4);
+                        text.setScaleZ(4);
+                        observableList.add(text);
+                    } else if (res == 2) {
+                        System.out.println("You have won!");
+                        Text text = new Text(150, 40, "You have won!");
+                        text.setFill(javafx.scene.paint.Color.RED);
+                        text.setScaleX(4);
+                        text.setScaleY(4);
+                        text.setScaleZ(4);
+                        observableList.add(text);
+                    }
+                    playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> newGame(level));
+                    hasEnded = true;
+                    
+                }
+                prevRun = now;
+            }
+        }
+    };
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         Group root = new Group();
         observableList = root.getChildren();
+        
+        
+		///////////////////////////////////////////////////////////////////////////////////////
+		        
+		thestage=primaryStage;
+		
+		//make 2 Panes
+		FlowPane pane1=new FlowPane();
+		pane1.setVgap(10);
+		//set background color of each Pane
+		pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");
+		
+		playButtons=new Button[4];
+		String[] buttonNames=new String[4];
+		buttonNames[0]="easy";
+		buttonNames[1]="complex";
+		buttonNames[2]="hard";
+		
+		for (int i=0; i<3; i++) {
+		playButtons[i]=new Button(buttonNames[i]);
+		playButtons[i].setOnAction(e-> ButtonClicked(e));
+		pane1.getChildren().addAll(playButtons[i]);
+		playButtons[i].setDisable(true);
+		}
+		playButtons[0].setDisable(false);
+		
+		playgroundScene = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
+		menuScene =new Scene(pane1, 700, 700, javafx.scene.paint.Color.BEIGE);
+		/////////////////////////////////////////////////////////////////////////////////////////
 
-        Scene s = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
-        primaryStage.setScene(s);
+
+        
         observableList.add(mountain);
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
         mountain.toBack();
 
-        AnimationTimer loop = new AnimationTimer() {
-            long prevRun = 0;
-            boolean hasEnded = false;
-            @Override
-            public void handle(long now) {
-                final int nano = (int) 1e6;
-                if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
-                    int res = playground.runTurn();
-                    if (res != 0) {
-                        if (res == 1) {
-                            System.out.println("You have lost!");
-                            Text text = new Text(150, 40, "You have lost!");
-                            text.setFill(javafx.scene.paint.Color.RED);
-                            text.setScaleX(4);
-                            text.setScaleY(4);
-                            text.setScaleZ(4);
-                            observableList.add(text);
-                        } else if (res == 2) {
-                            System.out.println("You have won!");
-                            Text text = new Text(150, 40, "You have won!");
-                            text.setFill(javafx.scene.paint.Color.RED);
-                            text.setScaleX(4);
-                            text.setScaleY(4);
-                            text.setScaleZ(4);
-                            observableList.add(text);
-                        }
-                        s.addEventFilter(KeyEvent.KEY_PRESSED, event -> Platform.exit());
-                        hasEnded = true;
-                    }
-                    prevRun = now;
-                }
-            }
-        };
+        loop = new at();
            
-        ///////////////////////////////////////////////////////////////////////////////////////
-        
-        thestage=primaryStage;
-        
-        //make 2 Panes
-        FlowPane pane1=new FlowPane();
-        pane1.setVgap(10);
-        //set background color of each Pane
-        pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");
-        
-        playButtons=new Button[4];
-        String[] buttonNames=new String[4];
-        buttonNames[0]="easy";
-        buttonNames[1]="complex";
-        buttonNames[2]="hard";
-        
-        for (int i=0; i<4; i++) {
-        	playButtons[i]=new Button(buttonNames[i]);
-        	playButtons[i].setOnAction(e-> ButtonClicked(e));
-            pane1.getChildren().addAll(playButtons[i]);
-		}
-
-        
-        
-        //menuScene =new Scene(root, 700, 700, javafx.scene.paint.Color.BEIGE);
-        
-
-           
-        //add everything to panes
-       
-        
-   
-        /////////////////////////////////////////////////////////////////////////////////////////
-        playgroundScene = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
-        menuScene =new Scene(pane1, 700, 700, javafx.scene.paint.Color.BEIGE);
-        
         
         primaryStage.setScene(menuScene);
-        observableList.add(mountain);
+        /*observableList.add(mountain);
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
-        mountain.toBack();
+        mountain.toBack();*/
         //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
@@ -629,11 +627,50 @@ public class Program extends Application {
             playground = new Playground(file, Program.this);
             loop.start();
         }
-
-//        File file = new File("mountain.txt");
-//        playground = new Playground(file, Program.this);
-//        loop.start();
      
     }
+    public void newGame(int level){
+    	loop.stop();
+    	String filename;
+    	switch (level) {
+		case 0:
+			filename="easyMap.txt";
+			break;
+		case 1:
+			filename="complexMap.txt";
+			break;
+		case 2:
+			filename="hardMap.txt";
+			break;
+		default:
+			filename="easyMap.txt";
+			break;
+		}
+    	
+    	level++;
+        playButtons[level].setDisable(false);
+    	
+        thestage.setScene(menuScene);
+        
+        /*FileChooser fileChooser = new FileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(workingDirectory);
+        File file = fileChooser.showOpenDialog(thestage);*/
+        File file=new File(filename);
+        if (file != null) {
+        	lines.clear();
+        	coordinates.clear();
+        	carCircles.clear();
+        	stationRectangles.clear();
+        	playground=null;
+        	System.gc();
+            playground = new Playground(file, Program.this);
+            observableList.clear();
+            loop= new at();
+            loop.start();
+        }
+     
+    }
+    
     
 }
