@@ -31,30 +31,30 @@ import java.util.Scanner;
  * Communicates with the user and the {@link Playground}.
  */
 public class Program extends Application {
-    final int carSize = 75;
-    final int bias = 0;
-    final int timeBetweenTurns = 1000;
+    private final int carSize = 75;
+    private final int bias = 0;
+    private final int timeBetweenTurns = 1000;
     @SuppressWarnings("FieldCanBeLocal")
     private int drugFactor = 1;
-    int level=0;
+    private int level=0;
 
-    protected Playground playground;
-    ObservableList<Node> observableList;
+    private Playground playground;
+    private ObservableList<Node> observableList;
 
-    protected Map<LineIdentifier, Line> lines = new HashMap<>();
-    protected Map<Rail, Coordinates> coordinates = new HashMap<>();
-    protected Map<Car, Circle> carCircles = new HashMap<>();
-    protected Map<Station, Rectangle> stationRectangles = new HashMap<>();
+    private Map<LineIdentifier, Line> lines = new HashMap<>();
+    private Map<Rail, Coordinates> coordinates = new HashMap<>();
+    private Map<Car, Circle> carCircles = new HashMap<>();
+    private Map<Station, Rectangle> stationRectangles = new HashMap<>();
 
-    protected Polygon mountain = new Polygon();
+    private Polygon mountain = new Polygon();
 
 
 
-    Scene playgroundScene;
-    Scene menuScene;
-    Stage thestage;
-    Button[] playButtons;
-    AnimationTimer loop;
+    private Scene playgroundScene;
+    private Scene menuScene;
+    private Stage theStage;
+    private Button[] playButtons;
+    private AnimationTimer loop;
     /**
      * Starts the program.
      *
@@ -76,7 +76,7 @@ public class Program extends Application {
         public void handle(long now) {
             final int nano = (int) 1e6;
             if ((now - prevRun > timeBetweenTurns * nano) && !hasEnded) {
-            	playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, /*event->Platform.exit()*/event -> cleanAndStart(event));
+            	playgroundScene.addEventFilter(KeyEvent.KEY_PRESSED, Program.this::cleanAndStart);
                 int res = playground.runTurn();
                 if (res != 0) {
                     if (res == 1) {
@@ -102,7 +102,7 @@ public class Program extends Application {
                 prevRun = now;
             }
         }
-    };
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -112,7 +112,7 @@ public class Program extends Application {
 
 		///////////////////////////////////////////////////////////////////////////////////////
 
-		thestage=primaryStage;
+		theStage =primaryStage;
 
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
@@ -136,7 +136,7 @@ public class Program extends Application {
 
 		for (int i=0; i<3; i++) {
             playButtons[i]=new Button(buttonNames[i]);
-            playButtons[i].setOnAction(e-> ButtonClicked(e));
+            playButtons[i].setOnAction(this::ButtonClicked);
             HBox hb=new HBox(50);
             hb.getChildren().addAll(playButtons[i]);
             playButtons[i].setDisable(true);
@@ -159,7 +159,7 @@ public class Program extends Application {
     /**
      * Game loop.
      */
-    protected void run() {
+    void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -235,7 +235,7 @@ public class Program extends Application {
         playground = new Playground(f, this);
     }
 
-    protected static void printHelp() {
+    private static void printHelp() {
         System.out.println("Your input is not recognizable as an existing command!");
         System.out.println("init <file>\n" +
                 "Leírás: beolvassa a megadott file-t és ez alapján felépíti a játékterepet\n" +
@@ -615,7 +615,7 @@ public class Program extends Application {
 			filename="easyMap.txt";
 			break;
 		}
-        thestage.setScene(playgroundScene);
+        theStage.setScene(playgroundScene);
         File file=new File(filename);
         if (file != null) {
             playground = new Playground(file, Program.this);
@@ -650,13 +650,13 @@ public class Program extends Application {
         observableList.add(mountain);
         mountain.setFill(javafx.scene.paint.Color.SLATEGRAY);
         mountain.toBack();
-        thestage.setFullScreen(true);
-        thestage.setScene(playgroundScene);
+        theStage.setFullScreen(true);
+        theStage.setScene(playgroundScene);
 
         /*FileChooser fileChooser = new FileChooser();
         File workingDirectory = new File(System.getProperty("user.dir"));
         fileChooser.setInitialDirectory(workingDirectory);
-        File file = fileChooser.showOpenDialog(thestage);*/
+        File file = fileChooser.showOpenDialog(theStage);*/
         File file=new File(filename);
         if (file != null) {
         	/*lines.clear();
@@ -673,7 +673,7 @@ public class Program extends Application {
         }
 
     }
-    
+
     private void Clean(){
     	loop.stop();
         lines.clear();
@@ -690,7 +690,7 @@ public class Program extends Application {
     private void cleanAndStart(KeyEvent e){
     	Clean();
     	if(e.getCode()==KeyCode.ESCAPE){
-    		thestage.setScene(menuScene);
+    		theStage.setScene(menuScene);
     		return;
     	}
     	newGame(level);
