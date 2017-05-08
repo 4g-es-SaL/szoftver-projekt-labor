@@ -11,7 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.*;
+import javafx.scene.text.*;
+import javafx.geometry.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -112,28 +116,38 @@ public class Program extends Application {
 		        
 		thestage=primaryStage;
 		
-		//make 2 Panes
-		FlowPane pane1=new FlowPane();
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(30);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(25, 25, 25, 25));
+		Text scenetitle = new Text("Valassz terepasztalt!");
+		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 75));
+		grid.add(scenetitle, 0, 0, 2, 1);
+		
+		/*FlowPane pane1=new FlowPane();
 		pane1.setVgap(10);
 		//set background color of each Pane
-		pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");
+		pane1.setStyle("-fx-background-color: tan;-fx-padding: 10px;");*/
 		
 		playButtons=new Button[4];
 		String[] buttonNames=new String[4];
-		buttonNames[0]="easy";
-		buttonNames[1]="complex";
-		buttonNames[2]="hard";
+		buttonNames[0]="kezdo";
+		buttonNames[1]="halado";
+		buttonNames[2]="nehez";
 		
 		for (int i=0; i<3; i++) {
 		playButtons[i]=new Button(buttonNames[i]);
 		playButtons[i].setOnAction(e-> ButtonClicked(e));
-		pane1.getChildren().addAll(playButtons[i]);
+		HBox hb=new HBox(50);
+		hb.getChildren().addAll(playButtons[i]);
 		playButtons[i].setDisable(true);
+		grid.add(hb, 1, i+1);
 		}
 		playButtons[0].setDisable(false);
 		
 		playgroundScene = new Scene(root, 800,800, javafx.scene.paint.Color.LIGHTGREEN);
-		menuScene =new Scene(pane1, 700, 700, javafx.scene.paint.Color.BEIGE);
+		menuScene =new Scene(grid, 700, 700, javafx.scene.paint.Color.BEIGE);
 		/////////////////////////////////////////////////////////////////////////////////////////
 
 
