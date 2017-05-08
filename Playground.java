@@ -10,7 +10,7 @@ import java.util.Random;
 public class Playground {
 
     protected long startTime;
-    protected Program program;
+    protected Level level;
     protected ArrayList<Locomotive> locomotives = new ArrayList<>();
     protected ArrayList<Rail> rails = new ArrayList<>();
     protected ArrayList<Station> stations = new ArrayList<>();
@@ -93,9 +93,9 @@ public class Playground {
      *          A hegy alakjának koordinátái.
      */
 
-    Playground(File f, Program p) {
+    Playground(File f, Level p) {
         Rail.idGenerator = 0;
-        program = p;
+        level = p;
         try (FileInputStream in = new FileInputStream(f)) {
             byte[] rawData = new byte[(int) f.length()];
             in.read(rawData);
@@ -136,7 +136,7 @@ public class Playground {
             int currentRailID = Integer.parseInt(locomotiveData[2]);
 
             Locomotive locomotive = new Locomotive(rails.get(currentRailID), rails.get(prevRailID), null, speed, entryTime);
-            program.addCar(locomotive);
+            level.addCar(locomotive);
 
             for (int j = 0; j < numCars; j++) {
                 String[] carData = trainData[dataPointer++].split(" ");
@@ -145,7 +145,7 @@ public class Playground {
                 prevRailID = Integer.parseInt(carData[1]);
                 currentRailID = Integer.parseInt(carData[2]);
                 Car newCar = new Car(rails.get(currentRailID), rails.get(prevRailID), null, color, entryTime);
-                program.addCar(newCar);
+                level.addCar(newCar);
                 locomotive.getLastCar().next = newCar;
             }
             locomotives.add(locomotive);
@@ -219,7 +219,7 @@ public class Playground {
             Rail current = rails.get(i);
             current.setFrom(from);
             current.setTo(to);
-            program.addRail(current, x, y);
+            level.addRail(current, x, y);
 
             // total ertelmetlen, de a doksiban ugy maradt,
             // hogy a rail blokkban vannak a Station-k és
@@ -228,7 +228,7 @@ public class Playground {
                 Color c = Color.values()[Integer.parseInt(line[4])];
                 Station tmp = (Station) current;
                 tmp.color = c;
-                program.addStation(tmp, x, y);
+                level.addStation(tmp, x, y);
             } else if (line.length == 6) {
                 int from2ID = Integer.parseInt(line[4]);
                 int to2ID = Integer.parseInt(line[5]);
@@ -243,7 +243,7 @@ public class Playground {
                 CrossRail cross = (CrossRail) current;
                 cross.setFrom2(from2);
                 cross.setTo2(to2);
-                program.extendRailToCrossRail(cross);
+                level.extendRailToCrossRail(cross);
             }
         }
     }
@@ -285,7 +285,7 @@ public class Playground {
             sw.setFrom(from);
             sw.setTo(to);
             sw.alternativeWays = alternativeRails;
-            program.addSwitch(sw, x, y);
+            level.addSwitch(sw, x, y);
         }
     }
 
@@ -293,7 +293,7 @@ public class Playground {
         String[] tunnelEndData = data[3].split(" ");
         for (String tep : tunnelEndData) {
             int idx = Integer.parseInt(tep);
-            program.extendRailToTunnelEntryPoint(rails.get(idx));
+            level.extendRailToTunnelEntryPoint(rails.get(idx));
         }
     }
 
@@ -313,7 +313,7 @@ public class Playground {
             String[] coords = tep.split(" ");
             float x = Float.parseFloat(coords[0]);
             float y = Float.parseFloat(coords[1]);
-            program.addMountainPoint(x, y);
+            level.addMountainPoint(x, y);
         }
     }
     //endregion
@@ -340,7 +340,7 @@ public class Playground {
 
     private void updateAllStations() {
         for (Station s : stations) {
-            program.updateStation(s);
+            level.updateStation(s);
         }
     }
 
@@ -355,7 +355,7 @@ public class Playground {
             }
             System.out.println(loc);
             for (Car car : loc) {
-                program.updateCar(car);
+                level.updateCar(car);
             }
         }
         return 0;
@@ -367,7 +367,7 @@ public class Playground {
             int index = rand.nextInt(stations.size());
             Station station = stations.get(index);
             station.addPassanger();
-            program.updateStation(station);
+            level.updateStation(station);
             return station;
         }
         return null;
