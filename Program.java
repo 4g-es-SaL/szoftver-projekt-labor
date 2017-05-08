@@ -47,7 +47,6 @@ public class Program extends Application {
     protected Map<Station, Rectangle> stationRectangles = new HashMap<>();
 
     protected Polygon mountain = new Polygon();
-    protected boolean isMountainInitialized = false;
 
 
 
@@ -625,12 +624,12 @@ public class Program extends Application {
      */
     }
 
-    void incrementLevel(){
+    private void incrementLevel(){
     	level++;
         playButtons[level].setDisable(false);
     }
 
-    public void newGame(int level){
+    private void newGame(int level){
     	//loop.stop();
     	String filename;
     	switch (level) {
@@ -674,9 +673,8 @@ public class Program extends Application {
         }
 
     }
-
-
-    void Clean(){
+    
+    private void Clean(){
     	loop.stop();
         lines.clear();
         coordinates.clear();
@@ -688,7 +686,8 @@ public class Program extends Application {
         observableList.clear();
         mountain.getPoints().clear();
     }
-    void cleanAndStart(KeyEvent e){
+
+    private void cleanAndStart(KeyEvent e){
     	Clean();
     	if(e.getCode()==KeyCode.ESCAPE){
     		thestage.setScene(menuScene);
