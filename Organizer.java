@@ -84,6 +84,7 @@ public class Organizer extends Application {
         Group root = new Group();
         observableList = root.getChildren();
         theStage = primaryStage;
+        theStage.setTitle("MÁV Vasutas Szimulátor - Az utasok visszatérnek");
 
         setUpMenuScene();
         setUpPlaygroundScene(root);
